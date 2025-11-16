@@ -6,7 +6,7 @@ export const OrbitalDataSchema = z
         orbit_determination_date: z.string(),
         first_observation_date: z.string(),
         last_observation_date: z.string(),
-        data_arc_in_days: z.number(),
+        data_arc_in_days: z.number().nullable(),
         observations_used: z.number(),
         orbit_uncertainty: z.string(),
         minimum_orbit_intersection: z.string(),
@@ -52,6 +52,17 @@ export const AsteroidSchema = z
         estimated_diameter: DiameterSchema,
     })
     .partial();
+
+export const NEOAsteroidListSchema = z.record(z.string(), z.array(AsteroidSchema));
+
+export const ResponseSchema = z
+    .object({
+        near_earth_objects: NEOAsteroidListSchema,
+    })
+    .partial();
+
+export type NEOAsteroidList = z.infer<typeof NEOAsteroidListSchema>;
+export type NEOResponse = z.infer<typeof ResponseSchema>;
 
 export type OrbitalData = z.infer<typeof OrbitalDataSchema>;
 export type AsteroidModel = z.infer<typeof AsteroidSchema>;

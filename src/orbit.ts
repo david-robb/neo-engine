@@ -1,11 +1,12 @@
 import { AsteroidModel } from './asteroid';
 import { Vector3 } from 'three';
 import { toRad } from './util';
+import { ORBIT_SEGMENT_COUNT, SCALE_FACTOR } from './constants';
 
 export function calculateOrbit(asteroid: AsteroidModel): Vector3[] {
     let trueAnomaly: number = 0.0;
 
-    const segments: number = 3000;
+    const segments: number = ORBIT_SEGMENT_COUNT;
     const accumulator: number = 360.0 / segments;
 
     const points: Vector3[] = [];
@@ -39,9 +40,9 @@ export function calculateRadius(asteroid: AsteroidModel, perihelionAngle: number
 
 export function toEclipticCoordinates(asteroid: AsteroidModel, orbitalCoordinates: Vector3): Vector3 {
     return new Vector3(
-        transformX(asteroid, orbitalCoordinates),
-        transformY(asteroid, orbitalCoordinates),
-        transformZ(asteroid, orbitalCoordinates)
+        transformX(asteroid, orbitalCoordinates) * SCALE_FACTOR,
+        transformY(asteroid, orbitalCoordinates) * SCALE_FACTOR,
+        transformZ(asteroid, orbitalCoordinates) * SCALE_FACTOR
     );
 }
 
@@ -102,12 +103,12 @@ export function calculateEccentricAnomaly(asteroid: AsteroidModel, t: number): n
     const m = calculateMeanAnomaly(asteroid, t);
     const eccentricity = +asteroid.orbital_data?.eccentricity!;
 
-    let en = m;
-    for (let i = 0; i < 100; i++) {
-        en = en + (m - en + eccentricity * Math.sin(en)) / (1 - eccentricity * Math.cos(en));
-    }
+    // let en = m;
+    // for (let i = 0; i < 100; i++) {
+    //     en = en + (m - en + eccentricity * Math.sin(en)) / (1 - eccentricity * Math.cos(en));
+    // }
 
-    return en;
+    return m;
 }
 
 export function calculateTrueAnomaly(asteroid: AsteroidModel, eccentricAnomaly: number): number {

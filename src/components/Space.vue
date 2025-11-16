@@ -1,30 +1,19 @@
 <script setup lang="ts">
-    import { Sphere } from '@tresjs/cientos';
-    import type { AsteroidModel } from '../asteroid';
-    import { AsteroidSchema } from '../asteroid';
-    import { ASTEROID_JSON, ASTEROID_JSON_2 } from '../data';
-    import Asteroid from './Asteroid.vue';
+    import { AsteroidModel, ResponseSchema } from '../asteroid';
+    import { ASTEROID_JSON_LIST } from '../data';
+    import Sun from './Sun.vue';
+    import Bodies from './Bodies.vue';
+    import Orbits from './Orbits.vue';
+    import { TOTAL_ASTEROID_COUNT } from '../constants';
 
-    const asteroid1: AsteroidModel = AsteroidSchema.parse(ASTEROID_JSON);
-    const asteroid2: AsteroidModel = AsteroidSchema.parse(ASTEROID_JSON_2);
+    const response = ResponseSchema.parse(ASTEROID_JSON_LIST);
+    const allAsteroids = Object.entries(response.near_earth_objects!).flatMap(([_, value]) => value);
+
+    const asteroids: AsteroidModel[] = allAsteroids.slice(0, TOTAL_ASTEROID_COUNT);
 </script>
 
 <template>
-    <!--    <Stars />-->
-    <!--    <TresGridHelper />-->
-
-    <Sphere :position="[0, 0, 0]" :args="[0.00465047, 100, 100]" color="yellow" />
-    <Asteroid :asteroid="asteroid1" />
-    <Asteroid :asteroid="asteroid2" />
-
-    <!--  <TresAxesHelper />-->
-    <!--  <Grid-->
-    <!--    cell-color="white"-->
-    <!--    section-color="white"-->
-    <!--    :section-thickness="0.2"-->
-    <!--    :cell-thickness="1"-->
-    <!--    :infinite-grid="true"-->
-    <!--    :fade-distance="12"-->
-    <!--    :fade-from="0"-->
-    <!--  />-->
+    <Sun />
+    <Bodies :asteroids="asteroids" />
+    <Orbits :asteroids="asteroids" />
 </template>
