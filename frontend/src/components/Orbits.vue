@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { AsteroidModel } from '../asteroid';
-import * as THREE from 'three';
-import { Vector3 } from 'three';
-import { calculateOrbit } from '../orbit';
-import { useTres } from '@tresjs/core';
+    import { AsteroidModel } from '../asteroid';
+    import * as THREE from 'three';
+    import { Vector3 } from 'three';
+    import { calculateOrbit } from '../orbit';
+    import { useTres } from '@tresjs/core';
 
-const props = defineProps({
+    const props = defineProps({
         asteroids: { type: Array, default: () => [] },
     }) as { asteroids: AsteroidModel[] };
 

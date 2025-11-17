@@ -22,3 +22,38 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Binaries for the current project
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Compiled binaries for other platforms (e.g., cross-compilation)
+bin/
+pkg/
+
+# Dependency management artifacts
+vendor/
+go.mod.bak
+go.sum.bak
+
+# Editor/IDE specific files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Operating System generated files
+.DS_Store
+Thumbs.db
+
+# Test artifacts
+testdata/
+*.out
+
+# Logs
+*.log
+
+# Environment variables
+.env
