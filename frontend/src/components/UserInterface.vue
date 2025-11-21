@@ -2,17 +2,12 @@
     import { onMounted, watch } from 'vue';
     import GUI from 'lil-gui';
     import { useStateStore } from '../stores/state';
-    import { START_BODY_COUNT } from '../utility/constants';
-    import { useTres } from '@tresjs/core';
-    import { Vector3 } from 'three';
     import { NeoEngineBody } from 'src/models/body';
     import { format } from '@formkit/tempo';
 
     const state = useStateStore();
 
-    const { camera } = useTres();
-
-    const controls = new GUI({ title: 'NEO Sim', width: 350 });
+    const controls = new GUI({ title: 'NEO Sim', width: 400 });
     const timeControlsFolder = controls.addFolder('Time Controls');
     const generalControlsFolder = controls.addFolder('General Controls');
     const selectedObjectFolder = controls.addFolder('Selected NEO');
@@ -20,15 +15,10 @@
     selectedObjectFolder.hide();
 
     const generalControlsInterface = {
-        neoCount: state.getActiveTotal,
         renderOrbits: true,
-        selectedObjectName: '',
+        dropDownSelectedObject: '',
+        hoveredObjectName: '',
         logState: () => {
-            state.bodies.forEach((body) => {
-                if (body.state.active) {
-                    console.log(body.state.currentPosition);
-                }
-            });
             console.log(state);
         },
     };
@@ -59,25 +49,25 @@
     };
 
     onMounted(() => {
+        generalControlsFolder.add(generalControlsInterface, 'hoveredObjectName').listen().disable().name('Hovered Object Name');
+        generalControlsFolder
+            .add(generalControlsInterface, 'dropDownSelectedObject', state.allObjectNames.sort())
+            .name('Select Object')
+            .onChange((newValue: string) => {
+                state.focusByName(newValue);
+            });
+
         timeControlsFolder.add(timeControlsInterface, 'currentDateTime').name('Simulation Time (s)').listen().disable();
         timeControlsFolder
-            .add(timeControlsInterface, 'multiplier', [1, 100, 1000, 10000])
+            .add(timeControlsInterface, 'multiplier', [1, 10000, 1000000, 100000000])
             .name('Time Multiplier')
             .onChange((value: number) => {
                 state.updateTimeMultiplier(value);
             });
 
-        generalControlsFolder.add(generalControlsInterface, 'selectedObjectName').listen().disable().name('Hovered Object Name');
-
-        generalControlsFolder
-            .add(generalControlsInterface, 'neoCount', 1, state.getTotal, 1)
-            .name('NEO Count')
-            .setValue(START_BODY_COUNT)
-            .onChange((value: number) => state.updateSliderInactive(value));
-
         generalControlsFolder
             .add(generalControlsInterface, 'renderOrbits')
-            .name('Render Orbits?')
+            .name('Render All Orbits?')
             .setValue(false)
             .onChange((enabled: boolean) => {
                 state.$patch({
@@ -114,12 +104,8 @@
 
     watch(
         () => state.hoveredObject,
-        (selected) => {
-            if (selected) {
-                generalControlsInterface.selectedObjectName = selected.properties.name;
-            } else {
-                generalControlsInterface.selectedObjectName = '';
-            }
+        (hovered) => {
+            generalControlsInterface.hoveredObjectName = hovered?.properties.name ?? '';
         }
     );
 
@@ -157,6 +143,8 @@
             selectedObjectInterface.equinox = selected.orbit.equinox;
 
             selectedObjectFolder.show();
+
+            generalControlsInterface.dropDownSelectedObject = selected.properties.name;
         }
     );
 
@@ -169,12 +157,12 @@
 
     watch(
         () => state.focusedState?.velocity,
-        (velocity) => (selectedObjectInterface.velocity = velocity!.toFixed(4))
+        (velocity) => (selectedObjectInterface.velocity = velocity?.toFixed(4) ?? '')
     );
 
     watch(
         () => state.focusedState?.distanceToSun,
-        (distanceToSun) => (selectedObjectInterface.distanceToSun = '' + distanceToSun!)
+        (distanceToSun) => (selectedObjectInterface.distanceToSun = distanceToSun?.toFixed() ?? '')
     );
 </script>
 <template></template>

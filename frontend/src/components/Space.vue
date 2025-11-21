@@ -46,18 +46,13 @@
         const grid: THREE.GridHelper = buildGrid();
         const axes: THREE.AxesHelper = buildAxes();
 
-        if (camera.value) {
-            camera.value.rotation.x = Math.PI / 2;
-        }
-        // camera.value?.lookAt(0, 0, 0);
-
         bodies.forEach((body) => {
             scene.value.add(body.mesh.orbit!);
             scene.value.add(body.mesh.sphere!);
         });
 
         scene.value.add(grid);
-        scene.value.add(axes);
+        // scene.value.add(axes);
 
         renderer.setPixelRatio(window.devicePixelRatio);
 

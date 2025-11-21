@@ -2,10 +2,8 @@
     import { useLoop } from '@tresjs/core';
     import { onMounted } from 'vue';
     import { useStateStore } from '../stores/state';
-    import { calculatePosition, calculateVelocity } from '../utility/orbital-mechanics';
+    import { calculateFocusedState, calculateScaledPosition } from '../utility/orbital-mechanics';
     import { NeoBodyMesh, NeoBodyState } from 'src/models/body';
-    import { SCALE_FACTOR, SIM_SPEED_SCALAR } from '../utility/constants';
-    import { Matrix4, Vector3 } from 'three';
 
     const state = useStateStore();
 
@@ -61,20 +59,16 @@
         if (state.focusedState) {
             const body = state.focusedState.object;
 
-            const velocity = calculateVelocity(body.orbit, t);
+            const focusedState = calculateFocusedState(body);
 
-            const distanceToSun = body.state.currentPosition.multiplyScalar(SCALE_FACTOR).length();
-
-            state.updateFocusedObjectState({ velocity, distanceToSun });
+            state.updateFocusedObjectState(focusedState);
         }
     }
     function updatePhysics(t: number): void {
-        for (let i = 0; i < state.getActiveBodies.length; i++) {
-            const body = state.bodies[i];
-
-            body.state.currentPosition = calculatePosition(body.orbit, t);
+        state.getActiveBodies.forEach((body) => {
+            body.state.currentPosition = calculateScaledPosition(body.orbit, t);
             body.mesh.sphere!.position.set(body.state.currentPosition.x, body.state.currentPosition.y, body.state.currentPosition.z);
-        }
+        });
     }
 </script>
 <template></template>

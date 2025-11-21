@@ -33,6 +33,7 @@ const unfocus = (state: State): void => {
         return;
     }
 
+    state.focusedState.object.state.active = false;
     state.focusedState.object.state.isSelected = false;
     state.focusedState = undefined;
 };
@@ -46,6 +47,7 @@ const focus = (state: State, obj: Object3D): void => {
     }
 
     simObject.state.isSelected = true;
+    simObject.state.active = true;
     state.focusedState = {
         distanceToSun: 0,
         velocity: 0,
@@ -70,17 +72,9 @@ export const useStateStore = defineStore('state', {
         getTotal: (state: State) => state.bodies.length,
         getTimeMultiplier: (state: State) => state.timeState.multiplier,
         objectSelected: (state: State) => !!state.focusedState,
+        allObjectNames: (state: State) => state.bodies.map((body) => body.properties.name),
     },
     actions: {
-        updateSliderInactive(index: number): void {
-            this.bodies.slice(0, index).forEach((body: NeoEngineBody) => {
-                body.state.active = true;
-            });
-
-            this.bodies.slice(index, this.bodies.length).forEach((body: NeoEngineBody) => {
-                body.state.active = false;
-            });
-        },
         updateHoveredObject(hovered: Object3D | null): void {
             if (!hovered) {
                 if (this.hoveredObject) {
@@ -136,8 +130,31 @@ export const useStateStore = defineStore('state', {
             unfocus(this.$state);
             focus(this.$state, obj);
         },
+        focusByName(name: string): void {
+            const object = this.getObjectByName(name);
+            if (!object) {
+                console.error(`Failed to find ${name}!`);
+
+                return;
+            }
+
+            if (!object.mesh.orbit) {
+                console.error(`Failed to focus on ${name}, mesh does not exist!`);
+            }
+
+            this.focusObject(object.mesh.sphere as Object3D | null);
+        },
         updateTimeMultiplier(multiplier: number): void {
             this.timeState.multiplier = multiplier;
+        },
+        getObjectByName(name: string): NeoEngineBody | undefined {
+            return this.bodies.find((body) => body.properties.name === name);
+        },
+        markObjectActive(name: string): void {
+            const object = this.getObjectByName(name);
+            if (object) {
+                object.state.active = true;
+            }
         },
     },
 });

@@ -4,28 +4,26 @@ import { ASTEROID_JSON_LIST } from '../data';
 import { SCALE_FACTOR, START_BODY_COUNT } from '../utility/constants';
 import * as THREE from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
-import { buildOrbit, calculatePosition } from '../utility/orbital-mechanics';
+import { buildOrbit, calculateScaledPosition } from '../utility/orbital-mechanics';
 
 export function loadEngineBodies(): NeoEngineBody[] {
     const response = ResponseSchema.parse(ASTEROID_JSON_LIST);
     const bodies = Object.entries(response.near_earth_objects!).flatMap(([_, value]) => value);
 
-    const engineBodies = bodies.map((neoBody) => toEngineBody(neoBody));
-    for (let i = 0; i < START_BODY_COUNT; i++) {
-        engineBodies[i].state.active = true;
-    }
-
-    return engineBodies;
+    return bodies.map((neoBody) => toEngineBody(neoBody));
 }
 
 export function buildGrid(): THREE.GridHelper {
-    const size = 500000000 / SCALE_FACTOR;
-    const divisions = size / 100000;
-    const colorCenterLine = 0x444444; // Color for the center line (e.g., dark gray)
-    const colorGrid = 0x888888; // Color for the other grid lines (e.g., light gray)
+    const GRID_TOTAL_SIZE_KM = 1000000000;
+    const GRID_SECTION_SIZE_KM = 100000000;
+
+    const size = GRID_TOTAL_SIZE_KM / SCALE_FACTOR;
+    const divisions = size / (GRID_SECTION_SIZE_KM / SCALE_FACTOR);
+    const colorCenterLine = 0xff0000;
+    const colorGrid = 0x888888;
     const gridHelper = new THREE.GridHelper(size, divisions, colorCenterLine, colorGrid);
     gridHelper.material.transparent = true;
-    gridHelper.material.opacity = 0.2;
+    gridHelper.material.opacity = 0.5;
 
     return gridHelper;
 }
@@ -45,7 +43,7 @@ function toEngineBody(neoBody: AsteroidModel): NeoEngineBody {
     const orbit: NeoBodyOrbitalData = toOrbitalData(neoBody.orbital_data!);
 
     const orbitalPoints = buildOrbit(orbit);
-    const startingPosition = calculatePosition(orbit);
+    const startingPosition = calculateScaledPosition(orbit);
 
     return {
         mesh: {
@@ -98,7 +96,7 @@ function toOrbitalData(orbitalData: OrbitalData): NeoBodyOrbitalData {
         aphelionDistance: auToKm(orbitalData.aphelion_distance!),
         perihelionTime: +orbitalData.perihelion_time!, // CHECK
         meanAnomaly: degToRad(+orbitalData.mean_anomaly!),
-        meanMotion: (+orbitalData.mean_motion! * 2 * Math.PI) / 86400,
+        meanMotion: degDayToRadSec(orbitalData.mean_motion!),
         equinox: orbitalData.equinox!,
     };
 }
@@ -111,15 +109,20 @@ function daysToSec(day: number | undefined): number | undefined {
     return day * 86400;
 }
 
+function degDayToRadSec(val: string): number {
+    return +val * (Math.PI / (180 * 86400));
+}
+
 function auToKm(auDistance: string): number {
-    return +auDistance! * 149600000;
+    return +auDistance! * 149597870.691;
 }
 
 function buildLine(orbitPositions: THREE.Vector3[]): THREE.LineSegments {
     const geometry = new THREE.BufferGeometry();
     geometry.setFromPoints(orbitPositions);
 
-    const material = new THREE.LineBasicMaterial({ color: 0x343434, transparent: false, opacity: 0.1, depthWrite: false });
+    // 0x343434
+    const material = new THREE.LineBasicMaterial({ color: 0x4f4d4d, depthWrite: false });
     const mesh = new THREE.LineSegments(geometry, material);
     mesh.layers.set(1);
 
