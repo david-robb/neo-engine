@@ -1,15 +1,15 @@
 export const ASTEROID_JSON_LIST = JSON.parse(`{
     "links": {
-        "next": "http://api.nasa.gov/neo/rest/v1/feed?start_date=2025-11-15&end_date=2025-11-22&detailed=true&api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid",
-        "previous": "http://api.nasa.gov/neo/rest/v1/feed?start_date=2025-11-01&end_date=2025-11-08&detailed=true&api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid",
-        "self": "http://api.nasa.gov/neo/rest/v1/feed?start_date=2025-11-08&end_date=2025-11-15&detailed=true&api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+        "next": "http://api.nasa.gov/neo/rest/v1/feed?start_date=2025-11-15&end_date=2025-11-22&detailed=true&",
+        "previous": "http://api.nasa.gov/neo/rest/v1/feed?start_date=2025-11-01&end_date=2025-11-08&detailed=true&",
+        "self": "http://api.nasa.gov/neo/rest/v1/feed?start_date=2025-11-08&end_date=2025-11-15&detailed=true&"
     },
     "element_count": 121,
     "near_earth_objects": {
         "2025-11-04": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3763925?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3763925?"
                 },
                 "id": "3763925",
                 "neo_reference_id": "3763925",
@@ -87,7 +87,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3782066?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3782066?"
                 },
                 "id": "3782066",
                 "neo_reference_id": "3782066",
@@ -165,7 +165,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54216378?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54216378?"
                 },
                 "id": "54216378",
                 "neo_reference_id": "54216378",
@@ -243,7 +243,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54316551?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54316551?"
                 },
                 "id": "54316551",
                 "neo_reference_id": "54316551",
@@ -321,7 +321,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54402652?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54402652?"
                 },
                 "id": "54402652",
                 "neo_reference_id": "54402652",
@@ -399,7 +399,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54505729?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54505729?"
                 },
                 "id": "54505729",
                 "neo_reference_id": "54505729",
@@ -477,7 +477,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553387?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553387?"
                 },
                 "id": "54553387",
                 "neo_reference_id": "54553387",
@@ -555,7 +555,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554062?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554062?"
                 },
                 "id": "54554062",
                 "neo_reference_id": "54554062",
@@ -633,7 +633,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554911?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554911?"
                 },
                 "id": "54554911",
                 "neo_reference_id": "54554911",
@@ -711,7 +711,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555538?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555538?"
                 },
                 "id": "54555538",
                 "neo_reference_id": "54555538",
@@ -789,7 +789,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561137?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561137?"
                 },
                 "id": "54561137",
                 "neo_reference_id": "54561137",
@@ -867,7 +867,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561142?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561142?"
                 },
                 "id": "54561142",
                 "neo_reference_id": "54561142",
@@ -945,7 +945,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561380?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561380?"
                 },
                 "id": "54561380",
                 "neo_reference_id": "54561380",
@@ -1025,7 +1025,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-03": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3117427?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3117427?"
                 },
                 "id": "3117427",
                 "neo_reference_id": "3117427",
@@ -1100,11 +1100,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3117427?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3117427?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3274489?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3274489?"
                 },
                 "id": "3274489",
                 "neo_reference_id": "3274489",
@@ -1182,7 +1182,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54017094?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54017094?"
                 },
                 "id": "54017094",
                 "neo_reference_id": "54017094",
@@ -1260,7 +1260,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54342586?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54342586?"
                 },
                 "id": "54342586",
                 "neo_reference_id": "54342586",
@@ -1338,7 +1338,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54385807?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54385807?"
                 },
                 "id": "54385807",
                 "neo_reference_id": "54385807",
@@ -1416,7 +1416,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54404099?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54404099?"
                 },
                 "id": "54404099",
                 "neo_reference_id": "54404099",
@@ -1494,7 +1494,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54496386?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54496386?"
                 },
                 "id": "54496386",
                 "neo_reference_id": "54496386",
@@ -1572,7 +1572,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555539?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555539?"
                 },
                 "id": "54555539",
                 "neo_reference_id": "54555539",
@@ -1650,7 +1650,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555756?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555756?"
                 },
                 "id": "54555756",
                 "neo_reference_id": "54555756",
@@ -1730,7 +1730,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-06": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2138175?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2138175?"
                 },
                 "id": "2138175",
                 "neo_reference_id": "2138175",
@@ -1808,7 +1808,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3311964?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3311964?"
                 },
                 "id": "3311964",
                 "neo_reference_id": "3311964",
@@ -1886,7 +1886,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3401433?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3401433?"
                 },
                 "id": "3401433",
                 "neo_reference_id": "3401433",
@@ -1961,11 +1961,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3401433?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3401433?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3558382?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3558382?"
                 },
                 "id": "3558382",
                 "neo_reference_id": "3558382",
@@ -2043,7 +2043,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3703013?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3703013?"
                 },
                 "id": "3703013",
                 "neo_reference_id": "3703013",
@@ -2121,7 +2121,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3789479?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3789479?"
                 },
                 "id": "3789479",
                 "neo_reference_id": "3789479",
@@ -2199,7 +2199,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3892708?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3892708?"
                 },
                 "id": "3892708",
                 "neo_reference_id": "3892708",
@@ -2277,7 +2277,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54220001?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54220001?"
                 },
                 "id": "54220001",
                 "neo_reference_id": "54220001",
@@ -2355,7 +2355,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54321095?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54321095?"
                 },
                 "id": "54321095",
                 "neo_reference_id": "54321095",
@@ -2433,7 +2433,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54357276?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54357276?"
                 },
                 "id": "54357276",
                 "neo_reference_id": "54357276",
@@ -2511,7 +2511,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54377574?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54377574?"
                 },
                 "id": "54377574",
                 "neo_reference_id": "54377574",
@@ -2589,7 +2589,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554918?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554918?"
                 },
                 "id": "54554918",
                 "neo_reference_id": "54554918",
@@ -2667,7 +2667,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555313?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555313?"
                 },
                 "id": "54555313",
                 "neo_reference_id": "54555313",
@@ -2745,7 +2745,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561385?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561385?"
                 },
                 "id": "54561385",
                 "neo_reference_id": "54561385",
@@ -2825,7 +2825,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-05": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3709286?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3709286?"
                 },
                 "id": "3709286",
                 "neo_reference_id": "3709286",
@@ -2903,7 +2903,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3309832?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3309832?"
                 },
                 "id": "3309832",
                 "neo_reference_id": "3309832",
@@ -2981,7 +2981,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3472370?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3472370?"
                 },
                 "id": "3472370",
                 "neo_reference_id": "3472370",
@@ -3059,7 +3059,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3551067?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3551067?"
                 },
                 "id": "3551067",
                 "neo_reference_id": "3551067",
@@ -3137,7 +3137,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3559839?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3559839?"
                 },
                 "id": "3559839",
                 "neo_reference_id": "3559839",
@@ -3215,7 +3215,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3836745?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3836745?"
                 },
                 "id": "3836745",
                 "neo_reference_id": "3836745",
@@ -3293,7 +3293,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3842898?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3842898?"
                 },
                 "id": "3842898",
                 "neo_reference_id": "3842898",
@@ -3371,7 +3371,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54088811?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54088811?"
                 },
                 "id": "54088811",
                 "neo_reference_id": "54088811",
@@ -3449,7 +3449,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54306612?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54306612?"
                 },
                 "id": "54306612",
                 "neo_reference_id": "54306612",
@@ -3527,7 +3527,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54312825?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54312825?"
                 },
                 "id": "54312825",
                 "neo_reference_id": "54312825",
@@ -3605,7 +3605,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54427945?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54427945?"
                 },
                 "id": "54427945",
                 "neo_reference_id": "54427945",
@@ -3683,7 +3683,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54496024?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54496024?"
                 },
                 "id": "54496024",
                 "neo_reference_id": "54496024",
@@ -3758,11 +3758,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54496024?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54496024?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54527457?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54527457?"
                 },
                 "id": "54527457",
                 "neo_reference_id": "54527457",
@@ -3840,7 +3840,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54535146?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54535146?"
                 },
                 "id": "54535146",
                 "neo_reference_id": "54535146",
@@ -3918,7 +3918,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54547365?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54547365?"
                 },
                 "id": "54547365",
                 "neo_reference_id": "54547365",
@@ -3996,7 +3996,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553930?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553930?"
                 },
                 "id": "54553930",
                 "neo_reference_id": "54553930",
@@ -4074,7 +4074,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555528?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555528?"
                 },
                 "id": "54555528",
                 "neo_reference_id": "54555528",
@@ -4152,7 +4152,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54560902?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54560902?"
                 },
                 "id": "54560902",
                 "neo_reference_id": "54560902",
@@ -4232,7 +4232,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-10-31": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2164294?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2164294?"
                 },
                 "id": "2164294",
                 "neo_reference_id": "2164294",
@@ -4310,7 +4310,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3692560?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3692560?"
                 },
                 "id": "3692560",
                 "neo_reference_id": "3692560",
@@ -4388,7 +4388,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3761747?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3761747?"
                 },
                 "id": "3761747",
                 "neo_reference_id": "3761747",
@@ -4466,7 +4466,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54135787?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54135787?"
                 },
                 "id": "54135787",
                 "neo_reference_id": "54135787",
@@ -4544,7 +4544,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54214728?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54214728?"
                 },
                 "id": "54214728",
                 "neo_reference_id": "54214728",
@@ -4622,7 +4622,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54218581?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54218581?"
                 },
                 "id": "54218581",
                 "neo_reference_id": "54218581",
@@ -4700,7 +4700,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54280484?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54280484?"
                 },
                 "id": "54280484",
                 "neo_reference_id": "54280484",
@@ -4778,7 +4778,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54358249?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54358249?"
                 },
                 "id": "54358249",
                 "neo_reference_id": "54358249",
@@ -4856,7 +4856,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54497569?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54497569?"
                 },
                 "id": "54497569",
                 "neo_reference_id": "54497569",
@@ -4934,7 +4934,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54499610?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54499610?"
                 },
                 "id": "54499610",
                 "neo_reference_id": "54499610",
@@ -5012,7 +5012,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553574?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553574?"
                 },
                 "id": "54553574",
                 "neo_reference_id": "54553574",
@@ -5090,7 +5090,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554703?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554703?"
                 },
                 "id": "54554703",
                 "neo_reference_id": "54554703",
@@ -5168,7 +5168,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554643?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554643?"
                 },
                 "id": "54554643",
                 "neo_reference_id": "54554643",
@@ -5246,7 +5246,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554754?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554754?"
                 },
                 "id": "54554754",
                 "neo_reference_id": "54554754",
@@ -5324,7 +5324,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555162?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555162?"
                 },
                 "id": "54555162",
                 "neo_reference_id": "54555162",
@@ -5402,7 +5402,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54556385?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54556385?"
                 },
                 "id": "54556385",
                 "neo_reference_id": "54556385",
@@ -5480,7 +5480,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561363?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561363?"
                 },
                 "id": "54561363",
                 "neo_reference_id": "54561363",
@@ -5560,7 +5560,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-02": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2469219?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2469219?"
                 },
                 "id": "2469219",
                 "neo_reference_id": "2469219",
@@ -5638,7 +5638,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3742875?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3742875?"
                 },
                 "id": "3742875",
                 "neo_reference_id": "3742875",
@@ -5716,7 +5716,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3749034?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3749034?"
                 },
                 "id": "3749034",
                 "neo_reference_id": "3749034",
@@ -5794,7 +5794,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3752704?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3752704?"
                 },
                 "id": "3752704",
                 "neo_reference_id": "3752704",
@@ -5872,7 +5872,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54017405?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54017405?"
                 },
                 "id": "54017405",
                 "neo_reference_id": "54017405",
@@ -5950,7 +5950,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54276987?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54276987?"
                 },
                 "id": "54276987",
                 "neo_reference_id": "54276987",
@@ -6028,7 +6028,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54402369?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54402369?"
                 },
                 "id": "54402369",
                 "neo_reference_id": "54402369",
@@ -6106,7 +6106,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54432969?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54432969?"
                 },
                 "id": "54432969",
                 "neo_reference_id": "54432969",
@@ -6184,7 +6184,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54494256?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54494256?"
                 },
                 "id": "54494256",
                 "neo_reference_id": "54494256",
@@ -6259,11 +6259,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54494256?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54494256?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54495687?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54495687?"
                 },
                 "id": "54495687",
                 "neo_reference_id": "54495687",
@@ -6341,7 +6341,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54528922?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54528922?"
                 },
                 "id": "54528922",
                 "neo_reference_id": "54528922",
@@ -6419,7 +6419,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553166?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553166?"
                 },
                 "id": "54553166",
                 "neo_reference_id": "54553166",
@@ -6497,7 +6497,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555755?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555755?"
                 },
                 "id": "54555755",
                 "neo_reference_id": "54555755",
@@ -6575,7 +6575,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561139?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561139?"
                 },
                 "id": "54561139",
                 "neo_reference_id": "54561139",
@@ -6655,7 +6655,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-01": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3609843?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3609843?"
                 },
                 "id": "3609843",
                 "neo_reference_id": "3609843",
@@ -6730,11 +6730,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3609843?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3609843?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3789618?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3789618?"
                 },
                 "id": "3789618",
                 "neo_reference_id": "3789618",
@@ -6812,7 +6812,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3892683?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3892683?"
                 },
                 "id": "3892683",
                 "neo_reference_id": "3892683",
@@ -6890,7 +6890,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54099613?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54099613?"
                 },
                 "id": "54099613",
                 "neo_reference_id": "54099613",
@@ -6968,7 +6968,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54105522?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54105522?"
                 },
                 "id": "54105522",
                 "neo_reference_id": "54105522",
@@ -7046,7 +7046,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54200473?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54200473?"
                 },
                 "id": "54200473",
                 "neo_reference_id": "54200473",
@@ -7124,7 +7124,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54214047?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54214047?"
                 },
                 "id": "54214047",
                 "neo_reference_id": "54214047",
@@ -7202,7 +7202,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54216371?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54216371?"
                 },
                 "id": "54216371",
                 "neo_reference_id": "54216371",
@@ -7280,7 +7280,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54347535?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54347535?"
                 },
                 "id": "54347535",
                 "neo_reference_id": "54347535",
@@ -7358,7 +7358,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54432336?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54432336?"
                 },
                 "id": "54432336",
                 "neo_reference_id": "54432336",
@@ -7436,7 +7436,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54471061?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54471061?"
                 },
                 "id": "54471061",
                 "neo_reference_id": "54471061",
@@ -7514,7 +7514,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554632?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554632?"
                 },
                 "id": "54554632",
                 "neo_reference_id": "54554632",
@@ -7592,7 +7592,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554761?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554761?"
                 },
                 "id": "54554761",
                 "neo_reference_id": "54554761",
@@ -7670,7 +7670,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554907?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554907?"
                 },
                 "id": "54554907",
                 "neo_reference_id": "54554907",
@@ -7748,7 +7748,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555169?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555169?"
                 },
                 "id": "54555169",
                 "neo_reference_id": "54555169",
@@ -7826,7 +7826,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54556386?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54556386?"
                 },
                 "id": "54556386",
                 "neo_reference_id": "54556386",
@@ -7904,7 +7904,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561515?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561515?"
                 },
                 "id": "54561515",
                 "neo_reference_id": "54561515",
@@ -7982,7 +7982,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561511?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561511?"
                 },
                 "id": "54561511",
                 "neo_reference_id": "54561511",
@@ -8062,7 +8062,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-07": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2164206?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2164206?"
                 },
                 "id": "2164206",
                 "neo_reference_id": "2164206",
@@ -8140,7 +8140,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3261401?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3261401?"
                 },
                 "id": "3261401",
                 "neo_reference_id": "3261401",
@@ -8218,7 +8218,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3393817?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3393817?"
                 },
                 "id": "3393817",
                 "neo_reference_id": "3393817",
@@ -8296,7 +8296,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3759000?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3759000?"
                 },
                 "id": "3759000",
                 "neo_reference_id": "3759000",
@@ -8374,7 +8374,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3759693?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3759693?"
                 },
                 "id": "3759693",
                 "neo_reference_id": "3759693",
@@ -8452,7 +8452,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3836124?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3836124?"
                 },
                 "id": "3836124",
                 "neo_reference_id": "3836124",
@@ -8530,7 +8530,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3989261?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3989261?"
                 },
                 "id": "3989261",
                 "neo_reference_id": "3989261",
@@ -8608,7 +8608,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54320729?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54320729?"
                 },
                 "id": "54320729",
                 "neo_reference_id": "54320729",
@@ -8686,7 +8686,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54327903?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54327903?"
                 },
                 "id": "54327903",
                 "neo_reference_id": "54327903",
@@ -8764,7 +8764,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54404097?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54404097?"
                 },
                 "id": "54404097",
                 "neo_reference_id": "54404097",
@@ -8839,11 +8839,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54404097?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54404097?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54467114?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54467114?"
                 },
                 "id": "54467114",
                 "neo_reference_id": "54467114",
@@ -8921,7 +8921,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554172?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554172?"
                 },
                 "id": "54554172",
                 "neo_reference_id": "54554172",
@@ -8999,7 +8999,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554914?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554914?"
                 },
                 "id": "54554914",
                 "neo_reference_id": "54554914",
@@ -9077,7 +9077,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555312?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555312?"
                 },
                 "id": "54555312",
                 "neo_reference_id": "54555312",
@@ -9155,7 +9155,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561372?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561372?"
                 },
                 "id": "54561372",
                 "neo_reference_id": "54561372",
@@ -9235,7 +9235,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-15": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3781579?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3781579?"
                 },
                 "id": "3781579",
                 "neo_reference_id": "3781579",
@@ -9310,11 +9310,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3781579?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3781579?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3788080?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3788080?"
                 },
                 "id": "3788080",
                 "neo_reference_id": "3788080",
@@ -9392,7 +9392,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3797899?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3797899?"
                 },
                 "id": "3797899",
                 "neo_reference_id": "3797899",
@@ -9470,7 +9470,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54142836?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54142836?"
                 },
                 "id": "54142836",
                 "neo_reference_id": "54142836",
@@ -9548,7 +9548,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54224424?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54224424?"
                 },
                 "id": "54224424",
                 "neo_reference_id": "54224424",
@@ -9626,7 +9626,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54225715?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54225715?"
                 },
                 "id": "54225715",
                 "neo_reference_id": "54225715",
@@ -9704,7 +9704,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54264231?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54264231?"
                 },
                 "id": "54264231",
                 "neo_reference_id": "54264231",
@@ -9782,7 +9782,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561506?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561506?"
                 },
                 "id": "54561506",
                 "neo_reference_id": "54561506",
@@ -9860,7 +9860,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561648?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561648?"
                 },
                 "id": "54561648",
                 "neo_reference_id": "54561648",
@@ -9940,7 +9940,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-14": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3465236?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3465236?"
                 },
                 "id": "3465236",
                 "neo_reference_id": "3465236",
@@ -10018,7 +10018,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3587872?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3587872?"
                 },
                 "id": "3587872",
                 "neo_reference_id": "3587872",
@@ -10096,7 +10096,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3634154?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3634154?"
                 },
                 "id": "3634154",
                 "neo_reference_id": "3634154",
@@ -10171,11 +10171,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3634154?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3634154?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3835954?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3835954?"
                 },
                 "id": "3835954",
                 "neo_reference_id": "3835954",
@@ -10253,7 +10253,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3879166?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3879166?"
                 },
                 "id": "3879166",
                 "neo_reference_id": "3879166",
@@ -10331,7 +10331,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3892813?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3892813?"
                 },
                 "id": "3892813",
                 "neo_reference_id": "3892813",
@@ -10409,7 +10409,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54016809?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54016809?"
                 },
                 "id": "54016809",
                 "neo_reference_id": "54016809",
@@ -10484,11 +10484,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54016809?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54016809?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54326659?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54326659?"
                 },
                 "id": "54326659",
                 "neo_reference_id": "54326659",
@@ -10566,7 +10566,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555527?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555527?"
                 },
                 "id": "54555527",
                 "neo_reference_id": "54555527",
@@ -10644,7 +10644,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555753?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555753?"
                 },
                 "id": "54555753",
                 "neo_reference_id": "54555753",
@@ -10722,7 +10722,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561138?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561138?"
                 },
                 "id": "54561138",
                 "neo_reference_id": "54561138",
@@ -10800,7 +10800,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561370?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561370?"
                 },
                 "id": "54561370",
                 "neo_reference_id": "54561370",
@@ -10878,7 +10878,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561377?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561377?"
                 },
                 "id": "54561377",
                 "neo_reference_id": "54561377",
@@ -10956,7 +10956,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561507?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561507?"
                 },
                 "id": "54561507",
                 "neo_reference_id": "54561507",
@@ -11036,7 +11036,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-11": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2348306?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2348306?"
                 },
                 "id": "2348306",
                 "neo_reference_id": "2348306",
@@ -11114,7 +11114,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3576729?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3576729?"
                 },
                 "id": "3576729",
                 "neo_reference_id": "3576729",
@@ -11192,7 +11192,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3617076?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3617076?"
                 },
                 "id": "3617076",
                 "neo_reference_id": "3617076",
@@ -11270,7 +11270,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3791243?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3791243?"
                 },
                 "id": "3791243",
                 "neo_reference_id": "3791243",
@@ -11348,7 +11348,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3869320?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3869320?"
                 },
                 "id": "3869320",
                 "neo_reference_id": "3869320",
@@ -11426,7 +11426,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54098026?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54098026?"
                 },
                 "id": "54098026",
                 "neo_reference_id": "54098026",
@@ -11504,7 +11504,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54212444?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54212444?"
                 },
                 "id": "54212444",
                 "neo_reference_id": "54212444",
@@ -11582,7 +11582,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54268448?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54268448?"
                 },
                 "id": "54268448",
                 "neo_reference_id": "54268448",
@@ -11657,11 +11657,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54268448?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54268448?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554638?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554638?"
                 },
                 "id": "54554638",
                 "neo_reference_id": "54554638",
@@ -11739,7 +11739,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555164?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555164?"
                 },
                 "id": "54555164",
                 "neo_reference_id": "54555164",
@@ -11817,7 +11817,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561043?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561043?"
                 },
                 "id": "54561043",
                 "neo_reference_id": "54561043",
@@ -11892,11 +11892,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54561043?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54561043?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561513?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561513?"
                 },
                 "id": "54561513",
                 "neo_reference_id": "54561513",
@@ -11974,7 +11974,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561595?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561595?"
                 },
                 "id": "54561595",
                 "neo_reference_id": "54561595",
@@ -12052,7 +12052,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561598?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561598?"
                 },
                 "id": "54561598",
                 "neo_reference_id": "54561598",
@@ -12127,11 +12127,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54561598?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54561598?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561647?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561647?"
                 },
                 "id": "54561647",
                 "neo_reference_id": "54561647",
@@ -12211,7 +12211,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-10": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2138852?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2138852?"
                 },
                 "id": "2138852",
                 "neo_reference_id": "2138852",
@@ -12289,7 +12289,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2410777?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2410777?"
                 },
                 "id": "2410777",
                 "neo_reference_id": "2410777",
@@ -12367,7 +12367,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3262691?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3262691?"
                 },
                 "id": "3262691",
                 "neo_reference_id": "3262691",
@@ -12445,7 +12445,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3358222?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3358222?"
                 },
                 "id": "3358222",
                 "neo_reference_id": "3358222",
@@ -12523,7 +12523,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3638502?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3638502?"
                 },
                 "id": "3638502",
                 "neo_reference_id": "3638502",
@@ -12601,7 +12601,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3763956?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3763956?"
                 },
                 "id": "3763956",
                 "neo_reference_id": "3763956",
@@ -12679,7 +12679,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3770142?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3770142?"
                 },
                 "id": "3770142",
                 "neo_reference_id": "3770142",
@@ -12757,7 +12757,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3802442?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3802442?"
                 },
                 "id": "3802442",
                 "neo_reference_id": "3802442",
@@ -12832,11 +12832,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3802442?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3802442?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3836166?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3836166?"
                 },
                 "id": "3836166",
                 "neo_reference_id": "3836166",
@@ -12914,7 +12914,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3873144?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3873144?"
                 },
                 "id": "3873144",
                 "neo_reference_id": "3873144",
@@ -12992,7 +12992,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3986725?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3986725?"
                 },
                 "id": "3986725",
                 "neo_reference_id": "3986725",
@@ -13067,11 +13067,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3986725?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3986725?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3989253?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3989253?"
                 },
                 "id": "3989253",
                 "neo_reference_id": "3989253",
@@ -13149,7 +13149,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54016324?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54016324?"
                 },
                 "id": "54016324",
                 "neo_reference_id": "54016324",
@@ -13227,7 +13227,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54087786?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54087786?"
                 },
                 "id": "54087786",
                 "neo_reference_id": "54087786",
@@ -13305,7 +13305,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54144286?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54144286?"
                 },
                 "id": "54144286",
                 "neo_reference_id": "54144286",
@@ -13383,7 +13383,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54276978?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54276978?"
                 },
                 "id": "54276978",
                 "neo_reference_id": "54276978",
@@ -13461,7 +13461,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54497055?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54497055?"
                 },
                 "id": "54497055",
                 "neo_reference_id": "54497055",
@@ -13539,7 +13539,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54533420?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54533420?"
                 },
                 "id": "54533420",
                 "neo_reference_id": "54533420",
@@ -13617,7 +13617,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54560904?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54560904?"
                 },
                 "id": "54560904",
                 "neo_reference_id": "54560904",
@@ -13695,7 +13695,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561039?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561039?"
                 },
                 "id": "54561039",
                 "neo_reference_id": "54561039",
@@ -13773,7 +13773,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561362?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561362?"
                 },
                 "id": "54561362",
                 "neo_reference_id": "54561362",
@@ -13851,7 +13851,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561376?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561376?"
                 },
                 "id": "54561376",
                 "neo_reference_id": "54561376",
@@ -13929,7 +13929,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561652?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561652?"
                 },
                 "id": "54561652",
                 "neo_reference_id": "54561652",
@@ -14009,7 +14009,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-13": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3359094?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3359094?"
                 },
                 "id": "3359094",
                 "neo_reference_id": "3359094",
@@ -14084,11 +14084,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3359094?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/3359094?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3767009?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3767009?"
                 },
                 "id": "3767009",
                 "neo_reference_id": "3767009",
@@ -14166,7 +14166,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54017226?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54017226?"
                 },
                 "id": "54017226",
                 "neo_reference_id": "54017226",
@@ -14244,7 +14244,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54415885?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54415885?"
                 },
                 "id": "54415885",
                 "neo_reference_id": "54415885",
@@ -14322,7 +14322,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554706?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554706?"
                 },
                 "id": "54554706",
                 "neo_reference_id": "54554706",
@@ -14400,7 +14400,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561369?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561369?"
                 },
                 "id": "54561369",
                 "neo_reference_id": "54561369",
@@ -14478,7 +14478,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561373?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561373?"
                 },
                 "id": "54561373",
                 "neo_reference_id": "54561373",
@@ -14556,7 +14556,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561509?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561509?"
                 },
                 "id": "54561509",
                 "neo_reference_id": "54561509",
@@ -14631,11 +14631,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54561509?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54561509?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561646?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561646?"
                 },
                 "id": "54561646",
                 "neo_reference_id": "54561646",
@@ -14713,7 +14713,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561650?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561650?"
                 },
                 "id": "54561650",
                 "neo_reference_id": "54561650",
@@ -14793,7 +14793,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-12": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3748362?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3748362?"
                 },
                 "id": "3748362",
                 "neo_reference_id": "3748362",
@@ -14871,7 +14871,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3752785?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3752785?"
                 },
                 "id": "3752785",
                 "neo_reference_id": "3752785",
@@ -14949,7 +14949,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3781991?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3781991?"
                 },
                 "id": "3781991",
                 "neo_reference_id": "3781991",
@@ -15027,7 +15027,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3789662?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3789662?"
                 },
                 "id": "3789662",
                 "neo_reference_id": "3789662",
@@ -15105,7 +15105,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3989190?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3989190?"
                 },
                 "id": "3989190",
                 "neo_reference_id": "3989190",
@@ -15183,7 +15183,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54016668?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54016668?"
                 },
                 "id": "54016668",
                 "neo_reference_id": "54016668",
@@ -15258,11 +15258,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54016668?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54016668?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54350423?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54350423?"
                 },
                 "id": "54350423",
                 "neo_reference_id": "54350423",
@@ -15340,7 +15340,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54394001?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54394001?"
                 },
                 "id": "54394001",
                 "neo_reference_id": "54394001",
@@ -15418,7 +15418,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553939?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54553939?"
                 },
                 "id": "54553939",
                 "neo_reference_id": "54553939",
@@ -15496,7 +15496,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561041?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561041?"
                 },
                 "id": "54561041",
                 "neo_reference_id": "54561041",
@@ -15574,7 +15574,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561379?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561379?"
                 },
                 "id": "54561379",
                 "neo_reference_id": "54561379",
@@ -15652,7 +15652,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561501?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561501?"
                 },
                 "id": "54561501",
                 "neo_reference_id": "54561501",
@@ -15730,7 +15730,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561512?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561512?"
                 },
                 "id": "54561512",
                 "neo_reference_id": "54561512",
@@ -15808,7 +15808,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561594?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561594?"
                 },
                 "id": "54561594",
                 "neo_reference_id": "54561594",
@@ -15886,7 +15886,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561596?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561596?"
                 },
                 "id": "54561596",
                 "neo_reference_id": "54561596",
@@ -15964,7 +15964,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561597?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561597?"
                 },
                 "id": "54561597",
                 "neo_reference_id": "54561597",
@@ -16042,7 +16042,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561649?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561649?"
                 },
                 "id": "54561649",
                 "neo_reference_id": "54561649",
@@ -16120,7 +16120,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561653?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561653?"
                 },
                 "id": "54561653",
                 "neo_reference_id": "54561653",
@@ -16200,7 +16200,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-08": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2481127?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/2481127?"
                 },
                 "id": "2481127",
                 "neo_reference_id": "2481127",
@@ -16278,7 +16278,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3432703?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3432703?"
                 },
                 "id": "3432703",
                 "neo_reference_id": "3432703",
@@ -16356,7 +16356,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3883085?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3883085?"
                 },
                 "id": "3883085",
                 "neo_reference_id": "3883085",
@@ -16434,7 +16434,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54144917?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54144917?"
                 },
                 "id": "54144917",
                 "neo_reference_id": "54144917",
@@ -16512,7 +16512,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54146681?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54146681?"
                 },
                 "id": "54146681",
                 "neo_reference_id": "54146681",
@@ -16590,7 +16590,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54219286?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54219286?"
                 },
                 "id": "54219286",
                 "neo_reference_id": "54219286",
@@ -16665,11 +16665,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54219286?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54219286?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54225722?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54225722?"
                 },
                 "id": "54225722",
                 "neo_reference_id": "54225722",
@@ -16747,7 +16747,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54281071?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54281071?"
                 },
                 "id": "54281071",
                 "neo_reference_id": "54281071",
@@ -16825,7 +16825,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54338715?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54338715?"
                 },
                 "id": "54338715",
                 "neo_reference_id": "54338715",
@@ -16903,7 +16903,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54533099?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54533099?"
                 },
                 "id": "54533099",
                 "neo_reference_id": "54533099",
@@ -16981,7 +16981,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554639?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54554639?"
                 },
                 "id": "54554639",
                 "neo_reference_id": "54554639",
@@ -17059,7 +17059,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555754?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555754?"
                 },
                 "id": "54555754",
                 "neo_reference_id": "54555754",
@@ -17137,7 +17137,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54560222?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54560222?"
                 },
                 "id": "54560222",
                 "neo_reference_id": "54560222",
@@ -17215,7 +17215,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54560905?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54560905?"
                 },
                 "id": "54560905",
                 "neo_reference_id": "54560905",
@@ -17293,7 +17293,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561038?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561038?"
                 },
                 "id": "54561038",
                 "neo_reference_id": "54561038",
@@ -17371,7 +17371,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561040?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561040?"
                 },
                 "id": "54561040",
                 "neo_reference_id": "54561040",
@@ -17449,7 +17449,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561042?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561042?"
                 },
                 "id": "54561042",
                 "neo_reference_id": "54561042",
@@ -17527,7 +17527,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561136?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561136?"
                 },
                 "id": "54561136",
                 "neo_reference_id": "54561136",
@@ -17605,7 +17605,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561378?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561378?"
                 },
                 "id": "54561378",
                 "neo_reference_id": "54561378",
@@ -17685,7 +17685,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
         "2025-11-09": [
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3652983?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3652983?"
                 },
                 "id": "3652983",
                 "neo_reference_id": "3652983",
@@ -17763,7 +17763,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3736207?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3736207?"
                 },
                 "id": "3736207",
                 "neo_reference_id": "3736207",
@@ -17841,7 +17841,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3761647?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3761647?"
                 },
                 "id": "3761647",
                 "neo_reference_id": "3761647",
@@ -17919,7 +17919,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3781985?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3781985?"
                 },
                 "id": "3781985",
                 "neo_reference_id": "3781985",
@@ -17997,7 +17997,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3789664?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3789664?"
                 },
                 "id": "3789664",
                 "neo_reference_id": "3789664",
@@ -18075,7 +18075,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3824114?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3824114?"
                 },
                 "id": "3824114",
                 "neo_reference_id": "3824114",
@@ -18153,7 +18153,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3989355?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/3989355?"
                 },
                 "id": "3989355",
                 "neo_reference_id": "3989355",
@@ -18231,7 +18231,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54203035?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54203035?"
                 },
                 "id": "54203035",
                 "neo_reference_id": "54203035",
@@ -18309,7 +18309,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54547359?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54547359?"
                 },
                 "id": "54547359",
                 "neo_reference_id": "54547359",
@@ -18387,7 +18387,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54551737?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54551737?"
                 },
                 "id": "54551737",
                 "neo_reference_id": "54551737",
@@ -18465,7 +18465,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555537?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54555537?"
                 },
                 "id": "54555537",
                 "neo_reference_id": "54555537",
@@ -18543,7 +18543,7 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561135?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561135?"
                 },
                 "id": "54561135",
                 "neo_reference_id": "54561135",
@@ -18618,11 +18618,11 @@ export const ASTEROID_JSON_LIST = JSON.parse(`{
                     }
                 },
                 "is_sentry_object": true,
-                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54561135?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                "sentry_data": "http://api.nasa.gov/neo/rest/v1/neo/sentry/54561135?"
             },
             {
                 "links": {
-                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561375?api_key=u5sKLoHYYeiG0NMMBxhr0f5DRzCaPmvSU4xf0cid"
+                    "self": "http://api.nasa.gov/neo/rest/v1/neo/54561375?"
                 },
                 "id": "54561375",
                 "neo_reference_id": "54561375",

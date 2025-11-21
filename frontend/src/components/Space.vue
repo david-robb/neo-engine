@@ -1,19 +1,83 @@
 <script setup lang="ts">
-    import { AsteroidModel, ResponseSchema } from '../asteroid';
-    import { ASTEROID_JSON_LIST } from '../data';
-    import Sun from './Sun.vue';
+    import { onMounted, ref } from 'vue';
+    import { useTres } from '@tresjs/core';
     import Bodies from './Bodies.vue';
-    import Orbits from './Orbits.vue';
-    import { TOTAL_ASTEROID_COUNT } from '../constants';
+    import { useStateStore } from '../stores/state';
+    import UserInterface from './UserInterface.vue';
+    import SolarSystem from './system/SolarSystem.vue';
+    import { buildAxes, buildGrid, loadEngineBodies } from './Space';
+    import * as THREE from 'three';
+    import { calculateIntersectedObject } from '../utility/raycast';
+    import { NeoEngineBody } from 'src/models/body';
 
-    const response = ResponseSchema.parse(ASTEROID_JSON_LIST);
-    const allAsteroids = Object.entries(response.near_earth_objects!).flatMap(([_, value]) => value);
+    const isLoading = ref(true);
+    const { scene, renderer, camera } = useTres();
+    const state = useStateStore();
 
-    const asteroids: AsteroidModel[] = allAsteroids.slice(0, TOTAL_ASTEROID_COUNT);
+    function onMouseMove(event: MouseEvent) {
+        const pickPosition = getCanvasRelativePosition(event);
+
+        const intersectedObject = calculateIntersectedObject(scene.value, pickPosition, camera.value!);
+        state.updateHoveredObject(intersectedObject);
+    }
+
+    function onMouseClick(event: MouseEvent) {
+        const pickPosition = getCanvasRelativePosition(event);
+
+        const intersectedObject = calculateIntersectedObject(scene.value, pickPosition, camera.value!);
+        state.focusObject(intersectedObject);
+    }
+
+    function getCanvasRelativePosition(event: MouseEvent): THREE.Vector2 {
+        const canvas = renderer.domElement;
+
+        if (!canvas) return new THREE.Vector2();
+
+        const rect = canvas.getBoundingClientRect();
+
+        const x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+        const y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+        return new THREE.Vector2(x, y);
+    }
+
+    onMounted(() => {
+        const bodies: NeoEngineBody[] = loadEngineBodies();
+        const grid: THREE.GridHelper = buildGrid();
+        const axes: THREE.AxesHelper = buildAxes();
+
+        if (camera.value) {
+            camera.value.rotation.x = Math.PI / 2;
+        }
+        // camera.value?.lookAt(0, 0, 0);
+
+        bodies.forEach((body) => {
+            scene.value.add(body.mesh.orbit!);
+            scene.value.add(body.mesh.sphere!);
+        });
+
+        scene.value.add(grid);
+        scene.value.add(axes);
+
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        state.$patch({
+            bodies,
+        });
+
+        camera.value?.layers.enable(1);
+        camera.value?.layers.enable(2);
+
+        isLoading.value = false;
+
+        window.addEventListener('mousemove', onMouseMove);
+        window.addEventListener('mousedown', onMouseClick);
+    });
 </script>
 
 <template>
-    <Sun />
-    <Bodies :asteroids="asteroids" />
-    <Orbits :asteroids="asteroids" />
+    <SolarSystem />
+    <UserInterface v-if="!isLoading" />
+    <Bodies v-if="!isLoading" />
+    <TresPlane :args="[new THREE.Vector3(1, 0, 0), 10000]"></TresPlane>
 </template>
