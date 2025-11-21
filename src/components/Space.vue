@@ -3,12 +3,12 @@
     import { useTres } from '@tresjs/core';
     import Bodies from './Bodies.vue';
     import { useStateStore } from '../stores/state';
-    import UserInterface from './UserInterface.vue';
-    import SolarSystem from './system/SolarSystem.vue';
-    import { buildGrid, loadEngineBodies } from './Space';
     import * as THREE from 'three';
     import { calculateIntersectedObject } from '../utility/raycast';
-    import { NeoEngineBody } from 'src/models/body';
+    import { NeoEngineBody } from '../models/body';
+    import { buildGrid, loadEngineBodies } from './Space';
+    import SolarSystem from './system/SolarSystem.vue';
+    import UserInterface from './UserInterface.vue';
 
     const isLoading = ref(true);
     const { scene, renderer, camera } = useTres();
@@ -72,5 +72,4 @@
     <SolarSystem />
     <UserInterface v-if="!isLoading" />
     <Bodies v-if="!isLoading" />
-    <TresPlane :args="[new THREE.Vector3(1, 0, 0), 10000]"></TresPlane>
 </template>
