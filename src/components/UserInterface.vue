@@ -7,7 +7,7 @@
 
     const state = useStateStore();
 
-    const controls = new GUI({ title: 'NEO Sim', width: 400 });
+    const controls = new GUI({ title: 'NEO Engine', width: 400 });
     const timeControlsFolder = controls.addFolder('Time Controls');
     const generalControlsFolder = controls.addFolder('General Controls');
     const selectedObjectFolder = controls.addFolder('Selected NEO');
