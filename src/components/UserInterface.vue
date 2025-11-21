@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { onMounted, watch } from 'vue';
     import GUI from 'lil-gui';
-    import { useStateStore } from '../stores/state';
-    import { NeoEngineBody } from 'src/models/body';
     import { format } from '@formkit/tempo';
+    import { useStateStore } from '../stores/state';
+    import { NeoEngineBody } from '../models/body';
 
     const state = useStateStore();
 

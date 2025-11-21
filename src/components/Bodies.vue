@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { useLoop } from '@tresjs/core';
     import { onMounted } from 'vue';
+    import { NeoBodyMesh, NeoBodyState } from '../models/body';
     import { useStateStore } from '../stores/state';
     import { calculateFocusedState, calculateScaledPosition } from '../utility/orbital-mechanics';
-    import { NeoBodyMesh, NeoBodyState } from 'src/models/body';
 
     const state = useStateStore();
 

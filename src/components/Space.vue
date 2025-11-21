@@ -5,7 +5,7 @@
     import { useStateStore } from '../stores/state';
     import UserInterface from './UserInterface.vue';
     import SolarSystem from './system/SolarSystem.vue';
-    import { buildAxes, buildGrid, loadEngineBodies } from './Space';
+    import { buildGrid, loadEngineBodies } from './Space';
     import * as THREE from 'three';
     import { calculateIntersectedObject } from '../utility/raycast';
     import { NeoEngineBody } from 'src/models/body';
@@ -44,7 +44,6 @@
     onMounted(() => {
         const bodies: NeoEngineBody[] = loadEngineBodies();
         const grid: THREE.GridHelper = buildGrid();
-        const axes: THREE.AxesHelper = buildAxes();
 
         bodies.forEach((body) => {
             scene.value.add(body.mesh.orbit!);
@@ -52,7 +51,6 @@
         });
 
         scene.value.add(grid);
-        // scene.value.add(axes);
 
         renderer.setPixelRatio(window.devicePixelRatio);
 

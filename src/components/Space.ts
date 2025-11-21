@@ -1,7 +1,7 @@
-import { AsteroidModel, ResponseSchema, OrbitalData } from '../models/neo-body';
+import { AsteroidModel, OrbitalData, ResponseSchema } from '../models/neo-body';
 import { NeoBodyOrbitalData, NeoBodyProperties, NeoEngineBody } from '../models/body';
 import { ASTEROID_JSON_LIST } from '../data';
-import { SCALE_FACTOR, START_BODY_COUNT } from '../utility/constants';
+import { SCALE_FACTOR } from '../utility/constants';
 import * as THREE from 'three';
 import { degToRad } from 'three/src/math/MathUtils.js';
 import { buildOrbit, calculateScaledPosition } from '../utility/orbital-mechanics';
@@ -26,16 +26,6 @@ export function buildGrid(): THREE.GridHelper {
     gridHelper.material.opacity = 0.5;
 
     return gridHelper;
-}
-
-export function buildAxes(): THREE.AxesHelper {
-    const axesHelper = new THREE.AxesHelper(1000000);
-    axesHelper.material.transparent = true;
-    axesHelper.material.opacity = 0.5;
-
-    axesHelper.setColors(new THREE.Color(0xff0000), new THREE.Color(0x00ff00), new THREE.Color(0x0000ff));
-
-    return axesHelper;
 }
 
 function toEngineBody(neoBody: AsteroidModel): NeoEngineBody {
@@ -130,10 +120,8 @@ function buildLine(orbitPositions: THREE.Vector3[]): THREE.LineSegments {
 }
 
 function buildSphere(name: string): THREE.Mesh {
-    // 1000 KM radius!
-    const geometry = new THREE.SphereGeometry(1000, 50, 50);
+    const geometry = new THREE.SphereGeometry(1000, 50, 50); // (1000 * SCALE_FACTOR) KM
 
-    // const material = new THREE.MeshPhongMaterial({ color: 0xa9a9a9, shininess: 100 });
     const material = new THREE.MeshBasicMaterial({ color: 0xa9a9a9 });
 
     const mesh = new THREE.Mesh(geometry, material);
