@@ -1,16 +1,16 @@
-import { AsteroidModel, OrbitalData, ResponseSchema } from '../models/neo-body';
-import { NeoBodyOrbitalData, NeoBodyProperties, NeoEngineBody } from '../models/body';
-import { ASTEROID_JSON_LIST } from '../data';
-import { SCALE_FACTOR } from '../utility/constants';
+import { SCALE_FACTOR, TOTAL_FETCH } from '../utility/constants';
 import * as THREE from 'three';
-import { degToRad } from 'three/src/math/MathUtils.js';
 import { buildOrbit, calculateScaledPosition } from '../utility/orbital-mechanics';
+import { EngineNEO } from './simulation/types/neo-engine';
+import { NEO } from './simulation/types/neo';
+import { fetchNeos } from './simulation/services/databaseApi';
 
-export function loadEngineBodies(): NeoEngineBody[] {
-    const response = ResponseSchema.parse(ASTEROID_JSON_LIST);
-    const bodies = Object.entries(response.near_earth_objects!).flatMap(([_, value]) => value);
+export async function loadEngineNEOs(): Promise<EngineNEO[]> {
+    const neos: NEO[] = await fetchNeos(TOTAL_FETCH);
 
-    return bodies.map((neoBody) => toEngineBody(neoBody));
+    console.log(`${neos?.length} NEOs Loaded`);
+
+    return neos.map((neo) => toEngineModel(neo));
 }
 
 export function buildGrid(): THREE.GridHelper {
@@ -28,17 +28,14 @@ export function buildGrid(): THREE.GridHelper {
     return gridHelper;
 }
 
-function toEngineBody(neoBody: AsteroidModel): NeoEngineBody {
-    const properties: NeoBodyProperties = toProperties(neoBody);
-    const orbit: NeoBodyOrbitalData = toOrbitalData(neoBody.orbital_data!);
-
-    const orbitalPoints = buildOrbit(orbit);
-    const startingPosition = calculateScaledPosition(orbit);
+function toEngineModel(neo: NEO): EngineNEO {
+    const orbitalPoints = buildOrbit(neo.orbitalData);
+    const startingPosition = calculateScaledPosition(neo.orbitalData);
 
     return {
         mesh: {
             orbit: buildLine(orbitalPoints),
-            sphere: buildSphere(properties.name),
+            sphere: buildSphere(neo.name),
         },
         state: {
             active: false,
@@ -46,65 +43,8 @@ function toEngineBody(neoBody: AsteroidModel): NeoEngineBody {
             isHovered: false,
             isSelected: false,
         },
-        properties: properties,
-        orbit: orbit,
+        neo: neo,
     };
-}
-
-function toProperties(neoBody: AsteroidModel): NeoBodyProperties {
-    const estimatedDiameter = neoBody.estimated_diameter!;
-    return {
-        name: neoBody.name!,
-        isHazardous: neoBody.is_potentially_hazardous_asteroid!,
-        diameterFeet: +estimatedDiameter.feet?.estimated_diameter_min! + +neoBody.estimated_diameter?.feet?.estimated_diameter_max! / 2,
-        diameterKilometers:
-            +estimatedDiameter?.kilometers?.estimated_diameter_min! + +estimatedDiameter?.kilometers?.estimated_diameter_max! / 2,
-        diameterMeters: +estimatedDiameter?.meters?.estimated_diameter_min! + +estimatedDiameter?.meters?.estimated_diameter_max! / 2,
-        diameterMiles: +estimatedDiameter?.miles?.estimated_diameter_min! + +estimatedDiameter?.miles?.estimated_diameter_max! / 2,
-    };
-}
-
-function toOrbitalData(orbitalData: OrbitalData): NeoBodyOrbitalData {
-    return {
-        orbitId: orbitalData.orbit_id!,
-        orbitDeterminationDate: orbitalData.orbit_determination_date!,
-        firstObservationDate: orbitalData.first_observation_date!,
-        lastObservationDate: orbitalData.last_observation_date!,
-        dataArcInDays: daysToSec(orbitalData.data_arc_in_days!),
-        observationsUsed: orbitalData.observations_used!,
-        orbitUncertainty: +orbitalData.orbit_uncertainty!,
-        minimumOrbitIntersection: auToKm(orbitalData.minimum_orbit_intersection!),
-        jupiterTisserandInvariant: +orbitalData.jupiter_tisserand_invariant!, // CHECK
-        epochOsculation: +orbitalData.epoch_osculation!, // CHECK
-        eccentricity: +orbitalData.eccentricity!,
-        semiMajorAxis: auToKm(orbitalData.semi_major_axis!),
-        inclination: degToRad(+orbitalData.inclination!),
-        ascendingNodeLongitude: degToRad(+orbitalData.ascending_node_longitude!),
-        orbitalPeriod: daysToSec(+orbitalData.orbital_period!)!,
-        perihelionDistance: auToKm(orbitalData.perihelion_distance!),
-        perihelionArgument: degToRad(+orbitalData.perihelion_argument!), // CHECK
-        aphelionDistance: auToKm(orbitalData.aphelion_distance!),
-        perihelionTime: +orbitalData.perihelion_time!, // CHECK
-        meanAnomaly: degToRad(+orbitalData.mean_anomaly!),
-        meanMotion: degDayToRadSec(orbitalData.mean_motion!),
-        equinox: orbitalData.equinox!,
-    };
-}
-
-function daysToSec(day: number | undefined): number | undefined {
-    if (!day) {
-        return undefined;
-    }
-
-    return day * 86400;
-}
-
-function degDayToRadSec(val: string): number {
-    return +val * (Math.PI / (180 * 86400));
-}
-
-function auToKm(auDistance: string): number {
-    return +auDistance! * 149597870.691;
 }
 
 function buildLine(orbitPositions: THREE.Vector3[]): THREE.LineSegments {

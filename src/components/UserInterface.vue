@@ -3,7 +3,7 @@
     import GUI from 'lil-gui';
     import { format } from '@formkit/tempo';
     import { useStateStore } from '../stores/state';
-    import { NeoEngineBody } from '../models/body';
+    import { EngineNEO } from './simulation/types/neo-engine';
 
     const state = useStateStore();
 
@@ -15,7 +15,8 @@
     selectedObjectFolder.hide();
 
     const generalControlsInterface = {
-        renderOrbits: true,
+        renderAllNEOs: false,
+        renderOrbits: false,
         dropDownSelectedObject: '',
         hoveredObjectName: '',
         logState: () => {
@@ -51,10 +52,10 @@
     onMounted(() => {
         generalControlsFolder.add(generalControlsInterface, 'hoveredObjectName').listen().disable().name('Hovered Object Name');
         generalControlsFolder
-            .add(generalControlsInterface, 'dropDownSelectedObject', state.allObjectNames.sort())
+            .add(generalControlsInterface, 'dropDownSelectedObject', state.neoNames.sort())
             .name('Select Object')
             .onChange((newValue: string) => {
-                state.focusByName(newValue);
+                state.focusNeoByName(newValue);
             });
 
         timeControlsFolder.add(timeControlsInterface, 'currentDateTime').name('Simulation Time (s)').listen().disable();
@@ -75,13 +76,25 @@
                 });
             });
 
+        generalControlsFolder
+            .add(generalControlsInterface, 'renderAllNEOs')
+            .name('Render All NEOs?')
+            .setValue(false)
+            .onChange((enabled: boolean) => {
+                if (enabled) {
+                    state.markAllActive();
+                } else {
+                    state.markAllInactive();
+                }
+            });
+
         generalControlsFolder.add(generalControlsInterface, 'logState').name('Log State');
 
         selectedObjectFolder.add(selectedObjectInterface, 'name').name('Name').listen().disable();
         selectedObjectFolder.add(selectedObjectInterface, 'velocity').name('Velocity (km/s)').listen().disable();
         selectedObjectFolder.add(selectedObjectInterface, 'distanceToSun').name('Distance To Sun (km)').listen().disable();
         selectedObjectFolder.add(selectedObjectInterface, 'isHazard').name('Is Hazardous?').listen().disable();
-        selectedObjectFolder.add(selectedObjectInterface, 'estDiameter').name('Diameter Est. (miles)').listen().disable();
+        selectedObjectFolder.add(selectedObjectInterface, 'estDiameter').name('Diameter Est. (km)').listen().disable();
         selectedObjectFolder.add(selectedObjectInterface, 'eccentricity').name('Eccentricity').listen().disable();
         selectedObjectFolder.add(selectedObjectInterface, 'semiMajorAxis').name('Semi-Major Axis (km)').listen().disable();
         selectedObjectFolder.add(selectedObjectInterface, 'inclination').name('Inclination (rad)').listen().disable();
@@ -105,7 +118,7 @@
     watch(
         () => state.hoveredObject,
         (hovered) => {
-            generalControlsInterface.hoveredObjectName = hovered?.properties.name ?? '';
+            generalControlsInterface.hoveredObjectName = hovered?.neo.name ?? '';
         }
     );
 
@@ -124,27 +137,26 @@
 
             generalControlsFolder.close();
 
-            const selected: NeoEngineBody = focusedState.object;
+            const selected: EngineNEO = focusedState.object;
 
-            selectedObjectInterface.name = selected.properties.name;
-            selectedObjectInterface.isHazard = selected.properties.isHazardous!;
-            selectedObjectInterface.estDiameter = selected.properties.diameterMiles;
-            selectedObjectInterface.eccentricity = selected.orbit.eccentricity;
-            selectedObjectInterface.semiMajorAxis = selected.orbit.semiMajorAxis;
-            selectedObjectInterface.inclination = selected.orbit.inclination;
-            selectedObjectInterface.ascendingNodeLongitude = selected.orbit.ascendingNodeLongitude;
-            selectedObjectInterface.orbitalPeriod = selected.orbit.orbitalPeriod;
-            selectedObjectInterface.perihelionDistance = selected.orbit.perihelionDistance;
-            selectedObjectInterface.perihelionArgument = selected.orbit.perihelionArgument;
-            selectedObjectInterface.aphelionDistance = selected.orbit.aphelionDistance;
-            selectedObjectInterface.perihelionTime = selected.orbit.perihelionTime;
-            selectedObjectInterface.meanAnomaly = selected.orbit.meanAnomaly;
-            selectedObjectInterface.meanMotion = selected.orbit.meanMotion;
-            selectedObjectInterface.equinox = selected.orbit.equinox;
+            selectedObjectInterface.name = selected.neo.name;
+            selectedObjectInterface.isHazard = selected.neo.isHazardous;
+            selectedObjectInterface.estDiameter = selected.neo.diameter.km.min;
+            selectedObjectInterface.eccentricity = selected.neo.orbitalData.eccentricity;
+            selectedObjectInterface.semiMajorAxis = selected.neo.orbitalData.semiMajorAxis;
+            selectedObjectInterface.inclination = selected.neo.orbitalData.inclination;
+            selectedObjectInterface.ascendingNodeLongitude = selected.neo.orbitalData.ascendingNodeLongitude;
+            selectedObjectInterface.orbitalPeriod = selected.neo.orbitalData.orbitalPeriod;
+            selectedObjectInterface.perihelionDistance = selected.neo.orbitalData.perihelionDistance;
+            selectedObjectInterface.perihelionArgument = selected.neo.orbitalData.perihelionArgument;
+            selectedObjectInterface.aphelionDistance = selected.neo.orbitalData.aphelionDistance;
+            selectedObjectInterface.perihelionTime = selected.neo.orbitalData.perihelionTime;
+            selectedObjectInterface.meanAnomaly = selected.neo.orbitalData.meanAnomaly;
+            selectedObjectInterface.meanMotion = selected.neo.orbitalData.meanMotion;
 
             selectedObjectFolder.show();
 
-            generalControlsInterface.dropDownSelectedObject = selected.properties.name;
+            generalControlsInterface.dropDownSelectedObject = selected.neo.name;
         }
     );
 

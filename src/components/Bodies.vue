@@ -1,9 +1,9 @@
 <script setup lang="ts">
     import { useLoop } from '@tresjs/core';
     import { onMounted } from 'vue';
-    import { NeoBodyMesh, NeoBodyState } from '../models/body';
     import { useStateStore } from '../stores/state';
     import { calculateFocusedState, calculateScaledPosition } from '../utility/orbital-mechanics';
+    import { EngineNEOMesh, EngineNEOState } from './simulation/types/neo-engine';
 
     const state = useStateStore();
 
@@ -34,7 +34,7 @@
 
                 updateVisibility();
 
-                t += dt * state.getTimeMultiplier;
+                t += dt * state.timeMultiplier;
                 accumulator -= dt;
             }
         });
@@ -42,8 +42,8 @@
 
     function updateVisibility(): void {
         state.bodies.forEach((body) => {
-            const bodyState: NeoBodyState = body.state;
-            const bodyMesh: NeoBodyMesh = body.mesh;
+            const bodyState: EngineNEOState = body.state;
+            const bodyMesh: EngineNEOMesh = body.mesh;
 
             if (bodyState.active) {
                 bodyMesh.sphere!.visible = true;
@@ -61,13 +61,13 @@
 
             const focusedState = calculateFocusedState(body);
 
-            state.updateFocusedObjectState(focusedState);
+            state.updateFocusedNeoState(focusedState);
         }
     }
     function updatePhysics(t: number): void {
-        state.getActiveBodies.forEach((body) => {
-            body.state.currentPosition = calculateScaledPosition(body.orbit, t);
-            body.mesh.sphere!.position.set(body.state.currentPosition.x, body.state.currentPosition.y, body.state.currentPosition.z);
+        state.activeNeos.forEach((neo) => {
+            neo.state.currentPosition = calculateScaledPosition(neo.neo.orbitalData, t);
+            neo.mesh.sphere!.position.set(neo.state.currentPosition.x, neo.state.currentPosition.y, neo.state.currentPosition.z);
         });
     }
 </script>

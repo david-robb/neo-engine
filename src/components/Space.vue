@@ -5,27 +5,28 @@
     import { useStateStore } from '../stores/state';
     import * as THREE from 'three';
     import { calculateIntersectedObject } from '../utility/raycast';
-    import { NeoEngineBody } from '../models/body';
-    import { buildGrid, loadEngineBodies } from './Space';
+    import { buildGrid, loadEngineNEOs } from './Space';
     import SolarSystem from './system/SolarSystem.vue';
     import UserInterface from './UserInterface.vue';
+    import { EngineNEO } from './simulation/types/neo-engine';
 
     const isLoading = ref(true);
+
     const { scene, renderer, camera } = useTres();
     const state = useStateStore();
 
     function onMouseMove(event: MouseEvent) {
         const pickPosition = getCanvasRelativePosition(event);
 
-        const intersectedObject = calculateIntersectedObject(scene.value, pickPosition, camera.value!);
-        state.updateHoveredObject(intersectedObject);
+        const intersectedNeo = calculateIntersectedObject(scene.value, pickPosition, camera.value!);
+        state.updateHoveredNeo(intersectedNeo);
     }
 
     function onMouseClick(event: MouseEvent) {
         const pickPosition = getCanvasRelativePosition(event);
 
-        const intersectedObject = calculateIntersectedObject(scene.value, pickPosition, camera.value!);
-        state.focusObject(intersectedObject);
+        const intersectedNeo = calculateIntersectedObject(scene.value, pickPosition, camera.value!);
+        state.focusNeo(intersectedNeo);
     }
 
     function getCanvasRelativePosition(event: MouseEvent): THREE.Vector2 {
@@ -41,22 +42,20 @@
         return new THREE.Vector2(x, y);
     }
 
-    onMounted(() => {
-        const bodies: NeoEngineBody[] = loadEngineBodies();
+    onMounted(async () => {
+        const neos: EngineNEO[] = await loadEngineNEOs();
         const grid: THREE.GridHelper = buildGrid();
 
-        bodies.forEach((body) => {
-            scene.value.add(body.mesh.orbit!);
-            scene.value.add(body.mesh.sphere!);
+        neos.forEach((neo) => {
+            scene.value.add(neo.mesh.orbit);
+            scene.value.add(neo.mesh.sphere);
         });
 
         scene.value.add(grid);
 
         renderer.setPixelRatio(window.devicePixelRatio);
 
-        state.$patch({
-            bodies,
-        });
+        state.$patch({ bodies: neos });
 
         camera.value?.layers.enable(1);
         camera.value?.layers.enable(2);

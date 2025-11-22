@@ -7,12 +7,10 @@
 </script>
 
 <template>
-    <div id="canvas">
-        <TresCanvas id="canvas" :antialias="true" clear-color="#000000" window-size>
-            <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="104104577000" />
-            <OrbitControls />
-            <Stats />
-            <Space />
-        </TresCanvas>
-    </div>
+    <TresCanvas :antialias="true" clear-color="#000000" window-size>
+        <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="104104577000" />
+        <OrbitControls />
+        <Stats />
+        <Space />
+    </TresCanvas>
 </template>
