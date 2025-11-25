@@ -8,6 +8,7 @@ export interface NEO {
     isSentry: boolean;
     diameter: NEODiameter;
     orbitalData: NEOOrbitalData;
+    epochOffset: number;
 }
 
 export interface NEODiameter {

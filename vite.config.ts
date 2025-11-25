@@ -10,7 +10,7 @@ export default defineConfig({
         vue({
             ...templateCompilerOptions,
         }),
-        glsl(),
+        glsl()
     ],
     build: {
         rollupOptions: {
@@ -23,5 +23,17 @@ export default defineConfig({
     },
     optimizeDeps: {
         exclude: ['vue', 'three'],
+    },
+    server: {
+        headers: {
+            'Cross-Origin-Opener-Policy': 'same-origin',
+            'Cross-Origin-Embedder-Policy': 'require-corp',
+        },
+    },
+    preview: {
+        headers: {
+            'Cross-Origin-Opener-Policy': 'same-origin',
+            'Cross-Origin-Embedder-Policy': 'require-corp',
+        },
     },
 });

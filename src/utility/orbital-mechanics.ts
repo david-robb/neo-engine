@@ -1,9 +1,9 @@
-import { Matrix4, Vector3 } from 'three';
+import { BufferGeometry, DoubleSide, Float32BufferAttribute, LineBasicMaterial, LineSegments, Matrix4, Vector3 } from 'three';
 import { ORBIT_SEGMENT_COUNT, SCALE_FACTOR } from './constants';
-import { NEOOrbitalData } from '../components/simulation/types/neo';
-import { EngineNEO } from '../components/simulation/types/neo-engine';
+import { NEOOrbitalData } from '../components/simulation/types/neo.types';
+import { EngineNEO } from '../components/simulation/types/neo-engine.types';
 
-export function buildOrbit(orbitElements: NEOOrbitalData): Vector3[] {
+export function buildOrbitForNew(orbitElements: NEOOrbitalData): LineSegments {
     let trueAnomaly: number = 0.0;
 
     const segments: number = ORBIT_SEGMENT_COUNT;
@@ -19,7 +19,21 @@ export function buildOrbit(orbitElements: NEOOrbitalData): Vector3[] {
         trueAnomaly += accumulator;
     }
 
-    return points;
+    const allPts: number[] = [];
+    for (let i = 0; i < points.length - 1; i++) {
+        allPts.push(points[i].x);
+        allPts.push(points[i].y);
+        allPts.push(points[i].z);
+        allPts.push(points[i + 1].x);
+        allPts.push(points[i + 1].y);
+        allPts.push(points[i + 1].z);
+    }
+
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', new Float32BufferAttribute(allPts, 3));
+
+    const material = new LineBasicMaterial({ transparent: true, opacity: 0.1, color: 0xa9a9a9, depthWrite: false });
+    return new LineSegments(geometry, material);
 }
 
 export function calculateScaledPosition(orbitElements: NEOOrbitalData, t: number = 0, scale: boolean = true) {
@@ -30,9 +44,9 @@ export function calculateScaledPosition(orbitElements: NEOOrbitalData, t: number
     return toEclipticCoordinates(orbitElements, orbitalCoordinates, scale);
 }
 
-export function calculateFocusedState(body: EngineNEO): { velocity: number; distanceToSun: number } {
+export function calculateDetailedState(body: EngineNEO, currentPosition: Vector3): { velocity: number; distanceToSun: number } {
     const mu = 132712440018;
-    const objectPosition = body.state.currentPosition.multiplyScalar(SCALE_FACTOR);
+    const objectPosition = currentPosition.multiplyScalar(SCALE_FACTOR);
 
     const distanceToSun = Math.hypot(objectPosition.x, objectPosition.y, objectPosition.z);
     const velocity = Math.sqrt(mu * (2.0 / distanceToSun - 1.0 / body.neo.orbitalData.semiMajorAxis));

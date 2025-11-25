@@ -1,8 +1,18 @@
-import { NEO, NEODiameter, NEOOrbitalData } from '../types/neo';
+import { NEO, NEODiameter, NEOOrbitalData } from '../types/neo.types';
 import { supabase } from '../../../lib/supabase';
+import { PostgrestError } from '@supabase/supabase-js';
 
-export const fetchNeos = async (amount: number): Promise<NEO[]> => {
-    const { data, error } = await supabase.from('neo').select().limit(amount);
+export const fetchAllNeos = async (): Promise<NEO[]> => {
+    const { data, error } = await supabase.from('neo').select();
+    return parseResponse(data, error);
+};
+
+export const fetchHazardousNeos = async (): Promise<NEO[]> => {
+    const { data, error } = await supabase.from('neo').select().eq('is_hazardous', true).limit(10);
+    return parseResponse(data, error);
+};
+
+const parseResponse = (data: any, error: PostgrestError | null): NEO[] => {
     if (error) {
         console.error(`Error occurred while calling DB: ${error}`);
         return [];
@@ -13,7 +23,7 @@ export const fetchNeos = async (amount: number): Promise<NEO[]> => {
         return [];
     }
 
-    return data.map((dbNeo) => {
+    return data.map((dbNeo: any) => {
         const id = dbNeo.id;
         const epoch = dbNeo.epoch!;
         const neoReferenceId = dbNeo.neo_reference_id!;
