@@ -23,7 +23,6 @@ export interface PhysicsWorkerSelectionChangePayload {
     id: number | undefined;
 }
 
-
 let positions: Float32Array;
 let focusedStateBuffer: Float32Array;
 let objects: EngineNEO[];
@@ -52,7 +51,7 @@ self.onmessage = (e: MessageEvent): void => {
 
         updatePositions(payload.t);
 
-        self.postMessage({type: PhysicsWorkerType.TICK_COMPLETE});
+        self.postMessage({ type: PhysicsWorkerType.TICK_COMPLETE });
     }
 };
 

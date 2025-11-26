@@ -1,19 +1,19 @@
 import { NEO } from '../types/neo.types';
-import { fetchAllNeos, fetchHazardousNeos } from '../services/database-api.service';
+import { fetchAllNeos, fetchHazardousNeos, fetchNeos } from '../services/database-api.service';
 import { SimulationMode, SimulationStartState } from '../types/simulation.types';
 import * as THREE from 'three';
+import { DynamicDrawUsage, GridHelper } from 'three';
 import { EngineNEO } from '../types/neo-engine.types';
 import { synchronizeEpochs } from '../services/epoch-synchronizer.service';
 import { updatePositions } from '../services/position-updater.service';
 import { SCALE_FACTOR } from '../../../utility/constants';
-import { DynamicDrawUsage, GridHelper } from 'three';
 
-export const init = async (mode: SimulationMode): Promise<SimulationStartState> => {
-    const databaseNeos = await fetchDatabaseRecords(mode);
+export const init = async (mode: SimulationMode, epoch: Date, customAmount: number = 1): Promise<SimulationStartState> => {
+    const databaseNeos = await fetchDatabaseRecords(mode, customAmount);
 
-    console.log(`${databaseNeos.length} Objects Loaded!`)
+    console.log(`${databaseNeos.length} Objects Loaded!`);
 
-    synchronizeEpochs(databaseNeos, new Date());
+    synchronizeEpochs(databaseNeos, epoch);
 
     const engineObjects: EngineNEO[] = toEngineObjects(databaseNeos);
 
@@ -32,19 +32,22 @@ export const init = async (mode: SimulationMode): Promise<SimulationStartState> 
     return {
         gridMesh: grid,
         objects: engineObjects,
-        objectsMesh: instancedMesh
-    }
-}
+        objectsMesh: instancedMesh,
+    };
+};
 
-const fetchDatabaseRecords = async (mode: SimulationMode): Promise<NEO[]> => {
+const fetchDatabaseRecords = async (mode: SimulationMode, customAmount: number = 1): Promise<NEO[]> => {
     switch (mode) {
         case SimulationMode.ONLY_HAZARDOUS:
             return fetchHazardousNeos();
         case SimulationMode.ALL:
             return fetchAllNeos();
-        default: return new Promise(() => []);
+        case SimulationMode.CUSTOM_AMOUNT:
+            return fetchNeos(customAmount);
+        default:
+            return new Promise(() => []);
     }
-}
+};
 
 const buildInstancedSpheres = (amount: number): THREE.InstancedMesh => {
     const geometry = new THREE.SphereGeometry(300, 10, 10); // (500 * SCALE_FACTOR) KM
@@ -54,7 +57,7 @@ const buildInstancedSpheres = (amount: number): THREE.InstancedMesh => {
     mesh.layers.set(2);
 
     return mesh;
-}
+};
 
 const toEngineObjects = (neos: NEO[]): EngineNEO[] => {
     return neos.map((neo, index) => {
@@ -70,7 +73,7 @@ const toEngineObjects = (neos: NEO[]): EngineNEO[] => {
             },
         } as EngineNEO;
     });
-}
+};
 
 const buildGrid = (): THREE.GridHelper => {
     const GRID_TOTAL_SIZE_KM = 1000000000;
@@ -82,7 +85,7 @@ const buildGrid = (): THREE.GridHelper => {
     const colorGrid = 0x888888;
     const gridHelper = new THREE.GridHelper(size, divisions, colorCenterLine, colorGrid);
     gridHelper.material.transparent = true;
-    gridHelper.material.opacity = 0.2;
+    gridHelper.material.opacity = 0.3;
 
     return gridHelper;
-}
+};

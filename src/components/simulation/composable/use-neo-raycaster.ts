@@ -2,8 +2,7 @@ import { EngineNEO } from '../types/neo-engine.types';
 import { onMounted } from 'vue';
 import * as THREE from 'three';
 import { TresRenderer, useTres } from '@tresjs/core';
-import { SimulationStateFlags, useStateStore } from '../../../stores/state';
-import { FlagUtilities } from '../utilities/flag.utilities';
+import { useStateStore } from '../stores/state';
 
 type NEOSelectCallback = (props: { oldVal: EngineNEO | undefined; newVal: EngineNEO | undefined }) => void;
 

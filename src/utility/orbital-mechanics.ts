@@ -1,4 +1,4 @@
-import { BufferGeometry, DoubleSide, Float32BufferAttribute, LineBasicMaterial, LineSegments, Matrix4, Vector3 } from 'three';
+import { BufferGeometry, Float32BufferAttribute, LineBasicMaterial, LineSegments, Matrix4, Vector3 } from 'three';
 import { ORBIT_SEGMENT_COUNT, SCALE_FACTOR } from './constants';
 import { NEOOrbitalData } from '../components/simulation/types/neo.types';
 import { EngineNEO } from '../components/simulation/types/neo-engine.types';

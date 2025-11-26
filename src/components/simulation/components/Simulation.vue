@@ -1,18 +1,19 @@
 <script setup lang="ts">
     import { useSimulationClock } from '../composable/use-simulation-clock';
-    import { SimulationStateFlags, useStateStore } from '../../../stores/state';
     import { buildOrbitForNew } from '../../../utility/orbital-mechanics';
     import { useNeoRaycaster } from '../composable/use-neo-raycaster';
     import { EngineNEO, EngineNeoStateFlags } from '../types/neo-engine.types';
     import { FlagUtilities } from '../utilities/flag.utilities';
-    import { useGui } from '../../ui/composables/use-gui';
     import { useKeyboardListener } from '../composable/use-keyboard-listener';
     import { useTres } from '@tresjs/core';
     import { InstancedBufferAttribute, Vector3 } from 'three';
     import SolarSystem from '../../system/SolarSystem.vue';
     import { OrbitControls } from '@tresjs/cientos';
-    import { onMounted, onUnmounted } from 'vue';
+    import { markRaw, onMounted, onUnmounted } from 'vue';
+    import * as ThreeOrbitControls from 'three/addons/controls/OrbitControls.js';
     import { PhysicsWorkerInitPayload, PhysicsWorkerSelectionChangePayload, PhysicsWorkerType } from '../workers/physics.worker';
+    import { SimulationStateFlags, useStateStore } from '../stores/state';
+    import { addSecond } from '@formkit/tempo';
 
     const state = useStateStore();
 
@@ -22,13 +23,11 @@
     let positionMatrixFloatArray: Float32Array;
     let focusedFloatArray: Float32Array;
 
-    const { scene } = useTres();
-
-    const { onFocusChange, onFocusUpdate, onTimeChange, onUnfocus } = useGui();
+    const { scene, camera, controls, renderer } = useTres();
 
     useNeoRaycaster(onSelect);
     useSimulationClock(onSimulationStep, onRender);
-    useKeyboardListener(onRayCastToggle, onGridToggle);
+    useKeyboardListener(onGridToggle);
 
     const worker = new Worker(new URL('../workers/physics.worker.ts', import.meta.url), {
         type: 'module',
@@ -36,9 +35,24 @@
 
     onUnmounted(() => {
         worker.terminate();
-    })
+    });
 
     onMounted(() => {
+        renderer.setPixelRatio(window.devicePixelRatio);
+
+        if (camera.value) {
+            camera.value.layers.enable(1);
+            camera.value.layers.enable(2);
+        }
+
+        if (state.meshes.gridMesh) {
+            scene.value.add(state.meshes.gridMesh);
+        }
+
+        if (state.meshes.neoInstancedMesh) {
+            scene.value.add(state.meshes.neoInstancedMesh);
+        }
+
         positionMatrixBuffer = new SharedArrayBuffer(state.neos.length * 16 * 4);
         focusedStateBuffer = new SharedArrayBuffer(2 * 4);
 
@@ -72,65 +86,24 @@
         state.toggleFlag(SimulationStateFlags.GRID_ENABLED);
     }
 
-    function onRayCastToggle(): void {
-        state.toggleFlag(SimulationStateFlags.RAY_CASTING_ENABLED);
-    }
-
     function renderOrbit(neo: EngineNEO): void {
         const orbitMesh = buildOrbitForNew(neo.neo.orbitalData);
 
         scene.value.add(orbitMesh);
 
         state.$patch((state) => {
-            state.meshes.orbitsMesh = orbitMesh;
+            state.meshes.orbitsMesh = markRaw(orbitMesh);
         });
-    }
-
-    function destroyOrbit(): void {
-        const mesh = state.meshes.orbitsMesh;
-        if (!mesh) {
-            return;
-        }
-
-        mesh.visible = false;
-        scene.value.remove(mesh);
-
-        state.$patch((state) => {
-            state.meshes.orbitsMesh = undefined;
-        });
-
-        mesh.geometry.dispose();
     }
 
     function onSelect(props: { oldVal: EngineNEO | undefined; newVal: EngineNEO | undefined }): void {
         const oldSelectedObject = props.oldVal;
         const newSelectedObject = props.newVal;
 
-        if (newSelectedObject && oldSelectedObject?.id !== newSelectedObject?.id) {
+        if (newSelectedObject) {
             if (oldSelectedObject) {
-                onUnfocus();
-
-                destroyOrbit();
-
-                oldSelectedObject.flags = FlagUtilities.clearFlag(oldSelectedObject.flags, EngineNeoStateFlags.SELECTED);
-
-                state.setTarget(new Vector3(0, 0, 0));
-
-                worker.postMessage({
-                    type: PhysicsWorkerType.SELECTION_CHANGE,
-                    payload: {
-                        id: undefined,
-                    } as PhysicsWorkerSelectionChangePayload,
-                });
+                clearFocused();
             }
-
-            newSelectedObject.flags = FlagUtilities.setFlag(newSelectedObject.flags, EngineNeoStateFlags.SELECTED);
-
-            onFocusChange(newSelectedObject);
-
-            renderOrbit(newSelectedObject);
-
-            state.setTarget(newSelectedObject.state.currentPosition);
 
             worker.postMessage({
                 type: PhysicsWorkerType.SELECTION_CHANGE,
@@ -138,37 +111,72 @@
                     id: newSelectedObject.id,
                 } as PhysicsWorkerSelectionChangePayload,
             });
-        }
 
-        if (newSelectedObject && oldSelectedObject?.id === newSelectedObject?.id) {
-            onUnfocus();
-
-            destroyOrbit();
-
-            oldSelectedObject.flags = FlagUtilities.clearFlag(oldSelectedObject.flags, EngineNeoStateFlags.SELECTED);
-
-            state.setTarget(new Vector3(0, 0, 0));
-
-            worker.postMessage({
-                type: PhysicsWorkerType.SELECTION_CHANGE,
-                payload: {
-                    id: undefined,
-                } as PhysicsWorkerSelectionChangePayload,
-            });
+            newSelectedObject.flags = FlagUtilities.setFlag(newSelectedObject.flags, EngineNeoStateFlags.SELECTED);
+            state.setTarget(newSelectedObject.state.currentPosition);
+            renderOrbit(newSelectedObject);
         }
     }
 
-    function onRender(): void {
+    function clearFocused(): void {
+        worker.postMessage({
+            type: PhysicsWorkerType.SELECTION_CHANGE,
+            payload: {
+                id: undefined,
+            } as PhysicsWorkerSelectionChangePayload,
+        });
+
+        const focusedObject = state.focusedObject;
+        if (focusedObject) {
+            focusedObject.flags = FlagUtilities.clearFlag(focusedObject.flags, EngineNeoStateFlags.SELECTED);
+        }
+
+        scene.value.remove(state.meshes.orbitsMesh!);
+
+        state.clearFocus();
+
+        state.clearFlag(SimulationStateFlags.CLEAR_FOCUSED);
+    }
+
+    function onRender(delta: number): void {
         const gridMesh = state.meshes.gridMesh;
         if (gridMesh) {
-            gridMesh.visible = FlagUtilities.hasFlag(state.stateFlags, SimulationStateFlags.GRID_ENABLED);
+            gridMesh.visible = state.hasFlag(SimulationStateFlags.GRID_ENABLED);
+        }
+
+        if (state.hasFlag(SimulationStateFlags.IS_FLYING) && camera.value && controls.value) {
+            const target = state.focusedObject?.state.currentPosition ?? new Vector3(0, 0, 0);
+            const orbitControls = controls.value as ThreeOrbitControls.OrbitControls;
+            const cameraPosition = new Vector3();
+            camera.value.getWorldPosition(cameraPosition);
+
+            orbitControls.enabled = false;
+
+            const vectorToCurrentTarget = orbitControls.target.clone().sub(cameraPosition.clone()).normalize();
+            const vectorToSelectedTarget = target.clone().sub(cameraPosition.clone()).normalize();
+            const alpha = vectorToCurrentTarget.dot(vectorToSelectedTarget);
+
+            if (alpha < 0.9999) {
+                orbitControls.target.lerp(target, alpha / 15);
+            } else {
+                state.clearFlag(SimulationStateFlags.IS_FLYING);
+
+                orbitControls.target = target;
+                orbitControls.enabled = true;
+            }
+
+            orbitControls.update();
+        }
+
+        if (state.hasFlag(SimulationStateFlags.CLEAR_FOCUSED)) {
+            clearFocused();
         }
     }
 
     function onSimulationStep(t: number): void {
         worker.postMessage({ type: PhysicsWorkerType.TICK, payload: { t: t } });
 
-        onTimeChange(t);
+        state.time.simulationClock = addSecond(state.simulationEpoch, t);
     }
 
     function onSimulationStepComplete(): void {
@@ -186,8 +194,6 @@
 
             state.focusedObject.state.distanceToSun = focusedFloatArray[0];
             state.focusedObject.state.velocity = focusedFloatArray[1];
-
-            onFocusUpdate(state.focusedObject);
         }
 
         if (state.meshes.neoInstancedMesh) {
@@ -197,6 +203,6 @@
 </script>
 
 <template>
-    <OrbitControls :target="state.cameraTarget" />
+    <OrbitControls :target="[0, 0, 0]" :enable-damping="true" :damping-factor="0.1" :make-default="true" />
     <SolarSystem />
 </template>

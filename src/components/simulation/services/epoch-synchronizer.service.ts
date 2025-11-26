@@ -23,7 +23,7 @@ export function synchronizeEpochs(engineNeos: NEO[], date: Date): void {
         }
     });
 
-    engineNeos.forEach(obj => {
+    engineNeos.forEach((obj) => {
         obj.epochOffset = offsetByEpoch.get(obj.epoch) ?? 0;
     });
 }

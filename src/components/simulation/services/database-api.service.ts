@@ -7,8 +7,13 @@ export const fetchAllNeos = async (): Promise<NEO[]> => {
     return parseResponse(data, error);
 };
 
+export const fetchNeos = async (count: number): Promise<NEO[]> => {
+    const { data, error } = await supabase.from('neo').select().limit(count);
+    return parseResponse(data, error);
+};
+
 export const fetchHazardousNeos = async (): Promise<NEO[]> => {
-    const { data, error } = await supabase.from('neo').select().eq('is_hazardous', true).limit(10);
+    const { data, error } = await supabase.from('neo').select().eq('is_hazardous', true);
     return parseResponse(data, error);
 };
 
