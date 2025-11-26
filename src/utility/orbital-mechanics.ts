@@ -1,8 +1,9 @@
-import { Matrix4, Vector3 } from 'three';
+import { BufferGeometry, Float32BufferAttribute, LineBasicMaterial, LineSegments, Matrix4, Vector3 } from 'three';
 import { ORBIT_SEGMENT_COUNT, SCALE_FACTOR } from './constants';
-import { NeoBodyOrbitalData, NeoEngineBody } from '../models/body';
+import { NEOOrbitalData } from '../components/simulation/types/neo.types';
+import { EngineNEO } from '../components/simulation/types/neo-engine.types';
 
-export function buildOrbit(orbitElements: NeoBodyOrbitalData): Vector3[] {
+export function buildOrbitForNew(orbitElements: NEOOrbitalData): LineSegments {
     let trueAnomaly: number = 0.0;
 
     const segments: number = ORBIT_SEGMENT_COUNT;
@@ -18,10 +19,24 @@ export function buildOrbit(orbitElements: NeoBodyOrbitalData): Vector3[] {
         trueAnomaly += accumulator;
     }
 
-    return points;
+    const allPts: number[] = [];
+    for (let i = 0; i < points.length - 1; i++) {
+        allPts.push(points[i].x);
+        allPts.push(points[i].y);
+        allPts.push(points[i].z);
+        allPts.push(points[i + 1].x);
+        allPts.push(points[i + 1].y);
+        allPts.push(points[i + 1].z);
+    }
+
+    const geometry = new BufferGeometry();
+    geometry.setAttribute('position', new Float32BufferAttribute(allPts, 3));
+
+    const material = new LineBasicMaterial({ transparent: true, opacity: 0.1, color: 0xa9a9a9, depthWrite: false });
+    return new LineSegments(geometry, material);
 }
 
-export function calculateScaledPosition(orbitElements: NeoBodyOrbitalData, t: number = 0, scale: boolean = true) {
+export function calculateScaledPosition(orbitElements: NEOOrbitalData, t: number = 0, scale: boolean = true) {
     const eccentricAnomaly = calculateEccentricAnomaly(orbitElements, t);
     const trueAnomaly = calculateTrueAnomaly(orbitElements, eccentricAnomaly);
 
@@ -29,17 +44,17 @@ export function calculateScaledPosition(orbitElements: NeoBodyOrbitalData, t: nu
     return toEclipticCoordinates(orbitElements, orbitalCoordinates, scale);
 }
 
-export function calculateFocusedState(body: NeoEngineBody): { velocity: number; distanceToSun: number } {
+export function calculateDetailedState(body: EngineNEO, currentPosition: Vector3): { velocity: number; distanceToSun: number } {
     const mu = 132712440018;
-    const objectPosition = body.state.currentPosition.multiplyScalar(SCALE_FACTOR);
+    const objectPosition = currentPosition.multiplyScalar(SCALE_FACTOR);
 
     const distanceToSun = Math.hypot(objectPosition.x, objectPosition.y, objectPosition.z);
-    const velocity = Math.sqrt(mu * (2.0 / distanceToSun - 1.0 / body.orbit.semiMajorAxis));
+    const velocity = Math.sqrt(mu * (2.0 / distanceToSun - 1.0 / body.neo.orbitalData.semiMajorAxis));
 
     return { velocity, distanceToSun };
 }
 
-function toOrbitalCoordinates(orbitElements: NeoBodyOrbitalData, trueAnomaly: number): Vector3 {
+function toOrbitalCoordinates(orbitElements: NEOOrbitalData, trueAnomaly: number): Vector3 {
     const radius = calculateRadius(orbitElements, trueAnomaly);
 
     const xOrb = radius * Math.cos(trueAnomaly);
@@ -48,14 +63,14 @@ function toOrbitalCoordinates(orbitElements: NeoBodyOrbitalData, trueAnomaly: nu
     return new Vector3(xOrb, yOrb, 0);
 }
 
-function calculateRadius(orbitElements: NeoBodyOrbitalData, trueAnomaly: number): number {
+function calculateRadius(orbitElements: NEOOrbitalData, trueAnomaly: number): number {
     return (
         (orbitElements.semiMajorAxis * (1.0 - Math.pow(orbitElements.eccentricity, 2))) /
         (1.0 + orbitElements.eccentricity * Math.cos(trueAnomaly))
     );
 }
 
-function toEclipticCoordinates(orbitElements: NeoBodyOrbitalData, orbitalCoordinates: Vector3, scale: boolean = true): Vector3 {
+function toEclipticCoordinates(orbitElements: NEOOrbitalData, orbitalCoordinates: Vector3, scale: boolean = true): Vector3 {
     const longAscendingNode = orbitElements.ascendingNodeLongitude;
     const argPerihelion = orbitElements.perihelionArgument;
     const inclination = orbitElements.inclination;
@@ -90,7 +105,7 @@ function toEclipticCoordinates(orbitElements: NeoBodyOrbitalData, orbitalCoordin
     return positionVector.applyMatrix4(matrix);
 }
 
-function calculateMeanAnomaly(orbitElements: NeoBodyOrbitalData, t: number): number {
+function calculateMeanAnomaly(orbitElements: NEOOrbitalData, t: number): number {
     const meanAnomalyAtEpoch = orbitElements.meanAnomaly;
     if (t === 0) {
         return meanAnomalyAtEpoch;
@@ -99,7 +114,7 @@ function calculateMeanAnomaly(orbitElements: NeoBodyOrbitalData, t: number): num
     return meanAnomalyAtEpoch + orbitElements.meanMotion * t;
 }
 
-function calculateEccentricAnomaly(orbitElements: NeoBodyOrbitalData, t: number): number {
+function calculateEccentricAnomaly(orbitElements: NEOOrbitalData, t: number): number {
     const m = calculateMeanAnomaly(orbitElements, t);
     const eccentricity = orbitElements.eccentricity;
 
@@ -114,7 +129,7 @@ function calculateEccentricAnomaly(orbitElements: NeoBodyOrbitalData, t: number)
     return enP1;
 }
 
-function calculateTrueAnomaly(orbitElements: NeoBodyOrbitalData, eccentricAnomaly: number): number {
+function calculateTrueAnomaly(orbitElements: NEOOrbitalData, eccentricAnomaly: number): number {
     const eccentricity = orbitElements.eccentricity;
 
     return 2.0 * Math.atan(Math.sqrt((1 + eccentricity) / (1 - eccentricity)) * Math.tan(eccentricAnomaly / 2.0));
