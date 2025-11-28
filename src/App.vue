@@ -2,12 +2,11 @@
     import { TresCanvas } from '@tresjs/core';
 
     import { CAMERA_START_POS } from './utility/constants';
-    import Simulation from './components/simulation/components/Simulation.vue';
-    import { FlagUtilities } from './components/simulation/utilities/flag.utilities';
-    import Startup from './components/ui/components/Startup.vue';
-    import { SimulationStateFlags, useStateStore } from './components/simulation/stores/state';
-    import SelectedObjectDetails from './components/ui/components/SelectedObjectDetails.vue';
-    import SimulationClock from './components/ui/components/SimulationClock.vue';
+    import Simulation from './features/simulation/components/Simulation.vue';
+    import Startup from './features/ui/components/Startup.vue';
+    import { useStateStore } from './features/simulation/stores/state';
+    import SelectedObjectDetails from './features/ui/components/SelectedObjectDetails.vue';
+    import SimulationClock from './features/ui/components/SimulationClock.vue';
 
     const state = useStateStore();
 </script>
@@ -23,11 +22,12 @@
 <template>
     <div id="scene-wrapper">
         <Startup />
-        <SelectedObjectDetails />
-        <SimulationClock />
-        <TresCanvas :antialias="true" clear-color="#000000" window-size>
-            <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="104104577000" />
-            <Simulation v-if="!FlagUtilities.hasFlag(state.stateFlags, SimulationStateFlags.SIMULATION_LOADING)" />
+        <SelectedObjectDetails v-if="state.isReady" />
+        <SimulationClock v-if="state.isReady" />
+        <!--        <Stats />-->
+        <TresCanvas :antialias="true" clear-color="#1b1b1c" logarithmicDepthBuffer window-size>
+            <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="10000000000" />
+            <Simulation v-if="state.isReady" />
         </TresCanvas>
     </div>
 </template>
