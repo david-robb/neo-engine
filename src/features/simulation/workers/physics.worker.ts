@@ -59,6 +59,25 @@ function updatePositions(t: number = 0): void {
     objects.forEach((neo, index) => {
         const currentPosition = calculateScaledPosition(neo.neo.orbitalData, neo.neo.epochOffset + t);
 
+        const offset = index * 16;
+        const radiusScale = Math.min(((neo.neo.diameter.km.min + neo.neo.diameter.km.max) / 4) * 5000000, 695700);
+
+        positions[offset] = radiusScale;
+        positions[offset + 2] = 0;
+        positions[offset + 3] = 0;
+        positions[offset + 4] = 0;
+        positions[offset + 5] = radiusScale;
+        positions[offset + 6] = 0;
+        positions[offset + 7] = 0;
+        positions[offset + 8] = 0;
+        positions[offset + 9] = 0;
+        positions[offset + 10] = radiusScale;
+        positions[offset + 11] = 0;
+        positions[offset + 12] = currentPosition.x;
+        positions[offset + 13] = currentPosition.y;
+        positions[offset + 14] = currentPosition.z;
+        positions[offset + 15] = 1;
+
         if (neo.id === selectedId) {
             const selectedPosition = new Vector3();
             selectedPosition.copy(currentPosition);
@@ -68,26 +87,5 @@ function updatePositions(t: number = 0): void {
             focusedStateBuffer[0] = detailedState.distanceToSun;
             focusedStateBuffer[1] = detailedState.velocity;
         }
-
-        const offset = index * 16;
-
-        const diameter = (neo.neo.diameter.km.min + neo.neo.diameter.km.max) / 2;
-        const diameterScale = Math.min(diameter * 5, 4);
-
-        positions[offset] = diameterScale;
-        positions[offset + 2] = 0;
-        positions[offset + 3] = 0;
-        positions[offset + 4] = 0;
-        positions[offset + 5] = diameterScale;
-        positions[offset + 6] = 0;
-        positions[offset + 7] = 0;
-        positions[offset + 8] = 0;
-        positions[offset + 9] = 0;
-        positions[offset + 10] = diameterScale;
-        positions[offset + 11] = 0;
-        positions[offset + 12] = currentPosition.x;
-        positions[offset + 13] = currentPosition.y;
-        positions[offset + 14] = currentPosition.z;
-        positions[offset + 15] = 1;
     });
 }

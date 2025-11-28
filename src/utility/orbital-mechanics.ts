@@ -1,7 +1,7 @@
 import { BufferGeometry, Float32BufferAttribute, LineBasicMaterial, LineSegments, Matrix4, Vector3 } from 'three';
-import { ORBIT_SEGMENT_COUNT, SCALE_FACTOR } from './constants';
-import { NEOOrbitalData } from '../components/simulation/types/neo.types';
-import { EngineNEO } from '../components/simulation/types/neo-engine.types';
+import { ORBIT_SEGMENT_COUNT } from './constants';
+import { NEOOrbitalData } from '../features/simulation/types/neo.types';
+import { EngineNEO } from '../features/simulation/types/neo-engine.types';
 
 export function buildOrbitForNew(orbitElements: NEOOrbitalData): LineSegments {
     let trueAnomaly: number = 0.0;
@@ -46,9 +46,8 @@ export function calculateScaledPosition(orbitElements: NEOOrbitalData, t: number
 
 export function calculateDetailedState(body: EngineNEO, currentPosition: Vector3): { velocity: number; distanceToSun: number } {
     const mu = 132712440018;
-    const objectPosition = currentPosition.multiplyScalar(SCALE_FACTOR);
 
-    const distanceToSun = Math.hypot(objectPosition.x, objectPosition.y, objectPosition.z);
+    const distanceToSun = Math.hypot(currentPosition.x, currentPosition.y, currentPosition.z);
     const velocity = Math.sqrt(mu * (2.0 / distanceToSun - 1.0 / body.neo.orbitalData.semiMajorAxis));
 
     return { velocity, distanceToSun };
@@ -98,9 +97,6 @@ function toEclipticCoordinates(orbitElements: NEOOrbitalData, orbitalCoordinates
     matrix.makeRotationX((3 * Math.PI) / 2);
 
     const positionVector = new Vector3(xComp, yComp, zComp);
-    if (scale) {
-        positionVector.multiplyScalar(1 / SCALE_FACTOR);
-    }
 
     return positionVector.applyMatrix4(matrix);
 }

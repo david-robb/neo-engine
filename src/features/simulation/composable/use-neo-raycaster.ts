@@ -55,7 +55,7 @@ export function useNeoRaycaster(onSelect: NEOSelectCallback): void {
             return undefined;
         }
 
-        return state.neos.find((neo) => neo.mesh.instanceIndex === intersectedInstance);
+        return state.neos.find((neo) => neo.meshIndex === intersectedInstance);
     }
 
     onMounted(() => {

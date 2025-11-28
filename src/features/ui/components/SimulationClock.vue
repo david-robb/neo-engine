@@ -4,6 +4,7 @@
     import { format } from '@formkit/tempo';
     import { useStateStore } from '../../simulation/stores/state';
     import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
+    import { SimulationState } from '../../simulation/types/state.types';
 
     const CLOCK_DETAILS = {
         time: '',
@@ -22,7 +23,7 @@
 
         pane = new Pane({
             container: paneContainer.value,
-            title: 'Simulation Clock',
+            title: undefined,
             expanded: true,
         });
 
@@ -30,18 +31,26 @@
 
         addSelectedObjectDefaultBinding(pane, 'time');
 
-        const labels = ['<<', '<', '-', '>', '>>'];
-        const values = [-86400 * 30, -86400, 1, 86400, 86400 * 30];
+        const labels = ['<<<', '<<', '<', '-', '>', '>>', '>>>'];
+        const values = [-86400 * 30, -86400 * 7, -86400, 1, 86400, 86400 * 7, 86400 * 30];
         pane.addBinding(CLOCK_DETAILS, 'multiplier', {
             view: 'radiogrid',
             groupName: 'scale',
-            size: [5, 1],
+            size: [7, 1],
             cells: (x: number, y: number) => ({
                 title: labels[x],
                 value: values[x],
             }),
             label: undefined,
         }).on('change', (ev) => {
+            const multiplier = +ev.value;
+
+            if (multiplier === 1) {
+                state.clearFlag(SimulationState.FOLLOW_OBJECT);
+            } else {
+                state.setFlags(SimulationState.FOLLOW_OBJECT);
+            }
+
             state.updateTimeMultiplier(+ev.value);
         });
 

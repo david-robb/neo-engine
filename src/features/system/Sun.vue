@@ -2,12 +2,13 @@
     import * as THREE from 'three';
     import { useTres } from '@tresjs/core';
     import { onMounted } from 'vue';
-    import { SCALE_FACTOR } from '../../utility/constants';
+    import { OBJECTS_RENDER_ORDER } from '../../utility/constants';
 
     function addSun(): void {
-        const sphereGeometry = new THREE.SphereGeometry((0.00465047 * 149600000) / SCALE_FACTOR, 30, 30);
-        const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00});
+        const sphereGeometry = new THREE.SphereGeometry(695700, 30, 30);
+        const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xffff00 });
         const sunMesh = new THREE.Mesh(sphereGeometry, sunMaterial);
+        sunMesh.renderOrder = OBJECTS_RENDER_ORDER;
 
         const { scene } = useTres();
 

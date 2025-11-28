@@ -2,13 +2,11 @@ import { NEO } from '../types/neo.types';
 import { fetchAllNeos, fetchHazardousNeos, fetchNeos } from '../services/database-api.service';
 import { SimulationMode, SimulationStartState } from '../types/simulation.types';
 import * as THREE from 'three';
-import { DynamicDrawUsage, GridHelper } from 'three';
-import { EngineNEO } from '../types/neo-engine.types';
+import { EngineNEO, SimulationObjectState } from '../types/neo-engine.types';
 import { synchronizeEpochs } from '../services/epoch-synchronizer.service';
-import { updatePositions } from '../services/position-updater.service';
-import { SCALE_FACTOR } from '../../../utility/constants';
+import { calculateScaledPosition } from '../../../utility/orbital-mechanics';
 
-export const init = async (mode: SimulationMode, epoch: Date, customAmount: number = 1): Promise<SimulationStartState> => {
+export const initializeSimulation = async (mode: SimulationMode, epoch: Date, customAmount: number = 1): Promise<SimulationStartState> => {
     const databaseNeos = await fetchDatabaseRecords(mode, customAmount);
 
     console.log(`${databaseNeos.length} Objects Loaded!`);
@@ -16,21 +14,15 @@ export const init = async (mode: SimulationMode, epoch: Date, customAmount: numb
     synchronizeEpochs(databaseNeos, epoch);
 
     const engineObjects: EngineNEO[] = toEngineObjects(databaseNeos);
+    engineObjects.forEach((engineObject) => {
+        engineObject.currentPosition = calculateScaledPosition(engineObject.neo.orbitalData, engineObject.neo.epochOffset);
+    });
 
     const instancedMesh = buildInstancedSpheres(engineObjects.length);
-
-    instancedMesh.instanceMatrix.array = updatePositions(engineObjects, 0);
-    instancedMesh.instanceMatrix.setUsage(DynamicDrawUsage);
-
-    instancedMesh.instanceMatrix.needsUpdate = true;
-
-    instancedMesh.computeBoundingSphere();
-    instancedMesh.computeBoundingBox();
-
-    const grid: GridHelper = buildGrid();
+    const gridMesh = buildGrid();
 
     return {
-        gridMesh: grid,
+        gridMesh: gridMesh,
         objects: engineObjects,
         objectsMesh: instancedMesh,
     };
@@ -50,10 +42,10 @@ const fetchDatabaseRecords = async (mode: SimulationMode, customAmount: number =
 };
 
 const buildInstancedSpheres = (amount: number): THREE.InstancedMesh => {
-    const geometry = new THREE.SphereGeometry(300, 10, 10); // (500 * SCALE_FACTOR) KM
+    const geometry = new THREE.SphereGeometry(1, 10, 10);
     const material = new THREE.MeshBasicMaterial({ color: 0x808080 });
-
     const mesh = new THREE.InstancedMesh(geometry, material, amount);
+
     mesh.layers.set(2);
 
     return mesh;
@@ -63,24 +55,22 @@ const toEngineObjects = (neos: NEO[]): EngineNEO[] => {
     return neos.map((neo, index) => {
         return {
             id: neo.id,
-            mesh: {
-                instanceIndex: index,
-            },
-            flags: 0,
+            meshIndex: index,
+            state: SimulationObjectState.NONE,
             neo: neo,
-            state: {
-                currentPosition: new THREE.Vector3(0, 0, 0),
-            },
+            currentPosition: new THREE.Vector3(0, 0, 0),
+            distanceToSun: 0,
+            velocity: 0,
         } as EngineNEO;
     });
 };
 
 const buildGrid = (): THREE.GridHelper => {
-    const GRID_TOTAL_SIZE_KM = 1000000000;
-    const GRID_SECTION_SIZE_KM = 100000000;
+    const GRID_TOTAL_SIZE_KM = 1000000000; // 1 billion KM
+    const GRID_SECTION_SIZE_KM = 100000000; // 100 million KM
 
-    const size = GRID_TOTAL_SIZE_KM / SCALE_FACTOR;
-    const divisions = size / (GRID_SECTION_SIZE_KM / SCALE_FACTOR);
+    const size = GRID_TOTAL_SIZE_KM;
+    const divisions = size / GRID_SECTION_SIZE_KM;
     const colorCenterLine = 0xff0000;
     const colorGrid = 0x888888;
     const gridHelper = new THREE.GridHelper(size, divisions, colorCenterLine, colorGrid);
