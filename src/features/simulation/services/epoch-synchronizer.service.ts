@@ -1,5 +1,6 @@
 import { NEO } from '../types/neo.types';
 import * as tempo from '@formkit/tempo';
+import { tzDate } from '@formkit/tempo';
 
 export function synchronizeEpochs(engineNeos: NEO[], date: Date): void {
     const neoByEpoch = new Map<string, NEO[]>();
@@ -15,7 +16,9 @@ export function synchronizeEpochs(engineNeos: NEO[], date: Date): void {
     const offsetByEpoch = new Map<string, number>();
     neoByEpoch.keys().forEach((key) => {
         const epochDate: Date = tempo.parse(key);
-        const offsetSeconds = tempo.diffSeconds(epochDate, date);
+        const epochDateAtUtc = tzDate(epochDate, 'UTC');
+
+        const offsetSeconds = tempo.diffSeconds(epochDateAtUtc, date);
         if (offsetSeconds < 0) {
             offsetByEpoch.set(key, Math.abs(offsetSeconds));
         } else {

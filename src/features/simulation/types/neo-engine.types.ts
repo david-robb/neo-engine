@@ -1,17 +1,46 @@
 import * as THREE from 'three';
-import { NEO } from './neo.types';
+import { Color, Vector3 } from 'three';
 
-export enum SimulationObjectState {
-    NONE = 0,
-    SELECTED = 1 << 0,
-}
-
-export interface EngineNEO {
+export interface EngineSecondaryBody {
     id: number;
+    name: string;
+    neoReferenceId: number;
+    estimatedDiameterMaxKm: number;
+    estimatedDiameterMinKm: number;
+    orbitalClass: string;
+    isHazardous: boolean;
+    isSentry: boolean;
+
+    epochOffset: number;
+    distanceToSun: number;
+    distanceToEarth: number;
     currentPosition: THREE.Vector3;
     velocity: number;
-    distanceToSun: number;
-    neo: NEO;
+    orbit: EngineOrbit;
     meshIndex: number;
-    state: SimulationObjectState;
+}
+
+export interface EnginePrimaryBody {
+    name: string;
+    orbitData: EngineOrbit | undefined;
+    epochOffset: number;
+    radiusKm: number;
+    color: Color;
+    currentPosition: Vector3;
+}
+
+export interface EngineOrbit {
+    orbitalPeriod: number;
+    orbitUncertainty: number;
+    eccentricity: number;
+    semiMajorAxis: number;
+    inclination: number;
+    ascendingNodeLongitude: number;
+    perihelionDistance: number;
+    perihelionArgument: number;
+    aphelionDistance: number;
+    perihelionTime: number;
+    meanAnomaly: number;
+    meanMotion: number;
+    epoch: string;
 }

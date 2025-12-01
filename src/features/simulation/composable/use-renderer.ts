@@ -1,7 +1,8 @@
 import { useStateStore } from '../stores/state';
 import { useTres } from '@tresjs/core';
-import { SimulationState } from '../types/state.types';
-import { GRID_RENDER_ORDER, OBJECTS_RENDER_ORDER } from '../../../utility/constants';
+import { SimulationState } from '../stores/state.types';
+import { Mesh } from 'three';
+import { MeshLine } from '@lume/three-meshline';
 
 export function useRenderer(): { initializeRenderer: () => void; renderFrame: () => void } {
     const state = useStateStore();
@@ -11,13 +12,19 @@ export function useRenderer(): { initializeRenderer: () => void; renderFrame: ()
         renderer.setPixelRatio(window.devicePixelRatio);
 
         if (state.meshes.gridMesh) {
-            state.meshes.gridMesh.renderOrder = GRID_RENDER_ORDER;
             scene.value.add(state.meshes.gridMesh);
         }
 
         if (state.meshes.neoInstancedMesh) {
-            state.meshes.neoInstancedMesh.renderOrder = OBJECTS_RENDER_ORDER;
             scene.value.add(state.meshes.neoInstancedMesh);
+        }
+
+        if (state.meshes.planetMeshes) {
+            state.meshes.planetMeshes.forEach((planetMesh: Mesh) => scene.value.add(planetMesh));
+        }
+
+        if (state.meshes.planetOrbitMeshes) {
+            state.meshes.planetOrbitMeshes.forEach((planetOrbitMesh: MeshLine) => scene.value.add(planetOrbitMesh));
         }
     }
 

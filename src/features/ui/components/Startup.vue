@@ -2,29 +2,40 @@
     import { markRaw, onMounted, ref } from 'vue';
     import { Pane } from 'tweakpane';
     import { format, parse } from '@formkit/tempo';
-    import { BindingApi } from '@tweakpane/core';
     import { SimulationMode, SimulationStartState } from '../../simulation/types/simulation.types';
     import { useStateStore } from '../../simulation/stores/state';
-    import { SimulationState, State } from '../../simulation/types/state.types';
     import { initializeSimulation } from '../../simulation/services/simulation-initializer.service';
+    import { SimulationState } from '../../simulation/stores/state.types';
+    import { fetchTotalCount } from '../../simulation/services/database-api.service';
+    import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
+
+    const START_UP_PARAMS = {
+        simulationMode: SimulationMode.ONLY_HAZARDOUS,
+        amountSelected: 3,
+        simulationEpoch: format(new Date(), { date: 'medium', time: 'short' }),
+        percent: 50,
+        label: '',
+    };
 
     const state = useStateStore();
 
     const paneContainer = ref<HTMLElement | null>(null);
     let pane: Pane | null = null;
 
-    onMounted(() => {
+    let totalCount = ref(0);
+
+    onMounted(async () => {
         if (!paneContainer.value) {
             return;
         }
 
-        const START_UP_PARAMS = {
-            simulationMode: SimulationMode.ONLY_HAZARDOUS,
-            amountSelected: 100,
-            simulationEpoch: format(new Date(), { date: 'medium', time: 'short' }),
-        };
+        await fetchTotalCount().then((count) => {
+            totalCount.value = count;
 
-        let simulationObjectAmountBinding: BindingApi;
+            if (pane) {
+                pane.refresh();
+            }
+        });
 
         pane = new Pane({
             container: paneContainer.value,
@@ -32,30 +43,33 @@
             expanded: true,
         });
 
+        pane.registerPlugin(EssentialsPlugin);
+
         pane.addBinding(START_UP_PARAMS, 'simulationEpoch', {
-            label: 'Simulation Epoch',
+            label: 'Epoch',
         });
 
-        pane.addBinding(START_UP_PARAMS, 'simulationMode', {
-            view: 'list',
-            label: 'Mode',
-            options: [
-                { text: 'All Objects', value: SimulationMode.ALL },
-                { text: 'Hazardous Only', value: SimulationMode.ONLY_HAZARDOUS },
-                { text: 'Custom Amount', value: SimulationMode.CUSTOM_AMOUNT },
-            ],
-            value: SimulationMode.ONLY_HAZARDOUS,
-        }).on('change', (val) => {
-            simulationObjectAmountBinding.hidden = val.value !== SimulationMode.CUSTOM_AMOUNT;
-        });
+        const sizes = [10, 25, 50, 75, 100];
+        const binding = pane
+            .addBinding(START_UP_PARAMS, 'percent', {
+                view: 'radiogrid',
+                groupName: 'scale',
+                size: [5, 1],
+                cells: (x: number, y: number) => ({
+                    title: `${sizes[x]}%`,
+                    value: sizes[x],
+                }),
+                label: `Object Count (${Math.floor(totalCount.value * (START_UP_PARAMS.percent / 100))})`,
+            })
+            .on('change', (event) => {
+                if (pane) {
+                    START_UP_PARAMS.percent = event.value;
 
-        simulationObjectAmountBinding = pane.addBinding(START_UP_PARAMS, 'amountSelected', {
-            label: 'Amount',
-            step: 1,
-            min: 1,
-            max: 10000,
-        });
-        simulationObjectAmountBinding.hidden = true;
+                    binding.label = `Object Count (${Math.floor(totalCount.value * (START_UP_PARAMS.percent / 100))})`;
+
+                    pane.refresh();
+                }
+            });
 
         pane.addBlade({
             view: 'separator',
@@ -77,15 +91,19 @@
             state.setEpoch(epochDate);
 
             const initState: SimulationStartState = await initializeSimulation(
-                START_UP_PARAMS.simulationMode,
+                SimulationMode.CUSTOM_AMOUNT,
                 epochDate,
-                START_UP_PARAMS.amountSelected
+                Math.floor(totalCount.value * (START_UP_PARAMS.percent / 100))
             );
 
-            state.$patch((state: State) => {
+            state.$patch((state: any) => {
                 state.neos = initState.objects;
+                state.planets = initState.planets;
+
                 state.meshes.neoInstancedMesh = markRaw(initState.objectsMesh);
                 state.meshes.gridMesh = markRaw(initState.gridMesh);
+                state.meshes.planetMeshes = markRaw(initState.planetMeshes);
+                state.meshes.planetOrbitMeshes = markRaw(initState.planetOrbitMesh);
             });
 
             if (pane) {
@@ -173,6 +191,6 @@
         transform: translate(-50%, -50%);
         z-index: 10;
 
-        width: 300px;
+        width: 400px;
     }
 </style>

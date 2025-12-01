@@ -4,7 +4,7 @@
     import { format } from '@formkit/tempo';
     import { useStateStore } from '../../simulation/stores/state';
     import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
-    import { SimulationState } from '../../simulation/types/state.types';
+    import { SimulationState } from '../../simulation/stores/state.types';
 
     const CLOCK_DETAILS = {
         time: '',

@@ -7,6 +7,8 @@
     import { useStateStore } from './features/simulation/stores/state';
     import SelectedObjectDetails from './features/ui/components/SelectedObjectDetails.vue';
     import SimulationClock from './features/ui/components/SimulationClock.vue';
+    import HelpMenu from './features/ui/components/HelpMenu.vue';
+    import CloseApproachObjectList from './features/ui/components/CloseApproachObjectList.vue';
 
     const state = useStateStore();
 </script>
@@ -21,12 +23,13 @@
 
 <template>
     <div id="scene-wrapper">
+        <HelpMenu />
         <Startup />
+        <CloseApproachObjectList />
         <SelectedObjectDetails v-if="state.isReady" />
         <SimulationClock v-if="state.isReady" />
-        <!--        <Stats />-->
         <TresCanvas :antialias="true" clear-color="#1b1b1c" logarithmicDepthBuffer window-size>
-            <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="10000000000" />
+            <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="2000000000" :fov="20" />
             <Simulation v-if="state.isReady" />
         </TresCanvas>
     </div>
