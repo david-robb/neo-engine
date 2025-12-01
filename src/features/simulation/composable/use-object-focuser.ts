@@ -1,18 +1,17 @@
 import { useNeoRaycaster } from './use-neo-raycaster';
-import { EngineNEO, SimulationObjectState } from '../types/neo-engine.types';
-import { FlagUtilities } from '../utilities/flag.utilities';
+import { EngineSecondaryBody } from '../types/neo-engine.types';
 import { useStateStore } from '../stores/state';
-import { buildOrbitForNew } from '../../../utility/orbital-mechanics';
 import { markRaw, onMounted } from 'vue';
 import { useTres } from '@tresjs/core';
-import { SimulationState } from '../types/state.types';
-import { CAMERA_START_POS, ORBIT_RENDER_ORDER } from '../../../utility/constants';
+import { CAMERA_START_POS } from '../../../utility/constants';
 import CameraControls from 'camera-controls';
-import { Vector3 } from 'three';
+import { Color, Vector3 } from 'three';
+import { buildOrbitMeshLine } from '../services/orbit-mesh.service';
+import { SimulationState } from '../stores/state.types';
 
 export interface SelectObjectProps {
-    oldVal: EngineNEO | undefined;
-    newVal: EngineNEO | undefined;
+    oldVal: EngineSecondaryBody | undefined;
+    newVal: EngineSecondaryBody | undefined;
 }
 
 export function useObjectFocuser(onFocusChange: (id: number | undefined) => void): {
@@ -21,11 +20,11 @@ export function useObjectFocuser(onFocusChange: (id: number | undefined) => void
     updateTracking: () => void;
 } {
     const state = useStateStore();
-    const { scene, controls, camera } = useTres();
+    const { scene, controls, camera, renderer } = useTres();
 
-    useNeoRaycaster(select);
+    useNeoRaycaster(select, onMouseMove);
 
-    let lockDistance: Vector3 | undefined = undefined;
+    let cameraLockVector: Vector3 | undefined = undefined;
 
     onMounted(() => {
         if (camera.value) {
@@ -33,6 +32,12 @@ export function useObjectFocuser(onFocusChange: (id: number | undefined) => void
             camera.value.layers.enable(2);
         }
     });
+
+    function onMouseMove(newPosition: Vector3): void {
+        state.$patch({
+            mousePosition: newPosition,
+        });
+    }
 
     function select(props: SelectObjectProps): void {
         const oldSelectedObject = props.oldVal;
@@ -43,22 +48,22 @@ export function useObjectFocuser(onFocusChange: (id: number | undefined) => void
                 clearFocused();
             }
 
+            state.$patch({
+                focused: newSelectedObject,
+            });
+
             onFocusChange(newSelectedObject.id);
-
-            newSelectedObject.state = FlagUtilities.setFlag(newSelectedObject.state, SimulationObjectState.SELECTED);
             renderOrbit(newSelectedObject);
-
             state.setFlags(SimulationState.SELECTION_CHANGE);
         }
     }
 
-    function renderOrbit(neo: EngineNEO): void {
-        const orbitMesh = buildOrbitForNew(neo.neo.orbitalData);
-        orbitMesh.renderOrder = ORBIT_RENDER_ORDER;
+    function renderOrbit(neo: EngineSecondaryBody): void {
+        const orbitMesh = buildOrbitMeshLine(neo.orbit, new Color(0xa9a9a9), '', 500);
 
         scene.value.add(orbitMesh);
 
-        state.$patch((state) => {
+        state.$patch((state: any) => {
             state.meshes.orbitsMesh = markRaw(orbitMesh);
         });
     }
@@ -66,74 +71,76 @@ export function useObjectFocuser(onFocusChange: (id: number | undefined) => void
     function clearFocused(): void {
         onFocusChange(undefined);
 
-        const focusedObject = state.focusedObject;
-        if (focusedObject) {
-            focusedObject.state = FlagUtilities.clearFlag(focusedObject.state, SimulationObjectState.SELECTED);
-        }
-
         scene.value.remove(state.meshes.orbitsMesh!);
 
         state.clearFocus();
 
-        state.clearFlag(SimulationState.CLEAR_FOCUSED);
-
         const cameraControls = controls.value as CameraControls;
-
         cameraControls.setLookAt(CAMERA_START_POS.x, CAMERA_START_POS.y, CAMERA_START_POS.z, 0, 0, 0, true);
     }
 
     function updateTracking(): void {
         const focusedObject = state.focusedObject;
 
-        if (focusedObject && controls.value && camera.value) {
-            const cameraControls = controls.value as CameraControls;
+        if (!(focusedObject && controls.value && camera.value)) {
+            return;
+        }
 
-            if (state.hasFlag(SimulationState.FOLLOW_OBJECT)) {
-                const cameraPosition = new Vector3();
-                camera.value.getWorldPosition(cameraPosition);
+        const cameraControls = controls.value as CameraControls;
+        if (state.hasFlag(SimulationState.FOLLOW_OBJECT)) {
+            const cameraPosition = new Vector3();
+            camera.value.getWorldPosition(cameraPosition);
 
-                if (!lockDistance) {
-                    lockDistance = cameraPosition.clone().sub(focusedObject.currentPosition.clone());
-                }
+            if (!cameraLockVector) {
+                cameraControls.disconnect();
 
-                cameraControls.setLookAt(
-                    focusedObject.currentPosition.x + lockDistance.x,
-                    focusedObject.currentPosition.y + lockDistance.y,
-                    focusedObject.currentPosition.z + lockDistance.z,
-                    focusedObject.currentPosition.x,
-                    focusedObject.currentPosition.y,
-                    focusedObject.currentPosition.z
-                );
+                cameraLockVector = cameraPosition.clone().sub(focusedObject.currentPosition.clone());
             }
 
-            if (state.hasFlag(SimulationState.SELECTION_CHANGE)) {
-                cameraControls.setLookAt(
-                    focusedObject.currentPosition.x * 1.2,
-                    focusedObject.currentPosition.y * 1.2,
-                    focusedObject.currentPosition.z * 1.2,
-                    focusedObject.currentPosition.x,
-                    focusedObject.currentPosition.y,
-                    focusedObject.currentPosition.z,
-                    true
-                );
+            updateCameraLockPosition();
+        }
 
-                state.clearFlag(SimulationState.SELECTION_CHANGE);
-            }
+        if (state.hasFlag(SimulationState.SELECTION_CHANGE)) {
+            cameraControls.setLookAt(
+                CAMERA_START_POS.x,
+                CAMERA_START_POS.y,
+                CAMERA_START_POS.z,
+                focusedObject.currentPosition.x,
+                focusedObject.currentPosition.y,
+                focusedObject.currentPosition.z,
+                true
+            );
 
-            if (!state.hasFlag(SimulationState.FOLLOW_OBJECT) && lockDistance) {
-                cameraControls.setLookAt(
-                    focusedObject.currentPosition.x + lockDistance.x,
-                    focusedObject.currentPosition.y + lockDistance.y,
-                    focusedObject.currentPosition.z + lockDistance.z,
-                    focusedObject.currentPosition.x,
-                    focusedObject.currentPosition.y,
-                    focusedObject.currentPosition.z
-                );
+            state.clearFlag(SimulationState.SELECTION_CHANGE);
+        }
 
-                lockDistance = undefined;
-            }
+        // Perform final camera lock update after following
+        if (!state.hasFlag(SimulationState.FOLLOW_OBJECT) && cameraLockVector) {
+            updateCameraLockPosition();
+
+            cameraLockVector = undefined;
+
+            cameraControls.connect(renderer.domElement);
         }
     }
+
+    const updateCameraLockPosition = (): void => {
+        const cameraControls = controls.value as CameraControls;
+        const focusedObject = state.focusedObject;
+
+        if (!cameraControls || !focusedObject || !cameraLockVector) {
+            return;
+        }
+
+        cameraControls.setLookAt(
+            focusedObject.currentPosition.x + cameraLockVector.x,
+            focusedObject.currentPosition.y + cameraLockVector.y,
+            focusedObject.currentPosition.z + cameraLockVector.z,
+            focusedObject.currentPosition.x,
+            focusedObject.currentPosition.y,
+            focusedObject.currentPosition.z
+        );
+    };
 
     return {
         clearFocused,

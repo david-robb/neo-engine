@@ -2,9 +2,10 @@ import { NEO } from '../types/neo.types';
 import { fetchAllNeos, fetchHazardousNeos, fetchNeos } from '../services/database-api.service';
 import { SimulationMode, SimulationStartState } from '../types/simulation.types';
 import * as THREE from 'three';
-import { EngineNEO, SimulationObjectState } from '../types/neo-engine.types';
+import { EngineSecondaryBody } from '../types/neo-engine.types';
 import { synchronizeEpochs } from '../services/epoch-synchronizer.service';
-import { calculateScaledPosition } from '../../../utility/orbital-mechanics';
+import { calculatePosition } from '../../../utility/orbital-mechanics';
+import { initializePlanetMeshes, initializePlanets } from './planet-initializer.service';
 
 export const initializeSimulation = async (mode: SimulationMode, epoch: Date, customAmount: number = 1): Promise<SimulationStartState> => {
     const databaseNeos = await fetchDatabaseRecords(mode, customAmount);
@@ -13,18 +14,24 @@ export const initializeSimulation = async (mode: SimulationMode, epoch: Date, cu
 
     synchronizeEpochs(databaseNeos, epoch);
 
-    const engineObjects: EngineNEO[] = toEngineObjects(databaseNeos);
+    const engineObjects: EngineSecondaryBody[] = toEngineObjects(databaseNeos);
     engineObjects.forEach((engineObject) => {
-        engineObject.currentPosition = calculateScaledPosition(engineObject.neo.orbitalData, engineObject.neo.epochOffset);
+        engineObject.currentPosition = calculatePosition(engineObject.orbit, engineObject.epochOffset);
     });
 
     const instancedMesh = buildInstancedSpheres(engineObjects.length);
     const gridMesh = buildGrid();
 
+    const planets = initializePlanets(epoch);
+    const { orbitMeshes, bodyMeshes } = initializePlanetMeshes(planets);
+
     return {
         gridMesh: gridMesh,
         objects: engineObjects,
         objectsMesh: instancedMesh,
+        planets: planets,
+        planetOrbitMesh: orbitMeshes,
+        planetMeshes: bodyMeshes,
     };
 };
 
@@ -42,7 +49,7 @@ const fetchDatabaseRecords = async (mode: SimulationMode, customAmount: number =
 };
 
 const buildInstancedSpheres = (amount: number): THREE.InstancedMesh => {
-    const geometry = new THREE.SphereGeometry(1, 10, 10);
+    const geometry = new THREE.SphereGeometry(1, 30, 30);
     const material = new THREE.MeshBasicMaterial({ color: 0x808080 });
     const mesh = new THREE.InstancedMesh(geometry, material, amount);
 
@@ -51,17 +58,41 @@ const buildInstancedSpheres = (amount: number): THREE.InstancedMesh => {
     return mesh;
 };
 
-const toEngineObjects = (neos: NEO[]): EngineNEO[] => {
+const toEngineObjects = (neos: NEO[]): EngineSecondaryBody[] => {
     return neos.map((neo, index) => {
+        const o = neo.orbitalData;
+
         return {
             id: neo.id,
-            meshIndex: index,
-            state: SimulationObjectState.NONE,
-            neo: neo,
+            name: neo.name,
+            neoReferenceId: neo.neoReferenceId,
+            estimatedDiameterMaxKm: neo.diameter.km.max,
+            estimatedDiameterMinKm: neo.diameter.km.min,
+            orbitalClass: neo.orbitalClass,
+            isHazardous: neo.isHazardous,
+            isSentry: neo.isSentry,
             currentPosition: new THREE.Vector3(0, 0, 0),
             distanceToSun: 0,
+            distanceToEarth: 0,
             velocity: 0,
-        } as EngineNEO;
+            epochOffset: neo.epochOffset,
+            orbit: {
+                epoch: neo.epoch,
+                orbitalPeriod: o.orbitalPeriod,
+                orbitUncertainty: o.orbitUncertainty,
+                eccentricity: o.eccentricity,
+                semiMajorAxis: o.semiMajorAxis,
+                inclination: o.inclination,
+                ascendingNodeLongitude: o.ascendingNodeLongitude,
+                perihelionDistance: o.perihelionDistance,
+                perihelionArgument: o.perihelionArgument,
+                aphelionDistance: o.aphelionDistance,
+                perihelionTime: o.perihelionTime,
+                meanAnomaly: o.meanAnomaly,
+                meanMotion: o.meanMotion,
+            },
+            meshIndex: index,
+        };
     });
 };
 

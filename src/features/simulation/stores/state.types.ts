@@ -1,5 +1,6 @@
-import { EngineNEO } from './neo-engine.types';
-import { GridHelper, InstancedMesh, LineSegments, Vector3 } from 'three';
+import { GridHelper, InstancedMesh, Mesh, Vector3 } from 'three';
+import { MeshLine } from '@lume/three-meshline';
+import { EnginePrimaryBody, EngineSecondaryBody } from '../types/neo-engine.types';
 
 export enum SimulationState {
     NONE = 0,
@@ -14,17 +15,22 @@ export enum SimulationState {
 }
 
 export interface State {
-    neos: EngineNEO[];
+    neos: EngineSecondaryBody[];
     meshes: GlobalStateMeshes;
     state: SimulationState;
     time: EngineTime;
-    target: Vector3;
+    objectsNearEarth: string[];
+    mousePosition: Vector3;
+    planets: EnginePrimaryBody[];
+    focused: EngineSecondaryBody | undefined;
 }
 
 export interface GlobalStateMeshes {
     gridMesh: GridHelper | undefined;
     neoInstancedMesh: InstancedMesh | undefined;
-    orbitsMesh: LineSegments | undefined;
+    orbitsMesh: MeshLine | undefined;
+    planetMeshes: Mesh[] | undefined;
+    planetOrbitMeshes: MeshLine[] | undefined;
 }
 
 export interface EngineTime {

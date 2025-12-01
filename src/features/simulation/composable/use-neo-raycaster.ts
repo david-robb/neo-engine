@@ -1,10 +1,12 @@
-import { EngineNEO } from '../types/neo-engine.types';
+import { EngineSecondaryBody } from '../types/neo-engine.types';
 import { onMounted } from 'vue';
 import * as THREE from 'three';
+import { Vector3 } from 'three';
 import { TresRenderer, useTres } from '@tresjs/core';
 import { useStateStore } from '../stores/state';
 
-type NEOSelectCallback = (props: { oldVal: EngineNEO | undefined; newVal: EngineNEO | undefined }) => void;
+type NEOSelectCallback = (props: { oldVal: EngineSecondaryBody | undefined; newVal: EngineSecondaryBody | undefined }) => void;
+type MousePositionChangeCallback = (newPosition: Vector3) => void;
 
 export const getCanvasRelativePosition = (event: MouseEvent, renderer: TresRenderer): THREE.Vector2 => {
     const canvas = renderer.domElement;
@@ -19,12 +21,12 @@ export const getCanvasRelativePosition = (event: MouseEvent, renderer: TresRende
     return new THREE.Vector2(x, y);
 };
 
-export function useNeoRaycaster(onSelect: NEOSelectCallback): void {
+export function useNeoRaycaster(onSelect: NEOSelectCallback, mouseMove: MousePositionChangeCallback): void {
     const state = useStateStore();
     const { camera, renderer } = useTres();
     const raycaster: THREE.Raycaster = new THREE.Raycaster();
 
-    let lastSelected: EngineNEO | undefined;
+    let lastSelected: EngineSecondaryBody | undefined;
 
     let mouseDownTime: number;
 
@@ -39,7 +41,18 @@ export function useNeoRaycaster(onSelect: NEOSelectCallback): void {
         }
     }
 
-    function calculateIntersectedObject(normalizedPosition: THREE.Vector2): EngineNEO | undefined {
+    function onMouseMove(event: MouseEvent) {
+        if (!camera.value) {
+            return;
+        }
+
+        const pickPosition = getCanvasRelativePosition(event, renderer);
+        const mousePosition = new Vector3(pickPosition.x, pickPosition.y, 1);
+
+        mouseMove(mousePosition);
+    }
+
+    function calculateIntersectedObject(normalizedPosition: THREE.Vector2): EngineSecondaryBody | undefined {
         const instancedMesh = state.meshes.neoInstancedMesh;
         if (!instancedMesh) {
             return undefined;
@@ -55,7 +68,7 @@ export function useNeoRaycaster(onSelect: NEOSelectCallback): void {
             return undefined;
         }
 
-        return state.neos.find((neo) => neo.meshIndex === intersectedInstance);
+        return state.neos.find((neo: EngineSecondaryBody) => neo.meshIndex === intersectedInstance);
     }
 
     onMounted(() => {
@@ -67,6 +80,10 @@ export function useNeoRaycaster(onSelect: NEOSelectCallback): void {
             if (event.timeStamp - mouseDownTime <= 200) {
                 onMouseClick(event);
             }
+        });
+
+        window.addEventListener('mousemove', (event: MouseEvent) => {
+            onMouseMove(event);
         });
     });
 }

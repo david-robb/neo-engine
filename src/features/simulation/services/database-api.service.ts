@@ -7,6 +7,17 @@ export const fetchAllNeos = async (): Promise<NEO[]> => {
     return parseResponse(data, error);
 };
 
+export const fetchTotalCount = async (): Promise<number> => {
+    const { count, error } = await supabase.from('neo').select('*', { count: 'exact', head: true });
+    if (error) {
+        console.error(error);
+
+        return 0;
+    }
+
+    return count!;
+};
+
 export const fetchNeos = async (count: number): Promise<NEO[]> => {
     const { data, error } = await supabase.from('neo').select().limit(count);
     return parseResponse(data, error);

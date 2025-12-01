@@ -1,5 +1,6 @@
-import { EngineNEO } from './neo-engine.types';
-import { GridHelper, InstancedMesh } from 'three';
+import { EnginePrimaryBody, EngineSecondaryBody } from './neo-engine.types';
+import { GridHelper, InstancedMesh, Mesh } from 'three';
+import { MeshLine } from '@lume/three-meshline';
 
 export enum SimulationMode {
     ALL,
@@ -8,7 +9,10 @@ export enum SimulationMode {
 }
 
 export interface SimulationStartState {
-    objects: EngineNEO[];
+    objects: EngineSecondaryBody[];
+    planets: EnginePrimaryBody[];
     objectsMesh: InstancedMesh;
     gridMesh: GridHelper;
+    planetMeshes: Mesh[];
+    planetOrbitMesh: MeshLine[];
 }
