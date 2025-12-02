@@ -59,7 +59,7 @@ export function useObjectFocuser(onFocusChange: (id: number | undefined) => void
     }
 
     function renderOrbit(neo: EngineSecondaryBody): void {
-        const orbitMesh = buildOrbitMeshLine(neo.orbit, new Color(0xa9a9a9), '', 500);
+        const orbitMesh = buildOrbitMeshLine(neo.orbit, new Color(0xa9a9a9), '', 100000);
 
         scene.value.add(orbitMesh);
 

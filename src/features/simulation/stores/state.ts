@@ -66,7 +66,7 @@ const initialState = (): any => {
             planetOrbitMeshes: undefined,
         },
         planets: [],
-        state: SimulationState.GRID_ENABLED,
+        state: SimulationState.NONE,
         objectsNearEarth: [] as string[],
         time: {
             epoch: new Date(),

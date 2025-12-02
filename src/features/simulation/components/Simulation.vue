@@ -3,7 +3,7 @@
     import { useKeyboardListener } from '../composable/use-keyboard-listener';
     import { CameraControls } from '@tresjs/cientos';
     import { onMounted, reactive } from 'vue';
-    import { PhysicsWorkerSelectionChangePayload, PhysicsWorkerType } from '../workers/physics.worker';
+    import { PhysicsWorkerSelectionChangePayload, PhysicsWorkerTickPayload, PhysicsWorkerType } from '../workers/physics.worker';
     import { useStateStore } from '../stores/state';
     import { addSecond } from '@formkit/tempo';
     import { usePhysicsWorker } from '../composable/use-physics-worker';
@@ -11,14 +11,17 @@
     import { useRenderer } from '../composable/use-renderer';
     import { Vector3 } from 'three';
     import { SimulationState } from '../stores/state.types';
+    import { useTres } from '@tresjs/core';
 
     const controlsState = reactive({
         minDistance: 695700 * 2,
-        maxDistance: 1000000000,
+        maxDistance: 8000000000,
         target: new Vector3(0, 0, 0),
     });
 
     const state = useStateStore();
+
+    const { camera } = useTres();
 
     const { initializePhysicsWorker, sendWorkerMessage } = usePhysicsWorker(onSimulationStepComplete);
     const { clearFocused, select, updateTracking } = useObjectFocuser(onFocusChange);
@@ -64,6 +67,10 @@
 
     function onSimulationStep(t: number): void {
         const mousePosition = state.mousePosition;
+        const cameraPosition = new Vector3();
+        if (camera.value) {
+            camera.value.getWorldPosition(cameraPosition);
+        }
 
         sendWorkerMessage({
             type: PhysicsWorkerType.TICK,
@@ -72,7 +79,8 @@
                 mouseX: mousePosition.x,
                 mouseY: mousePosition.y,
                 mouseZ: mousePosition.z,
-            },
+                cameraPosition: [cameraPosition.x, cameraPosition.y, cameraPosition.z],
+            } as PhysicsWorkerTickPayload,
         });
 
         state.updateSimulationClock(addSecond(state.simulationEpoch, t));

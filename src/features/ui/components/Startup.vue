@@ -29,7 +29,11 @@
             return;
         }
 
+        state.setFlags(SimulationState.SIMULATION_LOADING);
+
         await fetchTotalCount().then((count) => {
+            state.clearFlag(SimulationState.SIMULATION_LOADING);
+
             totalCount.value = count;
 
             if (pane) {

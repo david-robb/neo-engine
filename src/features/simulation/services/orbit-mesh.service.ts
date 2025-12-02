@@ -25,13 +25,14 @@ export function buildOrbitMeshLine(
     }
 
     const geometry = new MeshLineGeometry();
-    geometry.setPoints(points, (p) => thickness);
+    geometry.setPoints(points);
 
     const material = new MeshLineMaterial({
         lineWidth: thickness,
         color: color,
         resolution: new Vector2(window.innerWidth, window.innerHeight),
         name: name,
+        sizeAttenuation: true,
     } as ShaderMaterialParameters & MeshLineMaterial);
 
     material.vertexShader = `#include <common>
