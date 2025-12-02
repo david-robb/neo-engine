@@ -2,19 +2,20 @@ import { NEO } from '../types/neo.types';
 import * as tempo from '@formkit/tempo';
 import { tzDate } from '@formkit/tempo';
 
-export function synchronizeEpochs(engineNeos: NEO[], date: Date): void {
-    const neoByEpoch = new Map<string, NEO[]>();
-    engineNeos.forEach((neo) => {
-        const neos = neoByEpoch.get(neo.epoch);
-        if (!neos) {
-            neoByEpoch.set(neo.epoch, [neo]);
+export function synchronizeEpochs(objects: NEO[], date: Date): void {
+    const objectsByEpoch = new Map<string, NEO[]>();
+
+    objects.forEach((object) => {
+        const objectsWithEpoch = objectsByEpoch.get(object.epoch);
+        if (!objectsWithEpoch) {
+            objectsByEpoch.set(object.epoch, [object]);
         } else {
-            neoByEpoch.set(neo.epoch, [neo, ...neos]);
+            objectsByEpoch.set(object.epoch, [object, ...objectsWithEpoch]);
         }
     });
 
     const offsetByEpoch = new Map<string, number>();
-    neoByEpoch.keys().forEach((key) => {
+    objectsByEpoch.keys().forEach((key) => {
         const epochDate: Date = tempo.parse(key);
         const epochDateAtUtc = tzDate(epochDate, 'UTC');
 
@@ -26,7 +27,7 @@ export function synchronizeEpochs(engineNeos: NEO[], date: Date): void {
         }
     });
 
-    engineNeos.forEach((obj) => {
+    objects.forEach((obj) => {
         obj.epochOffset = offsetByEpoch.get(obj.epoch) ?? 0;
     });
 }

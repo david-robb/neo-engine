@@ -3,11 +3,11 @@ import { EngineSecondaryBody } from '../types/neo-engine.types';
 import { useStateStore } from '../stores/state';
 import { markRaw, onMounted } from 'vue';
 import { useTres } from '@tresjs/core';
-import { CAMERA_START_POS } from '../../../utility/constants';
+import { CAMERA_START_POS, SECONDARY_ORBIT_LINE_THICKNESS } from '../../../utility/constants';
 import CameraControls from 'camera-controls';
 import { Color, Vector3 } from 'three';
-import { buildOrbitMeshLine } from '../services/orbit-mesh.service';
 import { SimulationState } from '../stores/state.types';
+import { buildOrbitMeshLine } from '../services/mesh.service';
 
 export interface SelectObjectProps {
     oldVal: EngineSecondaryBody | undefined;
@@ -58,8 +58,8 @@ export function useObjectFocuser(onFocusChange: (id: number | undefined) => void
         }
     }
 
-    function renderOrbit(neo: EngineSecondaryBody): void {
-        const orbitMesh = buildOrbitMeshLine(neo.orbit, new Color(0xa9a9a9), '', 100000);
+    function renderOrbit(object: EngineSecondaryBody): void {
+        const orbitMesh = buildOrbitMeshLine(object.orbit, new Color(0xffffff), '', SECONDARY_ORBIT_LINE_THICKNESS);
 
         scene.value.add(orbitMesh);
 
@@ -114,7 +114,6 @@ export function useObjectFocuser(onFocusChange: (id: number | undefined) => void
             state.clearFlag(SimulationState.SELECTION_CHANGE);
         }
 
-        // Perform final camera lock update after following
         if (!state.hasFlag(SimulationState.FOLLOW_OBJECT) && cameraLockVector) {
             updateCameraLockPosition();
 
