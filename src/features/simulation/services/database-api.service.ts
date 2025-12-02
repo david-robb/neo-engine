@@ -48,7 +48,6 @@ const parseResponse = (data: any, error: PostgrestError | null): NEO[] => {
         const name = dbNeo.name!;
         const orbitalClass = dbNeo.orbital_class!;
 
-        // Missing Data Arc (s)
         const diameter: NEODiameter = dbNeo.diameter! as unknown as NEODiameter;
         const orbitalData: NEOOrbitalData = dbNeo.orbital_data! as unknown as NEOOrbitalData;
 

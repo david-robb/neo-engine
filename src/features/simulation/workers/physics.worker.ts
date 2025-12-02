@@ -1,6 +1,7 @@
 import { EnginePrimaryBody, EngineSecondaryBody } from '../types/neo-engine.types';
 import { calculateDetailedState, calculatePosition } from '../../../utility/orbital-mechanics';
 import { Matrix4, Vector3 } from 'three';
+import { AU_TO_KM_1, SECONDARY_RADIUS_SCALE_FAR, SECONDARY_RADIUS_SCALE_NEAR_MAX } from '../../../utility/constants';
 
 export enum PhysicsWorkerType {
     INIT = 'INIT',
@@ -24,6 +25,7 @@ export interface PhysicsWorkerTickPayload {
     mouseX: number;
     mouseY: number;
     mouseZ: number;
+    cameraPosition: number[];
 }
 
 export interface PhysicsWorkerSelectionChangePayload {
@@ -42,9 +44,11 @@ let coreObjects: EnginePrimaryBody[];
 let selectedId: number | undefined = undefined;
 
 let mousePosition: Vector3 = new Vector3(0, 0, 0);
+let earthPosition: Vector3 = new Vector3(0, 0, 0);
+let cameraPosition: Vector3 = new Vector3(0, 0, 0);
+
 let cameraInverseWorld: Matrix4 = new Matrix4();
 let cameraProjection: Matrix4 = new Matrix4();
-let earthPosition: Vector3 = new Vector3(0, 0, 0);
 
 self.onmessage = (e: MessageEvent): void => {
     const type: PhysicsWorkerType = e.data.type;
@@ -79,6 +83,10 @@ self.onmessage = (e: MessageEvent): void => {
         mousePosition.z = payload.mouseZ;
 
         const time = payload.t;
+
+        cameraPosition.setX(payload.cameraPosition[0]);
+        cameraPosition.setY(payload.cameraPosition[1]);
+        cameraPosition.setZ(payload.cameraPosition[2]);
 
         updatePrimaryObjects(time);
         updateSecondaryObjects(time);
@@ -115,10 +123,9 @@ function updateSecondaryObjects(t: number): void {
 
         const screenCoordinates: Vector3 = currentPosition.clone().applyMatrix4(cameraInverseWorld).applyMatrix4(cameraProjection);
         const distanceToMouse: number = screenCoordinates.distanceTo(mousePosition);
+        const distanceToCamera: number = currentPosition.distanceTo(cameraPosition);
 
-        const estimatedRadius = (neo.estimatedDiameterMinKm + neo.estimatedDiameterMinKm) / 4;
-
-        const radiusScale: number = Math.min(estimatedRadius + 50000 * (1 / (distanceToMouse + 0.0001)), 1000000);
+        const radiusScale: number = calculateRadiusScale(currentPosition);
 
         const offset: number = index * 16;
         positions[offset] = radiusScale;
@@ -146,9 +153,21 @@ function updateSecondaryObjects(t: number): void {
             focusedStateBuffer[0] = detailedState.distanceToSun;
             focusedStateBuffer[1] = detailedState.velocity;
 
-            positions[offset] = radiusScale * 10;
-            positions[offset + 5] = radiusScale * 10;
-            positions[offset + 10] = radiusScale * 10;
+            positions[offset] = SECONDARY_RADIUS_SCALE_NEAR_MAX;
+            positions[offset + 5] = SECONDARY_RADIUS_SCALE_NEAR_MAX;
+            positions[offset + 10] = SECONDARY_RADIUS_SCALE_NEAR_MAX;
         }
     });
+}
+
+function calculateRadiusScale(currentPosition: Vector3): number {
+    const screenCoordinates: Vector3 = currentPosition.clone().applyMatrix4(cameraInverseWorld).applyMatrix4(cameraProjection);
+    const distanceToMouse: number = screenCoordinates.distanceTo(mousePosition);
+    const distanceToCamera: number = currentPosition.distanceTo(cameraPosition);
+
+    if (distanceToCamera > 3 * AU_TO_KM_1) {
+        return SECONDARY_RADIUS_SCALE_FAR;
+    }
+
+    return Math.min(SECONDARY_RADIUS_SCALE_FAR * (1 / (distanceToMouse + 0.0001)), SECONDARY_RADIUS_SCALE_NEAR_MAX);
 }

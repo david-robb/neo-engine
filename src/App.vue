@@ -28,8 +28,8 @@
         <CloseApproachObjectList />
         <SelectedObjectDetails v-if="state.isReady" />
         <SimulationClock v-if="state.isReady" />
-        <TresCanvas :antialias="true" clear-color="#1b1b1c" logarithmicDepthBuffer window-size>
-            <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="2000000000" :fov="20" />
+        <TresCanvas :antialias="true" clear-color="#000000" logarithmicDepthBuffer window-size>
+            <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="100000000000" :fov="20" />
             <Simulation v-if="state.isReady" />
         </TresCanvas>
     </div>

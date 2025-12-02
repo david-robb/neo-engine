@@ -82,7 +82,7 @@ function calculateEccentricAnomaly(orbitElements: NEOOrbitalData, t: number): nu
     let en = m;
     let enP1 = 0;
 
-    while (Math.abs(en - enP1) > 0.01) {
+    while (Math.abs(en - enP1) > 0.001) {
         enP1 = en + (m - en + eccentricity * Math.sin(en)) / (1 - eccentricity * Math.cos(en));
         en = enP1;
     }
