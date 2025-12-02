@@ -25,18 +25,22 @@
 
     const { initializePhysicsWorker, sendWorkerMessage } = usePhysicsWorker(onSimulationStepComplete);
     const { clearFocused, select, updateTracking } = useObjectFocuser(onFocusChange);
-    const { initializeRenderer, renderFrame } = useRenderer();
+    const { initializeScene, renderFrame } = useRenderer();
 
     useSimulationClock(onSimulationStep, onRender);
     useKeyboardListener(onGridToggle);
 
     onMounted(() => {
-        initializeRenderer();
+        initializeScene();
         initializePhysicsWorker();
     });
 
     function onGridToggle(): void {
         state.toggleFlag(SimulationState.GRID_ENABLED);
+        const v = new Vector3();
+        camera.value?.getWorldPosition(v);
+
+        console.log(v);
     }
 
     function onRender(delta: number): void {
@@ -76,9 +80,7 @@
             type: PhysicsWorkerType.TICK,
             payload: {
                 t: t,
-                mouseX: mousePosition.x,
-                mouseY: mousePosition.y,
-                mouseZ: mousePosition.z,
+                mousePosition: [mousePosition.x, mousePosition.y, mousePosition.z],
                 cameraPosition: [cameraPosition.x, cameraPosition.y, cameraPosition.z],
             } as PhysicsWorkerTickPayload,
         });

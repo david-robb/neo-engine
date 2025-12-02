@@ -4,11 +4,12 @@ import { SimulationState } from '../stores/state.types';
 import { Mesh } from 'three';
 import { MeshLine } from '@lume/three-meshline';
 
-export function useRenderer(): { initializeRenderer: () => void; renderFrame: () => void } {
+export function useRenderer(): { initializeScene: () => void; renderFrame: () => void } {
     const state = useStateStore();
+
     const { scene, renderer } = useTres();
 
-    function initializeRenderer(): void {
+    function initializeScene(): void {
         renderer.setPixelRatio(window.devicePixelRatio);
 
         if (state.meshes.gridMesh) {
@@ -35,7 +36,7 @@ export function useRenderer(): { initializeRenderer: () => void; renderFrame: ()
     }
 
     return {
-        initializeRenderer,
+        initializeScene,
         renderFrame,
     };
 }

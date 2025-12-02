@@ -2,16 +2,13 @@
     import { markRaw, onMounted, ref } from 'vue';
     import { Pane } from 'tweakpane';
     import { format, parse } from '@formkit/tempo';
-    import { SimulationMode, SimulationStartState } from '../../simulation/types/simulation.types';
     import { useStateStore } from '../../simulation/stores/state';
-    import { initializeSimulation } from '../../simulation/services/simulation-initializer.service';
+    import { initializeSimulation, SimulationStartState } from '../../simulation/services/initialization.service';
     import { SimulationState } from '../../simulation/stores/state.types';
     import { fetchTotalCount } from '../../simulation/services/database-api.service';
     import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
 
     const START_UP_PARAMS = {
-        simulationMode: SimulationMode.ONLY_HAZARDOUS,
-        amountSelected: 3,
         simulationEpoch: format(new Date(), { date: 'medium', time: 'short' }),
         percent: 50,
         label: '',
@@ -59,7 +56,7 @@
                 view: 'radiogrid',
                 groupName: 'scale',
                 size: [5, 1],
-                cells: (x: number, y: number) => ({
+                cells: (x: number, _: number) => ({
                     title: `${sizes[x]}%`,
                     value: sizes[x],
                 }),
@@ -95,19 +92,18 @@
             state.setEpoch(epochDate);
 
             const initState: SimulationStartState = await initializeSimulation(
-                SimulationMode.CUSTOM_AMOUNT,
                 epochDate,
                 Math.floor(totalCount.value * (START_UP_PARAMS.percent / 100))
             );
 
             state.$patch((state: any) => {
-                state.neos = initState.objects;
-                state.planets = initState.planets;
+                state.neos = initState.secondaryBodies;
+                state.planets = initState.primaryBodies;
 
-                state.meshes.neoInstancedMesh = markRaw(initState.objectsMesh);
+                state.meshes.neoInstancedMesh = markRaw(initState.primaryBodiesMesh);
                 state.meshes.gridMesh = markRaw(initState.gridMesh);
-                state.meshes.planetMeshes = markRaw(initState.planetMeshes);
-                state.meshes.planetOrbitMeshes = markRaw(initState.planetOrbitMesh);
+                state.meshes.planetMeshes = markRaw(initState.primaryBodyMeshes);
+                state.meshes.planetOrbitMeshes = markRaw(initState.primaryOrbitMeshes);
             });
 
             if (pane) {
