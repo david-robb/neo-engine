@@ -1,10 +1,8 @@
 <script setup lang="ts">
     import { onMounted, ref, watch } from 'vue';
     import { Pane } from 'tweakpane';
-    import { format } from '@formkit/tempo';
     import { useStateStore } from '../../simulation/stores/state';
     import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
-    import { SimulationState } from '../../simulation/stores/state.types';
 
     const CLOCK_DETAILS = {
         time: '',
@@ -37,7 +35,7 @@
             view: 'radiogrid',
             groupName: 'scale',
             size: [7, 1],
-            cells: (x: number, y: number) => ({
+            cells: (x: number, _: number) => ({
                 title: labels[x],
                 value: values[x],
             }),
@@ -45,13 +43,7 @@
         }).on('change', (ev) => {
             const multiplier = +ev.value;
 
-            if (multiplier === 1) {
-                state.clearFlag(SimulationState.FOLLOW_OBJECT);
-            } else {
-                state.setFlags(SimulationState.FOLLOW_OBJECT);
-            }
-
-            state.updateTimeMultiplier(+ev.value);
+            state.updateTimeMultiplier(multiplier);
         });
 
         pane.hidden = true;
@@ -63,12 +55,12 @@
     };
 
     watch(
-        () => state.time.simulationClock,
+        () => state._time.simulationClock,
         (date) => {
             if (date && pane) {
                 pane.hidden = false;
 
-                CLOCK_DETAILS.time = format(date, { date: 'medium', time: 'long' });
+                CLOCK_DETAILS.time = `${date.toLocaleDateString()} ${date.toLocaleTimeString()}`;
                 pane.refresh();
             }
         }

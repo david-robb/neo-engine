@@ -34,7 +34,7 @@
     });
 
     watch(
-        () => state.nearEarthObjects,
+        () => state._objectsNearEarth,
         (objects) => {
             if (!pane) {
                 return;

@@ -1,80 +1,48 @@
 <script setup lang="ts">
     import { useSimulationClock } from '../composable/use-simulation-clock';
-    import { useKeyboardListener } from '../composable/use-keyboard-listener';
+    import { useInput } from '../composable/use-input';
     import { CameraControls } from '@tresjs/cientos';
-    import { onMounted, reactive } from 'vue';
-    import { PhysicsWorkerSelectionChangePayload, PhysicsWorkerTickPayload, PhysicsWorkerType } from '../workers/physics.worker';
-    import { useStateStore } from '../stores/state';
+    import { onMounted } from 'vue';
+    import { PhysicsWorkerTickPayload, PhysicsWorkerType } from '../workers/physics.worker';
+    import { SimulationStateFlags, useStateStore } from '../stores/state';
     import { addSecond } from '@formkit/tempo';
     import { usePhysicsWorker } from '../composable/use-physics-worker';
-    import { useObjectFocuser } from '../composable/use-object-focuser';
     import { useRenderer } from '../composable/use-renderer';
-    import { Vector3 } from 'three';
-    import { SimulationState } from '../stores/state.types';
-    import { useTres } from '@tresjs/core';
-
-    const controlsState = reactive({
-        minDistance: 695700 * 2,
-        maxDistance: 8000000000,
-        target: new Vector3(0, 0, 0),
-    });
+    import { useCamera } from '../composable/use-camera';
+    import { useObjectSelector } from '../composable/use-object-selector';
 
     const state = useStateStore();
 
-    const { camera } = useTres();
-
-    const { initializePhysicsWorker, sendWorkerMessage } = usePhysicsWorker(onSimulationStepComplete);
-    const { clearFocused, select, updateTracking } = useObjectFocuser(onFocusChange);
+    const { initializePhysicsWorker, sendWorkerMessage } = usePhysicsWorker();
     const { initializeScene, renderFrame } = useRenderer();
 
+    const { updateCamera, setTarget } = useCamera();
+
     useSimulationClock(onSimulationStep, onRender);
-    useKeyboardListener(onGridToggle);
+
+    useInput();
+    useObjectSelector();
 
     onMounted(() => {
-        initializeScene();
         initializePhysicsWorker();
+        initializeScene();
     });
 
-    function onGridToggle(): void {
-        state.toggleFlag(SimulationState.GRID_ENABLED);
-        const v = new Vector3();
-        camera.value?.getWorldPosition(v);
-
-        console.log(v);
-    }
-
     function onRender(delta: number): void {
-        if (state.hasFlag(SimulationState.CLEAR_FOCUSED)) {
-            clearFocused();
-        }
+        if (state.focusChanged && state._focusedBody) {
+            setTarget(state._focusedBody.currentPosition);
 
-        if (state.hasFlag(SimulationState.SELECT_NEXT)) {
-            select({
-                newVal: state.neos[state.focusedObjectIndex + 1],
-                oldVal: state.focusedObject,
-            });
-
-            state.clearFlag(SimulationState.SELECT_NEXT);
-        }
-
-        if (state.hasFlag(SimulationState.SELECT_PREVIOUS)) {
-            select({
-                newVal: state.neos[state.focusedObjectIndex - 1],
-                oldVal: state.focusedObject,
-            });
-
-            state.clearFlag(SimulationState.SELECT_PREVIOUS);
+            state.clearFlag(SimulationStateFlags.FOCUS_CHANGE);
         }
 
         renderFrame();
+
+        updateCamera(delta);
     }
 
     function onSimulationStep(t: number): void {
-        const mousePosition = state.mousePosition;
-        const cameraPosition = new Vector3();
-        if (camera.value) {
-            camera.value.getWorldPosition(cameraPosition);
-        }
+        const mousePosition = state._mousePosition;
+        const cameraPosition = state._cameraPosition;
 
         sendWorkerMessage({
             type: PhysicsWorkerType.TICK,
@@ -87,21 +55,8 @@
 
         state.updateSimulationClock(addSecond(state.simulationEpoch, t));
     }
-
-    function onSimulationStepComplete(): void {
-        updateTracking();
-    }
-
-    function onFocusChange(id: number | undefined): void {
-        sendWorkerMessage({
-            type: PhysicsWorkerType.SELECTION_CHANGE,
-            payload: {
-                id: id,
-            } as PhysicsWorkerSelectionChangePayload,
-        });
-    }
 </script>
 
 <template>
-    <CameraControls v-bind="controlsState" make-default />
+    <CameraControls :max-distance="8000000000" :min-distance="695700 * 2" make-default />
 </template>

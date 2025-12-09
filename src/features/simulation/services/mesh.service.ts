@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Color, Mesh, type ShaderMaterialParameters, Vector2, Vector3 } from 'three';
-import { EngineOrbit } from '../types/neo-engine.types';
+import { EngineOrbit } from '../types/simulation.types';
 import { MeshLine, MeshLineGeometry, MeshLineMaterial } from '@lume/three-meshline';
 import { calculateOrbit } from '../../../utility/orbital-mechanics';
 
@@ -9,7 +9,9 @@ export const buildSphereMesh = (radius: number, color: Color, name: string): Mes
     const material = new THREE.MeshBasicMaterial({ color: color });
 
     const mesh = new THREE.Mesh(sphereGeometry, material);
+
     mesh.name = name;
+    mesh.layers.set(2);
 
     return mesh;
 };
@@ -47,8 +49,8 @@ export const buildGridMesh = (): THREE.GridHelper => {
     const GRID_TOTAL_SIZE_KM = 10000000000; // 10 billion KM
     const GRID_SECTION_SIZE_KM = 100000000; // 100 million KM
 
-    const size = GRID_TOTAL_SIZE_KM;
-    const divisions = size / GRID_SECTION_SIZE_KM;
+    const size: number = GRID_TOTAL_SIZE_KM;
+    const divisions: number = size / GRID_SECTION_SIZE_KM;
 
     const colorCenterLine = 0xff0000;
     const colorGrid = 0x888888;
@@ -62,7 +64,7 @@ export const buildGridMesh = (): THREE.GridHelper => {
 };
 
 export const buildInstancedSphereMesh = (amount: number) => {
-    const geometry = new THREE.SphereGeometry(1, 30, 30);
+    const geometry = new THREE.SphereGeometry(1, 10, 10);
     const material = new THREE.MeshBasicMaterial({ color: 0x808080 });
     const mesh = new THREE.InstancedMesh(geometry, material, amount);
 

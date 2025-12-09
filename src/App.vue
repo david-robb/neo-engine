@@ -3,12 +3,13 @@
 
     import { CAMERA_START_POS } from './utility/constants';
     import Simulation from './features/simulation/components/Simulation.vue';
-    import Startup from './features/ui/components/Startup.vue';
     import { useStateStore } from './features/simulation/stores/state';
-    import SelectedObjectDetails from './features/ui/components/SelectedObjectDetails.vue';
-    import SimulationClock from './features/ui/components/SimulationClock.vue';
-    import HelpMenu from './features/ui/components/HelpMenu.vue';
-    import CloseApproachObjectList from './features/ui/components/CloseApproachObjectList.vue';
+    import SimulationClock from './features/ui/controls/SimulationClock.vue';
+    import SecondaryBodyPanel from './features/ui/details/SecondaryBodyPanel.vue';
+    import PrimaryBodySelector from './features/ui/controls/PrimaryBodySelector.vue';
+    import CloseApproachObjectList from './features/ui/details/CloseApproachObjectList.vue';
+    import Startup from './features/ui/general/Startup.vue';
+    import HelpMenu from './features/ui/general/HelpMenu.vue';
 
     const state = useStateStore();
 </script>
@@ -25,8 +26,9 @@
     <div id="scene-wrapper">
         <HelpMenu />
         <Startup />
-        <CloseApproachObjectList />
-        <SelectedObjectDetails v-if="state.isReady" />
+        <CloseApproachObjectList v-if="state.isReady" />
+        <PrimaryBodySelector v-if="state.isReady" />
+        <SecondaryBodyPanel v-if="state.isReady" />
         <SimulationClock v-if="state.isReady" />
         <TresCanvas :antialias="true" clear-color="#000000" logarithmicDepthBuffer window-size>
             <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="100000000000" :fov="20" />

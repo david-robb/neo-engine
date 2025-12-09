@@ -1,30 +1,27 @@
-import { EnginePrimaryBody, EngineSecondaryBody } from '../types/neo-engine.types';
-import { calculateDetailedState, calculatePosition } from '../../../utility/orbital-mechanics';
+import { EnginePrimaryBody, EngineSecondaryBody } from '../types/simulation.types';
 import { Matrix4, Vector3 } from 'three';
 import {
     AU_TO_KM_1,
-    TRACKED_OBJECT_SCALE,
     ZOOMED_IN_SECONDARY_MAX_SCALE,
     ZOOMED_IN_SECONDARY_SCALE,
     ZOOMED_OUT_SECONDARY_MAX_SCALE,
     ZOOMED_OUT_SECONDARY_SCALE,
 } from '../../../utility/constants';
+import { calculateOptimizedPosition } from '../services/position.service';
 
 export enum PhysicsWorkerType {
     INIT = 'INIT',
     TICK = 'TICK',
     TICK_COMPLETE = 'TICK_COMPLETE',
-    SELECTION_CHANGE = 'SELECTION_CHANGE',
 }
 
 export interface PhysicsWorkerInitPayload {
-    positionsBuffer: SharedArrayBuffer;
-    focusedStateBuffer: SharedArrayBuffer;
     earthDistanceBuffer: SharedArrayBuffer;
-    corePositionBuffer: SharedArrayBuffer;
+    primaryBodyPositionBuffer: SharedArrayBuffer;
+    secondaryBodyPositionBuffer: SharedArrayBuffer;
     cameraMatrixBuffer: SharedArrayBuffer;
-    objects: string;
-    coreObjects: string;
+    primaryBodies: string;
+    secondaryBodies: string;
 }
 
 export interface PhysicsWorkerTickPayload {
@@ -33,20 +30,13 @@ export interface PhysicsWorkerTickPayload {
     cameraPosition: number[];
 }
 
-export interface PhysicsWorkerSelectionChangePayload {
-    id: number | undefined;
-}
-
-let positions: Float32Array;
-let focusedStateBuffer: Float32Array;
+let secondaryPositionArray: Float32Array;
 let earthDistanceBuffer: Float32Array;
-let corePositionBuffer: Float32Array;
+let primaryPositionArray: Float32Array;
 let cameraMatrixBuffer: Float32Array;
 
-let objects: EngineSecondaryBody[];
-let coreObjects: EnginePrimaryBody[];
-
-let selectedId: number | undefined = undefined;
+let secondaryBodies: EngineSecondaryBody[];
+let primaryBodies: EnginePrimaryBody[];
 
 let mousePosition: Vector3 = new Vector3(0, 0, 0);
 let earthPosition: Vector3 = new Vector3(0, 0, 0);
@@ -55,34 +45,28 @@ let cameraPosition: Vector3 = new Vector3(0, 0, 0);
 let cameraInverseWorld: Matrix4 = new Matrix4();
 let cameraProjection: Matrix4 = new Matrix4();
 
+let tempPositionVector: Vector3 = new Vector3(0, 0, 0);
+
 self.onmessage = (e: MessageEvent): void => {
     const type: PhysicsWorkerType = e.data.type;
 
     if (type === PhysicsWorkerType.INIT) {
         const payload: PhysicsWorkerInitPayload = e.data.payload;
 
-        positions = new Float32Array(payload.positionsBuffer);
-        focusedStateBuffer = new Float32Array(payload.focusedStateBuffer);
+        primaryPositionArray = new Float32Array(payload.primaryBodyPositionBuffer);
+        secondaryPositionArray = new Float32Array(payload.secondaryBodyPositionBuffer);
         earthDistanceBuffer = new Float32Array(payload.earthDistanceBuffer);
-        corePositionBuffer = new Float32Array(payload.corePositionBuffer);
         cameraMatrixBuffer = new Float32Array(payload.cameraMatrixBuffer);
 
         cameraInverseWorld = new Matrix4().fromArray(cameraMatrixBuffer);
         cameraProjection = new Matrix4().fromArray(cameraMatrixBuffer, 16);
 
-        objects = JSON.parse(payload.objects) as EngineSecondaryBody[];
-        coreObjects = JSON.parse(payload.coreObjects) as EnginePrimaryBody[];
-    }
-
-    if (type === PhysicsWorkerType.SELECTION_CHANGE) {
-        const payload: PhysicsWorkerSelectionChangePayload = e.data.payload;
-
-        selectedId = payload.id;
+        secondaryBodies = JSON.parse(payload.secondaryBodies) as EngineSecondaryBody[];
+        primaryBodies = JSON.parse(payload.primaryBodies) as EnginePrimaryBody[];
     }
 
     if (type === PhysicsWorkerType.TICK) {
         const payload: PhysicsWorkerTickPayload = e.data.payload;
-
         const time = payload.t;
 
         cameraPosition.setX(payload.cameraPosition[0]);
@@ -101,64 +85,55 @@ self.onmessage = (e: MessageEvent): void => {
 };
 
 function updatePrimaryObjects(t: number): void {
-    coreObjects.forEach((object, index) => {
+    for (let i = 0; i < primaryBodies.length; i++) {
+        const object = primaryBodies[i];
+
         if (object.orbitData) {
-            const currentPosition = calculatePosition(object.orbitData, object.epochOffset + t);
+            calculateOptimizedPosition(object.orbitData, object.epochOffset + t, tempPositionVector);
 
-            const offset = index * 3;
+            const offset = i * 3;
 
-            corePositionBuffer[offset] = currentPosition.x;
-            corePositionBuffer[offset + 1] = currentPosition.y;
-            corePositionBuffer[offset + 2] = currentPosition.z;
+            primaryPositionArray[offset] = tempPositionVector.x;
+            primaryPositionArray[offset + 1] = tempPositionVector.y;
+            primaryPositionArray[offset + 2] = tempPositionVector.z;
 
             if (object.name === 'Earth') {
-                earthPosition = currentPosition;
+                earthPosition.copy(tempPositionVector);
             }
         }
-    });
+    }
 }
 
 function updateSecondaryObjects(t: number): void {
     cameraInverseWorld.fromArray(cameraMatrixBuffer);
     cameraProjection.fromArray(cameraMatrixBuffer, 16);
 
-    objects.forEach((neo: EngineSecondaryBody, index: number): void => {
-        const currentPosition: Vector3 = calculatePosition(neo.orbit, neo.epochOffset + t);
-        earthDistanceBuffer[index] = currentPosition.distanceTo(earthPosition);
+    for (let i = 0; i < secondaryBodies.length; i++) {
+        const body: EngineSecondaryBody = secondaryBodies[i];
 
-        const radiusScale: number = calculateRadiusScale(currentPosition);
+        calculateOptimizedPosition(body.orbit, body.epochOffset + t, tempPositionVector);
 
-        const offset: number = index * 16;
-        positions[offset] = radiusScale;
-        positions[offset + 2] = 0;
-        positions[offset + 3] = 0;
-        positions[offset + 4] = 0;
-        positions[offset + 5] = radiusScale;
-        positions[offset + 6] = 0;
-        positions[offset + 7] = 0;
-        positions[offset + 8] = 0;
-        positions[offset + 9] = 0;
-        positions[offset + 10] = radiusScale;
-        positions[offset + 11] = 0;
-        positions[offset + 12] = currentPosition.x;
-        positions[offset + 13] = currentPosition.y;
-        positions[offset + 14] = currentPosition.z;
-        positions[offset + 15] = 1;
+        earthDistanceBuffer[i] = tempPositionVector.distanceTo(earthPosition);
 
-        if (neo.id === selectedId) {
-            const selectedPosition = new Vector3();
-            selectedPosition.copy(currentPosition);
+        const radiusScale: number = calculateRadiusScale(tempPositionVector);
 
-            const detailedState = calculateDetailedState(neo, selectedPosition);
-
-            focusedStateBuffer[0] = detailedState.distanceToSun;
-            focusedStateBuffer[1] = detailedState.velocity;
-
-            positions[offset] = TRACKED_OBJECT_SCALE;
-            positions[offset + 5] = TRACKED_OBJECT_SCALE;
-            positions[offset + 10] = TRACKED_OBJECT_SCALE;
-        }
-    });
+        const offset: number = i * 16;
+        secondaryPositionArray[offset] = radiusScale;
+        secondaryPositionArray[offset + 2] = 0;
+        secondaryPositionArray[offset + 3] = 0;
+        secondaryPositionArray[offset + 4] = 0;
+        secondaryPositionArray[offset + 5] = radiusScale;
+        secondaryPositionArray[offset + 6] = 0;
+        secondaryPositionArray[offset + 7] = 0;
+        secondaryPositionArray[offset + 8] = 0;
+        secondaryPositionArray[offset + 9] = 0;
+        secondaryPositionArray[offset + 10] = radiusScale;
+        secondaryPositionArray[offset + 11] = 0;
+        secondaryPositionArray[offset + 12] = tempPositionVector.x;
+        secondaryPositionArray[offset + 13] = tempPositionVector.y;
+        secondaryPositionArray[offset + 14] = tempPositionVector.z;
+        secondaryPositionArray[offset + 15] = 1;
+    }
 }
 
 function calculateRadiusScale(currentPosition: Vector3): number {

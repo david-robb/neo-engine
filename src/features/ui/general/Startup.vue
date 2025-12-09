@@ -1,16 +1,15 @@
 <script setup lang="ts">
-    import { markRaw, onMounted, ref } from 'vue';
+    import { onMounted, ref } from 'vue';
     import { Pane } from 'tweakpane';
     import { format, parse } from '@formkit/tempo';
-    import { useStateStore } from '../../simulation/stores/state';
-    import { initializeSimulation, SimulationStartState } from '../../simulation/services/initialization.service';
-    import { SimulationState } from '../../simulation/stores/state.types';
+    import { SimulationStateFlags, useStateStore } from '../../simulation/stores/state';
+    import { initializeSimulation } from '../../simulation/services/initialization.service';
     import { fetchTotalCount } from '../../simulation/services/database-api.service';
     import * as EssentialsPlugin from '@tweakpane/plugin-essentials';
 
     const START_UP_PARAMS = {
         simulationEpoch: format(new Date(), { date: 'medium', time: 'short' }),
-        percent: 50,
+        percent: 100,
         label: '',
     };
 
@@ -26,10 +25,10 @@
             return;
         }
 
-        state.setFlags(SimulationState.SIMULATION_LOADING);
+        state.setLoading(true);
 
         await fetchTotalCount().then((count) => {
-            state.clearFlag(SimulationState.SIMULATION_LOADING);
+            state.setLoading(false);
 
             totalCount.value = count;
 
@@ -86,32 +85,19 @@
                 pane.refresh();
             }
 
-            state.setFlags(SimulationState.SIMULATION_LOADING);
+            state.setLoading(true);
 
             const epochDate = parse(START_UP_PARAMS.simulationEpoch, { date: 'medium', time: 'short' });
             state.setEpoch(epochDate);
 
-            const initState: SimulationStartState = await initializeSimulation(
-                epochDate,
-                Math.floor(totalCount.value * (START_UP_PARAMS.percent / 100))
-            );
-
-            state.$patch((state: any) => {
-                state.neos = initState.secondaryBodies;
-                state.planets = initState.primaryBodies;
-
-                state.meshes.neoInstancedMesh = markRaw(initState.primaryBodiesMesh);
-                state.meshes.gridMesh = markRaw(initState.gridMesh);
-                state.meshes.planetMeshes = markRaw(initState.primaryBodyMeshes);
-                state.meshes.planetOrbitMeshes = markRaw(initState.primaryOrbitMeshes);
-            });
+            await initializeSimulation(epochDate, Math.floor(totalCount.value * (START_UP_PARAMS.percent / 100)));
 
             if (pane) {
                 pane.hidden = true;
             }
 
-            state.setFlags(SimulationState.SIMULATION_READY);
-            state.clearFlag(SimulationState.SIMULATION_LOADING);
+            state.setFlags(SimulationStateFlags.SIMULATION_READY);
+            state.setLoading(false);
         });
     });
 </script>

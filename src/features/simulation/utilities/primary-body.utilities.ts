@@ -1,16 +1,9 @@
-import { EngineOrbit, EnginePrimaryBody } from '../types/neo-engine.types';
+import { EngineOrbit, EnginePrimaryBody } from '../types/simulation.types';
 import { AU_TO_KM_1 } from '../../../utility/constants';
 import { Color, Vector3 } from 'three';
 import * as tempo from '@formkit/tempo';
 import { parse, tzDate } from '@formkit/tempo';
-
-interface PlanetInitializationProps {
-    orbit?: EngineOrbit;
-    name: string;
-    epochOffset: number;
-    color: Color;
-    radius: number;
-}
+import { calculatePosition } from '../../../utility/orbital-mechanics';
 
 export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] => {
     const epochDate = tzDate(parse('2000-01-01 12:00:00'), 'UTC');
@@ -23,78 +16,94 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
         name: 'Sun',
         color: new Color(0xffd700),
         epochOffset: epochOffset,
-        radius: 695700,
+        radiusKm: 695700,
     });
 
+    const mercuryOrbit = buildMercuryOrbit();
     const mercury = buildPrimaryBody({
         name: 'Mercury',
         color: new Color(0xe0ffff),
         epochOffset: epochOffset,
-        orbit: buildMercuryOrbit(),
-        radius: 3396.2 * bodyScaleFactor,
+        orbitData: mercuryOrbit,
+        radiusKm: 3396.2 * bodyScaleFactor,
+        currentPosition: calculatePosition(mercuryOrbit, epochOffset),
     });
 
+    const venusOrbit = buildVenusOrbit();
     const venus = buildPrimaryBody({
         name: 'Venus',
         color: new Color(0xffff00),
         epochOffset: epochOffset,
-        orbit: buildVenusOrbit(),
-        radius: 6051.8 * bodyScaleFactor,
+        orbitData: venusOrbit,
+        radiusKm: 6051.8 * bodyScaleFactor,
+        currentPosition: calculatePosition(venusOrbit, epochOffset),
     });
 
+    const earthOrbit = buildEarthOrbit();
     const earth = buildPrimaryBody({
         name: 'Earth',
-        orbit: buildEarthOrbit(),
+        orbitData: earthOrbit,
         color: new Color(0x00bfff),
         epochOffset: epochOffset,
-        radius: 6357 * bodyScaleFactor,
+        radiusKm: 6357 * bodyScaleFactor,
+        currentPosition: calculatePosition(earthOrbit, epochOffset),
     });
 
+    const marsOrbit = buildMarsOrbit();
     const mars = buildPrimaryBody({
         name: 'Mars',
         color: new Color(0xff4500),
         epochOffset: epochOffset,
-        orbit: buildMarsOrbit(),
-        radius: 2439.7 * bodyScaleFactor,
+        orbitData: marsOrbit,
+        radiusKm: 2439.7 * bodyScaleFactor,
+        currentPosition: calculatePosition(marsOrbit, epochOffset),
     });
 
+    const jupiterOrbit = buildJupiterOrbit();
     const jupiter = buildPrimaryBody({
         name: 'Jupiter',
         color: new Color(0xffa500),
         epochOffset: epochOffset,
-        orbit: buildJupiterOrbit(),
-        radius: 71492 * bodyScaleFactor,
+        orbitData: jupiterOrbit,
+        radiusKm: 71492 * bodyScaleFactor,
+        currentPosition: calculatePosition(jupiterOrbit, epochOffset),
     });
 
+    const saturnOrbit = buildSaturnOrbit();
     const saturn = buildPrimaryBody({
         name: 'Saturn',
         color: new Color(0x32cd32),
         epochOffset: epochOffset,
-        orbit: buildSaturnOrbit(),
-        radius: 58232 * bodyScaleFactor,
+        orbitData: saturnOrbit,
+        radiusKm: 58232 * bodyScaleFactor,
+        currentPosition: calculatePosition(saturnOrbit, epochOffset),
     });
 
+    const uranusOrbit = buildUranusOrbit();
     const uranus = buildPrimaryBody({
         name: 'Uranus',
         color: new Color(0xff69b4),
         epochOffset: epochOffset,
-        orbit: buildUranusOrbit(),
-        radius: 25362 * bodyScaleFactor,
+        orbitData: uranusOrbit,
+        radiusKm: 25362 * bodyScaleFactor,
+        currentPosition: calculatePosition(uranusOrbit, epochOffset),
     });
 
+    const neptuneOrbit = buildNeptuneOrbit();
     const neptune = buildPrimaryBody({
         name: 'Neptune',
         color: new Color(0xff00ff),
         epochOffset: epochOffset,
-        orbit: buildNeptuneOrbit(),
-        radius: 24622 * bodyScaleFactor,
+        orbitData: neptuneOrbit,
+        radiusKm: 24622 * bodyScaleFactor,
+        currentPosition: calculatePosition(neptuneOrbit, epochOffset),
     });
 
     return [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
 };
 
 export const buildEarthOrbit = (): EngineOrbit => {
-    return {
+    return new EngineOrbit({
         orbitalPeriod: 31558150,
         ascendingNodeLongitude: 0,
         eccentricity: 0.01671022,
@@ -104,11 +113,11 @@ export const buildEarthOrbit = (): EngineOrbit => {
         perihelionArgument: degreesToRadians(102.94719),
         meanMotion: (2 * Math.PI) / 31558150,
         epoch: '2000-01-01 12:00:00',
-    } as EngineOrbit;
+    });
 };
 
 export const buildMarsOrbit = (): EngineOrbit => {
-    return {
+    return new EngineOrbit({
         orbitalPeriod: 59354355,
         ascendingNodeLongitude: degreesToRadians(49.71),
         eccentricity: 0.09337,
@@ -118,13 +127,13 @@ export const buildMarsOrbit = (): EngineOrbit => {
         perihelionArgument: degreesToRadians(336.08) - degreesToRadians(49.71),
         meanMotion: (2 * Math.PI) / 59354355,
         epoch: '2000-01-01 12:00:00',
-    } as EngineOrbit;
+    });
 };
 
 export const buildMercuryOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(48.34);
 
-    return {
+    return new EngineOrbit({
         orbitalPeriod: 7603200,
         ascendingNodeLongitude: ascendingNodeLongitude,
         eccentricity: 0.20564,
@@ -134,13 +143,13 @@ export const buildMercuryOrbit = (): EngineOrbit => {
         perihelionArgument: degreesToRadians(77.46) - ascendingNodeLongitude,
         meanMotion: (2 * Math.PI) / 7603200,
         epoch: '2000-01-01 12:00:00',
-    } as EngineOrbit;
+    });
 };
 
 export const buildVenusOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(76.67);
 
-    return {
+    return new EngineOrbit({
         orbitalPeriod: 19394640,
         ascendingNodeLongitude: ascendingNodeLongitude,
         eccentricity: 0.00676,
@@ -150,13 +159,13 @@ export const buildVenusOrbit = (): EngineOrbit => {
         perihelionArgument: degreesToRadians(131.77) - ascendingNodeLongitude,
         meanMotion: (2 * Math.PI) / 19394640,
         epoch: '2000-01-01 12:00:00',
-    } as EngineOrbit;
+    });
 };
 
 export const buildJupiterOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(100.29);
 
-    return {
+    return new EngineOrbit({
         orbitalPeriod: 374332000,
         ascendingNodeLongitude: ascendingNodeLongitude,
         eccentricity: 0.04854,
@@ -166,14 +175,14 @@ export const buildJupiterOrbit = (): EngineOrbit => {
         perihelionArgument: degreesToRadians(14.27) - ascendingNodeLongitude,
         meanMotion: (2 * Math.PI) / 374332000,
         epoch: '2000-01-01 12:00:00',
-    } as EngineOrbit;
+    });
 };
 
 export const buildSaturnOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(113.64);
     const orbitalPeriodSec = 29.47 * 31540000;
 
-    return {
+    return new EngineOrbit({
         orbitalPeriod: orbitalPeriodSec,
         ascendingNodeLongitude: ascendingNodeLongitude,
         eccentricity: 0.05551,
@@ -183,14 +192,14 @@ export const buildSaturnOrbit = (): EngineOrbit => {
         perihelionArgument: degreesToRadians(92.86) - ascendingNodeLongitude,
         meanMotion: (2 * Math.PI) / orbitalPeriodSec,
         epoch: '2000-01-01 12:00:00',
-    } as EngineOrbit;
+    });
 };
 
 export const buildUranusOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(73.96);
     const orbitalPeriodSec = 84.05 * 31540000;
 
-    return {
+    return new EngineOrbit({
         orbitalPeriod: orbitalPeriodSec,
         ascendingNodeLongitude: ascendingNodeLongitude,
         eccentricity: 0.04686,
@@ -200,14 +209,14 @@ export const buildUranusOrbit = (): EngineOrbit => {
         perihelionArgument: degreesToRadians(172.43) - ascendingNodeLongitude,
         meanMotion: (2 * Math.PI) / orbitalPeriodSec,
         epoch: '2000-01-01 12:00:00',
-    } as EngineOrbit;
+    });
 };
 
 export const buildNeptuneOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(131.79);
     const orbitalPeriodSec = 164.9 * 31540000;
 
-    return {
+    return new EngineOrbit({
         orbitalPeriod: orbitalPeriodSec,
         ascendingNodeLongitude: ascendingNodeLongitude,
         eccentricity: 0.00895,
@@ -217,20 +226,20 @@ export const buildNeptuneOrbit = (): EngineOrbit => {
         perihelionArgument: degreesToRadians(46.68) - ascendingNodeLongitude,
         meanMotion: (2 * Math.PI) / orbitalPeriodSec,
         epoch: '2000-01-01 12:00:00',
-    } as EngineOrbit;
+    });
 };
 
 const degreesToRadians = (degrees: number): number => {
     return (degrees * Math.PI) / 180;
 };
 
-const buildPrimaryBody = (props: PlanetInitializationProps): EnginePrimaryBody => {
-    return {
+const buildPrimaryBody = (props: Partial<EnginePrimaryBody>): EnginePrimaryBody => {
+    return new EnginePrimaryBody({
         name: props.name,
-        orbitData: props.orbit,
+        orbitData: props.orbitData,
         epochOffset: props.epochOffset,
         color: props.color,
-        radiusKm: props.radius,
-        currentPosition: new Vector3(0, 0, 0),
-    };
+        radiusKm: props.radiusKm,
+        currentPosition: props.currentPosition ?? new Vector3(0, 0, 0),
+    });
 };

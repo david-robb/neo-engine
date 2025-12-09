@@ -1,5 +1,5 @@
 import { Matrix4, Vector3 } from 'three';
-import { EngineOrbit, EngineSecondaryBody } from '../features/simulation/types/neo-engine.types';
+import { EngineOrbit, EngineSecondaryBody } from '../features/simulation/types/simulation.types';
 import { ORBIT_SEGMENT_COUNT } from './constants';
 
 const DEFAULT_ROTATION = new Matrix4().makeRotationX((3 * Math.PI) / 2);
@@ -32,13 +32,13 @@ export function calculatePosition(orbitElements: EngineOrbit, t: number = 0) {
     return toEclipticCoordinates(orbitElements, orbitalCoordinates);
 }
 
-export function calculateDetailedState(body: EngineSecondaryBody, currentPosition: Vector3): { velocity: number; distanceToSun: number } {
+export function calculateDetailedState(body: EngineSecondaryBody, currentPosition: Vector3): { velocity: number } {
     const mu = 132712440018;
 
     const distanceToSun = Math.hypot(currentPosition.x, currentPosition.y, currentPosition.z);
     const velocity = Math.sqrt(mu * (2.0 / distanceToSun - 1.0 / body.orbit.semiMajorAxis));
 
-    return { velocity, distanceToSun };
+    return { velocity };
 }
 
 export function toOrbitalCoordinates(orbitElements: EngineOrbit, trueAnomaly: number): Vector3 {
@@ -78,14 +78,14 @@ export function toEclipticCoordinates(orbitElements: EngineOrbit, orbitalCoordin
     return positionVector.applyMatrix4(DEFAULT_ROTATION);
 }
 
-function calculateRadius(orbitElements: EngineOrbit, trueAnomaly: number): number {
+export function calculateRadius(orbitElements: EngineOrbit, trueAnomaly: number): number {
     return (
         (orbitElements.semiMajorAxis * (1.0 - Math.pow(orbitElements.eccentricity, 2))) /
         (1.0 + orbitElements.eccentricity * Math.cos(trueAnomaly))
     );
 }
 
-function calculateMeanAnomaly(orbitElements: EngineOrbit, t: number): number {
+export function calculateMeanAnomaly(orbitElements: EngineOrbit, t: number): number {
     const meanAnomalyAtEpoch = orbitElements.meanAnomaly;
     if (t === 0) {
         return meanAnomalyAtEpoch;
@@ -94,7 +94,7 @@ function calculateMeanAnomaly(orbitElements: EngineOrbit, t: number): number {
     return meanAnomalyAtEpoch + orbitElements.meanMotion * t;
 }
 
-function calculateEccentricAnomaly(orbitElements: EngineOrbit, t: number): number {
+export function calculateEccentricAnomaly(orbitElements: EngineOrbit, t: number): number {
     const m = calculateMeanAnomaly(orbitElements, t);
     const eccentricity = orbitElements.eccentricity;
 
@@ -109,7 +109,7 @@ function calculateEccentricAnomaly(orbitElements: EngineOrbit, t: number): numbe
     return enP1;
 }
 
-function calculateTrueAnomaly(orbitElements: EngineOrbit, eccentricAnomaly: number): number {
+export function calculateTrueAnomaly(orbitElements: EngineOrbit, eccentricAnomaly: number): number {
     const eccentricity = orbitElements.eccentricity;
 
     return 2.0 * Math.atan(Math.sqrt((1 + eccentricity) / (1 - eccentricity)) * Math.tan(eccentricAnomaly / 2.0));
