@@ -25,16 +25,23 @@ export const initializeSimulation = async (epoch: Date, amount: number = 1): Pro
     const primaryBodies: EnginePrimaryBody[] = buildPrimaryBodies(epoch);
     const { orbitMeshes, bodyMeshes } = initializePrimaryBodyMeshes(primaryBodies);
 
-    primaryBodies.forEach((body) => state._primaryBody.set(body.name, body));
-    secondaryBodies.forEach((body) => state._secondaryBody.set(body.id, body));
+    const primaryBodyMap = new Map<string, EnginePrimaryBody>();
+    const secondaryBodyMap = new Map<number, EngineSecondaryBody>();
+
+    primaryBodies.forEach((body) => primaryBodyMap.set(body.name, body));
+    secondaryBodies.forEach((body) => secondaryBodyMap.set(body.id, body));
+
+    state.$patch({
+        _primaryBody: primaryBodyMap,
+        _secondaryBody: secondaryBodyMap,
+    });
+
     state._meshes = {
         secondaryBodiesMesh: markRaw(instancedMesh),
         gridMesh: markRaw(gridMesh),
         primaryBodyMeshes: markRaw(bodyMeshes),
         primaryBodyOrbitMeshes: markRaw(orbitMeshes),
     };
-
-    state.setFocus(state._primaryBody.get('Earth')!);
 };
 
 const mapEngineSecondaryObject = (databaseObjects: NEO[]): EngineSecondaryBody[] => {

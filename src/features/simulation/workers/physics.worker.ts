@@ -8,6 +8,7 @@ import {
     ZOOMED_OUT_SECONDARY_SCALE,
 } from '../../../utility/constants';
 import { calculateOptimizedPosition } from '../services/position.service';
+import { calculateVelocity } from '../services/velocity.service';
 
 export enum PhysicsWorkerType {
     INIT = 'INIT',
@@ -17,6 +18,7 @@ export enum PhysicsWorkerType {
 
 export interface PhysicsWorkerInitPayload {
     earthDistanceBuffer: SharedArrayBuffer;
+    velocityBuffer: SharedArrayBuffer;
     primaryBodyPositionBuffer: SharedArrayBuffer;
     secondaryBodyPositionBuffer: SharedArrayBuffer;
     cameraMatrixBuffer: SharedArrayBuffer;
@@ -32,6 +34,7 @@ export interface PhysicsWorkerTickPayload {
 
 let secondaryPositionArray: Float32Array;
 let earthDistanceBuffer: Float32Array;
+let velocityBuffer: Float32Array;
 let primaryPositionArray: Float32Array;
 let cameraMatrixBuffer: Float32Array;
 
@@ -57,6 +60,7 @@ self.onmessage = (e: MessageEvent): void => {
         secondaryPositionArray = new Float32Array(payload.secondaryBodyPositionBuffer);
         earthDistanceBuffer = new Float32Array(payload.earthDistanceBuffer);
         cameraMatrixBuffer = new Float32Array(payload.cameraMatrixBuffer);
+        velocityBuffer = new Float32Array(payload.velocityBuffer);
 
         cameraInverseWorld = new Matrix4().fromArray(cameraMatrixBuffer);
         cameraProjection = new Matrix4().fromArray(cameraMatrixBuffer, 16);
@@ -114,6 +118,7 @@ function updateSecondaryObjects(t: number): void {
         calculateOptimizedPosition(body.orbit, body.epochOffset + t, tempPositionVector);
 
         earthDistanceBuffer[i] = tempPositionVector.distanceTo(earthPosition);
+        velocityBuffer[i] = calculateVelocity(body, tempPositionVector);
 
         const radiusScale: number = calculateRadiusScale(tempPositionVector);
 

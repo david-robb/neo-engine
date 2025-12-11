@@ -8,25 +8,23 @@ import { MeshLine } from '@lume/three-meshline';
 
 export enum SimulationStateFlags {
     NONE = 0,
-    SIMULATION_LOADING = 1 << 0,
-    SIMULATION_READY = 1 << 1,
-    GRID_ENABLED = 1 << 2,
-    FOCUS_CHANGE = 1 << 3,
-    UI_DISABLED = 1 << 4,
+    SIMULATION_READY = 1 << 0,
+    GRID_ENABLED = 1 << 1,
+    IS_SEARCHING = 1 << 2,
 }
 
 export const useStateStore = defineStore('simulation-state', () => {
-    const _secondaryBodyMeshPool = new Map<number, MeshLine>();
-    const _primaryBody = new Map<string, EnginePrimaryBody>([]);
-    const _secondaryBody = new Map<number, EngineSecondaryBody>([]);
-    const _meshes: SimulationMeshes = {} as SimulationMeshes;
-    const _mousePosition: Vector3 = new Vector3(0, 0, 1);
-    const _cameraPosition: Vector3 = CAMERA_START_POS;
+    const _secondaryBodyMeshPool = ref(new Map<number, MeshLine>());
+    const _primaryBody = ref(new Map<string, EnginePrimaryBody>([]));
+    const _secondaryBody = ref(new Map<number, EngineSecondaryBody>([]));
+    const _meshes = ref({} as SimulationMeshes);
+    const _mousePosition = ref(new Vector3(0, 0, 1));
+    const _cameraPosition = ref(CAMERA_START_POS.clone());
 
-    const _secondaryBodyPool = ref<Map<number, EngineSecondaryBody>>(new Map());
+    const _cameraTarget = ref(new Vector3(0, 0, 0));
     const _objectsNearEarth = ref<string[]>([]);
     const _stateFlags = ref<SimulationStateFlags>(SimulationStateFlags.NONE);
-    const _focusedBody = ref<EnginePrimaryBody | undefined>(undefined);
+    const _focusedIds = ref(new Set<number>());
     const _time = ref<SimulationTime>({
         epoch: new Date(),
         simulationClock: undefined,
@@ -34,19 +32,29 @@ export const useStateStore = defineStore('simulation-state', () => {
     });
 
     const isReady = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.SIMULATION_READY));
-    const isLoading = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.SIMULATION_LOADING));
+    const isSearching = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.IS_SEARCHING));
     const gridEnabled = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.GRID_ENABLED));
-    const focusChanged = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.FOCUS_CHANGE));
-    const uiDisabled = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.UI_DISABLED));
 
-    const secondaryPoolSize = computed(() => _secondaryBodyPool.value.size);
+    const cameraTarget = computed(() => _cameraTarget.value);
     const timeMultiplier = computed(() => _time.value.multiplier);
     const simulationEpoch = computed(() => _time.value.epoch);
-    const focusedBodyName = computed(() => _focusedBody.value?.name ?? '');
+    const simulationClock = computed(() => _time.value.simulationClock);
+
+    const focusedPool = computed(() => {
+        const focusedPoolMap = new Map<number, EngineSecondaryBody>();
+        _focusedIds.value.forEach((id) => {
+            const obj = _secondaryBody.value.get(id);
+            if (obj) {
+                focusedPoolMap.set(id, obj);
+            }
+        });
+
+        return focusedPoolMap;
+    });
+
+    const focusedPoolArray = computed(() => Array.from(focusedPool.value.values()));
 
     function updateTimeMultiplier(multiplier: number): void {
-        enableUi(multiplier === 1);
-
         _time.value.multiplier = multiplier;
     }
 
@@ -70,34 +78,45 @@ export const useStateStore = defineStore('simulation-state', () => {
         _time.value.simulationClock = value;
     }
 
-    function setLoading(isLoading: boolean): void {
-        if (isLoading) {
-            setFlags(SimulationStateFlags.SIMULATION_LOADING);
+    function toggleSearch(toggle: boolean): void {
+        if (toggle) {
+            setFlags(SimulationStateFlags.IS_SEARCHING);
         } else {
-            clearFlag(SimulationStateFlags.SIMULATION_LOADING);
+            clearFlag(SimulationStateFlags.IS_SEARCHING);
         }
     }
 
-    function enableUi(enable: boolean): void {
-        if (enable) {
-            clearFlag(SimulationStateFlags.UI_DISABLED);
-        } else {
-            setFlags(SimulationStateFlags.UI_DISABLED);
+    function focusObject(id: number): void {
+        _focusedIds.value.add(id);
+    }
+
+    function unfocusObject(id: number): void {
+        _focusedIds.value.delete(id);
+    }
+
+    function setTarget(location: Vector3): void {
+        _cameraTarget.value = location.clone();
+    }
+
+    function updateObjectState(id: number, location: Vector3, velocity: number, distanceToEarth: number): void {
+        const object = _secondaryBody.value.get(id);
+        if (object) {
+            object.currentPosition = location;
+
+            object.velocity = velocity;
+            object.distanceToEarth = distanceToEarth;
+            object.distanceToSun = location.length();
         }
     }
 
-    function setFocusByName(name: string): void {
-        _focusedBody.value = _primaryBody.get(name);
-        setFlags(SimulationStateFlags.FOCUS_CHANGE);
-    }
-
-    function setFocus(object: EnginePrimaryBody): void {
-        _focusedBody.value = object;
-        setFlags(SimulationStateFlags.FOCUS_CHANGE);
+    function updatePrimaryObjectState(name: string, position: Vector3): void {
+        const object = _primaryBody.value.get(name);
+        if (object) {
+            object.currentPosition = position;
+        }
     }
 
     return {
-        _focusedBody,
         _meshes,
         _secondaryBody,
         _stateFlags,
@@ -105,29 +124,35 @@ export const useStateStore = defineStore('simulation-state', () => {
         _cameraPosition,
         _objectsNearEarth,
         _time,
-        _secondaryBodyPool,
         _secondaryBodyMeshPool,
         _primaryBody,
+        _cameraTarget,
+        _focusedIds,
+
+        focusedPool,
+        focusedPoolArray,
 
         timeMultiplier,
         simulationEpoch,
-        isReady,
-        isLoading,
-        gridEnabled,
-        focusChanged,
-        uiDisabled,
-        focusedBodyName,
-        secondaryPoolSize,
+        simulationClock,
 
-        setFocus,
-        setFocusByName,
+        isReady,
+        isSearching,
+
+        gridEnabled,
+        cameraTarget,
+
         updateTimeMultiplier,
         toggleFlag,
         setFlags,
         clearFlag,
         setEpoch,
         updateSimulationClock,
-        setLoading,
-        enableUi,
+        toggleSearch,
+        focusObject,
+        unfocusObject,
+        setTarget,
+        updateObjectState,
+        updatePrimaryObjectState,
     };
 });

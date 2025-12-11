@@ -33,7 +33,7 @@ export function useRenderer(): { initializeScene: () => void; renderFrame: () =>
             state._meshes.gridMesh.visible = state.gridEnabled;
         }
 
-        const secondaryBodyPool = state._secondaryBodyPool;
+        const secondaryBodyPool = state.focusedPool;
         for (const [_, value] of secondaryBodyPool.entries()) {
             if (!state._secondaryBodyMeshPool.has(value.id)) {
                 const mesh = buildOrbitMeshLine(value.orbit, new Color(0xa9a9a9), value.name, 50000);
@@ -62,7 +62,7 @@ export function useRenderer(): { initializeScene: () => void; renderFrame: () =>
 
                     scene.value.remove(meshLine);
 
-                    state._secondaryBodyMeshPool.delete(value);
+                    state.unfocusObject(value);
                 }
             });
         }

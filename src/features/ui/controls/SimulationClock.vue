@@ -55,7 +55,7 @@
     };
 
     watch(
-        () => state._time.simulationClock,
+        () => state.simulationClock,
         (date) => {
             if (date && pane) {
                 pane.hidden = false;
@@ -75,6 +75,7 @@
     .pane-holder {
         position: absolute;
         left: 50%;
+        top: 1%;
         transform: translate(-50%, -0%);
         z-index: 10;
 

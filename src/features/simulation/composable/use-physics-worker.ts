@@ -1,10 +1,10 @@
 import { onUnmounted } from 'vue';
 import { useStateStore } from '../stores/state';
 import { PhysicsWorkerInitPayload, PhysicsWorkerType } from '../workers/physics.worker';
-import { DynamicDrawUsage, InstancedBufferAttribute } from 'three';
+import { DynamicDrawUsage, InstancedBufferAttribute, Vector3 } from 'three';
 import { ALERT_DISTANCE } from '../../../utility/constants';
 import { useTres } from '@tresjs/core';
-import { EnginePrimaryBody, EngineSecondaryBody } from '../types/simulation.types';
+import { EngineSecondaryBody } from '../types/simulation.types';
 
 export function usePhysicsWorker(): {
     initializePhysicsWorker: () => void;
@@ -13,11 +13,13 @@ export function usePhysicsWorker(): {
     let primaryBodyPositionBuffer: SharedArrayBuffer;
     let secondaryBodyPositionBuffer: SharedArrayBuffer;
     let earthDistanceBuffer: SharedArrayBuffer;
+    let velocityBuffer: SharedArrayBuffer;
     let cameraMatrixBuffer: SharedArrayBuffer;
 
     let primaryBodyPositionArray: Float32Array;
     let secondaryBodyPositionArray: Float32Array;
     let earthDistanceArray: Float32Array;
+    let velocityArray: Float32Array;
     let cameraMatrixArray: Float32Array;
 
     let secondaryBodyLookupArray: EngineSecondaryBody[] = [];
@@ -40,14 +42,16 @@ export function usePhysicsWorker(): {
             return;
         }
 
+        primaryBodyPositionBuffer = new SharedArrayBuffer(state._primaryBody.size * 16 * 4);
         secondaryBodyPositionBuffer = new SharedArrayBuffer(state._secondaryBody.size * 16 * 4);
         earthDistanceBuffer = new SharedArrayBuffer(state._secondaryBody.size * 4);
-        primaryBodyPositionBuffer = new SharedArrayBuffer(state._primaryBody.size * 16 * 4);
+        velocityBuffer = new SharedArrayBuffer(state._secondaryBody.size * 4);
         cameraMatrixBuffer = new SharedArrayBuffer(2 * 16 * 4);
 
+        primaryBodyPositionArray = new Float32Array(primaryBodyPositionBuffer);
         secondaryBodyPositionArray = new Float32Array(secondaryBodyPositionBuffer);
         earthDistanceArray = new Float32Array(earthDistanceBuffer);
-        primaryBodyPositionArray = new Float32Array(primaryBodyPositionBuffer);
+        velocityArray = new Float32Array(velocityBuffer);
         cameraMatrixArray = new Float32Array(cameraMatrixBuffer);
 
         secondaryBodyLookupArray = Array.from(state._secondaryBody.values());
@@ -64,6 +68,7 @@ export function usePhysicsWorker(): {
                 primaryBodyPositionBuffer: primaryBodyPositionBuffer,
                 secondaryBodyPositionBuffer: secondaryBodyPositionBuffer,
                 earthDistanceBuffer: earthDistanceBuffer,
+                velocityBuffer: velocityBuffer,
                 cameraMatrixBuffer: cameraMatrixBuffer,
             } as PhysicsWorkerInitPayload,
         });
@@ -79,7 +84,7 @@ export function usePhysicsWorker(): {
     function onSimulationStepComplete(): void {
         updateNearEarthObjects();
         updatePrimaryBodies();
-        updateSecondaryBodies();
+        updateSecondaryBodyPool();
 
         const secondaryBodiesMesh = state._meshes.secondaryBodiesMesh!;
         if (first) {
@@ -118,15 +123,26 @@ export function usePhysicsWorker(): {
         state._objectsNearEarth = nearEarthObjects.sort((a, b) => +a.split('-')[1].trim() - +b.split('-')[1].trim());
     }
 
-    function updateSecondaryBodies(): void {
-        const secondaryBodyPool = state._secondaryBodyPool;
+    function updateSecondaryBodyPool(): void {
+        const secondaryBodyPool = state.focusedPoolArray;
 
-        for (const [_, value] of secondaryBodyPool.entries()) {
-            const offset = 16 * value.meshIndex;
+        for (let i = 0; i < secondaryBodyPool.length; i++) {
+            const body = secondaryBodyPool[i];
+            const offset = 16 * body.meshIndex;
 
-            value.currentPosition.x = secondaryBodyPositionArray[offset + 12];
-            value.currentPosition.y = secondaryBodyPositionArray[offset + 13];
-            value.currentPosition.z = secondaryBodyPositionArray[offset + 14];
+            const distanceToEarth = earthDistanceArray[body.meshIndex];
+            const velocity = velocityArray[body.meshIndex];
+
+            state.updateObjectState(
+                body.id,
+                new Vector3(
+                    secondaryBodyPositionArray[offset + 12],
+                    secondaryBodyPositionArray[offset + 13],
+                    secondaryBodyPositionArray[offset + 14]
+                ),
+                velocity,
+                distanceToEarth
+            );
         }
     }
 
@@ -142,12 +158,10 @@ export function usePhysicsWorker(): {
             mesh.position.setY(primaryBodyPositionArray[offset + 1]);
             mesh.position.setZ(primaryBodyPositionArray[offset + 2]);
 
-            const object: EnginePrimaryBody | undefined = state._primaryBody.get(mesh.name);
-            if (object) {
-                object.currentPosition.x = primaryBodyPositionArray[offset];
-                object.currentPosition.y = primaryBodyPositionArray[offset + 1];
-                object.currentPosition.z = primaryBodyPositionArray[offset + 2];
-            }
+            state.updatePrimaryObjectState(
+                mesh.name,
+                new Vector3(primaryBodyPositionArray[offset], primaryBodyPositionArray[offset + 1], primaryBodyPositionArray[offset + 2])
+            );
         }
     }
 

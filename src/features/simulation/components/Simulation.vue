@@ -4,7 +4,7 @@
     import { CameraControls } from '@tresjs/cientos';
     import { onMounted } from 'vue';
     import { PhysicsWorkerTickPayload, PhysicsWorkerType } from '../workers/physics.worker';
-    import { SimulationStateFlags, useStateStore } from '../stores/state';
+    import { useStateStore } from '../stores/state';
     import { addSecond } from '@formkit/tempo';
     import { usePhysicsWorker } from '../composable/use-physics-worker';
     import { useRenderer } from '../composable/use-renderer';
@@ -16,7 +16,7 @@
     const { initializePhysicsWorker, sendWorkerMessage } = usePhysicsWorker();
     const { initializeScene, renderFrame } = useRenderer();
 
-    const { updateCamera, setTarget } = useCamera();
+    const { updateCamera } = useCamera();
 
     useSimulationClock(onSimulationStep, onRender);
 
@@ -29,15 +29,9 @@
     });
 
     function onRender(delta: number): void {
-        if (state.focusChanged && state._focusedBody) {
-            setTarget(state._focusedBody.currentPosition);
-
-            state.clearFlag(SimulationStateFlags.FOCUS_CHANGE);
-        }
-
         renderFrame();
 
-        updateCamera(delta);
+        updateCamera();
     }
 
     function onSimulationStep(t: number): void {

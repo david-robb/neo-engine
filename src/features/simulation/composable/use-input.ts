@@ -22,6 +22,14 @@ export function useInput(gridToggleEnabled: boolean = true): void {
                     state.toggleFlag(SimulationStateFlags.GRID_ENABLED);
                 }
             }
+
+            if (event.key === 's' || event.key == 'S') {
+                state.toggleSearch(true);
+            }
+
+            if (event.key === 'Escape') {
+                state.toggleSearch(false);
+            }
         });
 
         window.addEventListener('mousemove', (event: MouseEvent) => {

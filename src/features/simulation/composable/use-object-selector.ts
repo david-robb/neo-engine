@@ -1,4 +1,4 @@
-import { EngineBody, EnginePrimaryBody, EngineSecondaryBody } from '../types/simulation.types';
+import { EngineBody, EngineSecondaryBody } from '../types/simulation.types';
 import { onMounted } from 'vue';
 import * as THREE from 'three';
 import { TresRenderer, useTres } from '@tresjs/core';
@@ -19,7 +19,7 @@ export const getCanvasRelativePosition = (event: MouseEvent, renderer: TresRende
 
 export function useObjectSelector(): void {
     const state = useStateStore();
-    const { camera, renderer, scene } = useTres();
+    const { camera, renderer } = useTres();
     const raycaster: THREE.Raycaster = new THREE.Raycaster();
 
     let mouseDownTime: number;
@@ -27,7 +27,7 @@ export function useObjectSelector(): void {
     let secondaryObjectMeshIndexMap: Map<number, EngineSecondaryBody> = new Map();
 
     function onMouseClick(event: MouseEvent): void {
-        if (!camera.value) {
+        if (!camera.value || state.isSearching) {
             return;
         }
 
@@ -38,14 +38,12 @@ export function useObjectSelector(): void {
 
         const intersectedObject = findIntersectedObject();
         if (intersectedObject) {
-            if (intersectedObject instanceof EnginePrimaryBody) {
-                state.setFocus(intersectedObject);
-            }
+            // if (intersectedObject instanceof EnginePrimaryBody) {
+            //     state.setFocus(intersectedObject);
+            // }
 
             if (intersectedObject instanceof EngineSecondaryBody) {
-                state.$patch((partialState) => {
-                    partialState._secondaryBodyPool.set(intersectedObject.id, intersectedObject);
-                });
+                state.focusObject(intersectedObject.id);
             }
         }
     }

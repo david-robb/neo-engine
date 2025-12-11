@@ -1,11 +1,12 @@
-import { onMounted } from 'vue';
+import { onMounted, watch } from 'vue';
 import { useTres } from '@tresjs/core';
 import { Vector3 } from 'three';
 import { useStateStore } from '../stores/state';
 import CameraControls from 'camera-controls';
+import { CAMERA_START_POS } from '../../../utility/constants';
 
 export function useCamera(): {
-    updateCamera: (delta: number) => void;
+    updateCamera: () => void;
     setTarget: (location: Vector3, animate?: boolean) => void;
 } {
     const state = useStateStore();
@@ -17,7 +18,14 @@ export function useCamera(): {
         }
     });
 
-    function updateCamera(delta: number): void {
+    watch(
+        () => state.cameraTarget,
+        (newValue) => {
+            setTarget(newValue);
+        }
+    );
+
+    function updateCamera(): void {
         if (!camera.value) {
             return;
         }
@@ -31,7 +39,7 @@ export function useCamera(): {
         }
 
         const cameraControls = controls.value as CameraControls;
-        cameraControls.setTarget(location.x, location.y, location.z, animate);
+        cameraControls.setLookAt(CAMERA_START_POS.x, CAMERA_START_POS.y, CAMERA_START_POS.z, location.x, location.y, location.z, animate);
     }
 
     return {

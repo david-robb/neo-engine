@@ -7,10 +7,6 @@ export const SIMULATION_TICKS_PER_SECOND: number = 60;
 export const AU_TO_KM_1: number = 149597870.691;
 export const ALERT_DISTANCE: number = AU_TO_KM_1 / 100;
 
-export const SECONDARY_ORBIT_LINE_THICKNESS = 250000;
-
-export const TRACKED_OBJECT_SCALE = 300000;
-
 export const ZOOMED_IN_SECONDARY_MAX_SCALE = 100000;
 export const ZOOMED_IN_SECONDARY_SCALE = 30000;
 
