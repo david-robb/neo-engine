@@ -38,10 +38,6 @@ export function useObjectSelector(): void {
 
         const intersectedObject = findIntersectedObject();
         if (intersectedObject) {
-            // if (intersectedObject instanceof EnginePrimaryBody) {
-            //     state.setFocus(intersectedObject);
-            // }
-
             if (intersectedObject instanceof EngineSecondaryBody) {
                 state.focusObject(intersectedObject.id);
             }

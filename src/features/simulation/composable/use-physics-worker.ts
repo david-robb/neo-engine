@@ -137,11 +137,9 @@ export function usePhysicsWorker(): {
 
             state.updateSecondaryObjectState(
                 body.id,
-                new Vector3(
-                    secondaryBodyPositionArray[offset + 12],
-                    secondaryBodyPositionArray[offset + 13],
-                    secondaryBodyPositionArray[offset + 14]
-                ),
+                secondaryBodyPositionArray[offset + 12],
+                secondaryBodyPositionArray[offset + 13],
+                secondaryBodyPositionArray[offset + 14],
                 velocity,
                 distanceToEarth
             );

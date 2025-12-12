@@ -1,5 +1,4 @@
 import { defineStore } from 'pinia';
-import { FlagUtilities } from '../utilities/flag.utilities';
 import { Vector3 } from 'three';
 import { EnginePrimaryBody, EngineSecondaryBody, SimulationMeshes, SimulationTime } from '../types/simulation.types';
 import { computed, ref } from 'vue';
@@ -36,14 +35,16 @@ export const useStateStore = defineStore('simulation-state', () => {
         multiplier: 1,
     });
 
-    const isReady = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.SIMULATION_READY));
-    const isSearching = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.IS_SEARCHING));
-    const gridEnabled = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.GRID_ENABLED));
+    const isReady = computed(() => (_stateFlags.value & SimulationStateFlags.SIMULATION_READY) > 0);
+    const isSearching = computed(() => (_stateFlags.value & SimulationStateFlags.IS_SEARCHING) > 0);
+    const gridEnabled = computed(() => (_stateFlags.value & SimulationStateFlags.GRID_ENABLED) > 0);
 
     const cameraTarget = computed(() => _cameraTarget.value);
     const timeMultiplier = computed(() => _time.value.multiplier);
     const simulationEpoch = computed(() => _time.value.epoch);
     const simulationClock = computed(() => _time.value.simulationClock);
+
+    const primaryBodyArray = computed(() => Array.from(_primaryBody.value.values()));
     const idNamePairs = computed(() =>
         Array.from(_secondaryBody.value.values()).map(
             (body) =>
@@ -66,20 +67,7 @@ export const useStateStore = defineStore('simulation-state', () => {
         return focusedPoolMap;
     });
 
-    const objectsNearEarth = computed(() => {
-        const objectArray: EngineSecondaryBody[] = [];
-        _objectsNearEarth.value.forEach((id) => {
-            const obj = _secondaryBody.value.get(id);
-            if (obj) {
-                objectArray.push(obj);
-            }
-        });
-
-        return objectArray;
-    });
-
     const focusedPoolArray = computed(() => Array.from(focusedPool.value.values()));
-    const primaryBodyArray = computed(() => Array.from(_primaryBody.value.values()));
 
     function updateTimeMultiplier(multiplier: number): void {
         _time.value.multiplier = multiplier;
@@ -125,14 +113,15 @@ export const useStateStore = defineStore('simulation-state', () => {
         _cameraTarget.value = location.clone();
     }
 
-    function updateSecondaryObjectState(id: number, location: Vector3, velocity: number, distanceToEarth: number): void {
+    function updateSecondaryObjectState(id: number, x: number, y: number, z: number, velocity: number, distanceToEarth: number): void {
         const object = _secondaryBody.value.get(id);
         if (object) {
-            object.currentPosition = location;
+            object.currentPosition.x = x;
+            object.currentPosition.y = y;
+            object.currentPosition.z = z;
 
             object.velocity = velocity;
             object.distanceToEarth = distanceToEarth;
-            object.distanceToSun = location.length();
         }
     }
 
@@ -187,7 +176,6 @@ export const useStateStore = defineStore('simulation-state', () => {
         gridEnabled,
         cameraTarget,
         primaryBodyArray,
-        objectsNearEarth,
         idNamePairs,
 
         updateTimeMultiplier,

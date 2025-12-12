@@ -3,7 +3,7 @@ import { AU_TO_KM_1 } from '../../../utility/constants';
 import { Color, Vector3 } from 'three';
 import * as tempo from '@formkit/tempo';
 import { parse, tzDate } from '@formkit/tempo';
-import { calculatePosition } from '../../../utility/orbital-mechanics';
+import { calculatePosition } from '../services/position.service';
 
 export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] => {
     const epochDate = tzDate(parse('2000-01-01 12:00:00'), 'UTC');
@@ -11,6 +11,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     const epochOffset = offsetSeconds < 0 ? Math.abs(offsetSeconds) : -1 * offsetSeconds;
 
     const bodyScaleFactor = 100;
+    const positionVector = new Vector3();
 
     const sun = buildPrimaryBody({
         name: 'Sun',
@@ -20,84 +21,99 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     });
 
     const mercuryOrbit = buildMercuryOrbit();
+    calculatePosition(mercuryOrbit, epochOffset, positionVector);
+
     const mercury = buildPrimaryBody({
         name: 'Mercury',
         color: new Color(0xe0ffff),
         epochOffset: epochOffset,
         orbitData: mercuryOrbit,
         radiusKm: 3396.2 * bodyScaleFactor,
-        currentPosition: calculatePosition(mercuryOrbit, epochOffset),
+        currentPosition: positionVector,
     });
 
     const venusOrbit = buildVenusOrbit();
+    calculatePosition(venusOrbit, epochOffset, positionVector);
+
     const venus = buildPrimaryBody({
         name: 'Venus',
         color: new Color(0xffff00),
         epochOffset: epochOffset,
         orbitData: venusOrbit,
         radiusKm: 6051.8 * bodyScaleFactor,
-        currentPosition: calculatePosition(venusOrbit, epochOffset),
+        currentPosition: positionVector,
     });
 
     const earthOrbit = buildEarthOrbit();
+    calculatePosition(earthOrbit, epochOffset, positionVector);
+
     const earth = buildPrimaryBody({
         name: 'Earth',
         orbitData: earthOrbit,
         color: new Color(0x00bfff),
         epochOffset: epochOffset,
         radiusKm: 6357 * bodyScaleFactor,
-        currentPosition: calculatePosition(earthOrbit, epochOffset),
-        orbitEnabled: true,
+        currentPosition: positionVector,
     });
 
     const marsOrbit = buildMarsOrbit();
+    calculatePosition(marsOrbit, epochOffset, positionVector);
+
     const mars = buildPrimaryBody({
         name: 'Mars',
         color: new Color(0xff4500),
         epochOffset: epochOffset,
         orbitData: marsOrbit,
         radiusKm: 2439.7 * bodyScaleFactor,
-        currentPosition: calculatePosition(marsOrbit, epochOffset),
+        currentPosition: positionVector,
     });
 
     const jupiterOrbit = buildJupiterOrbit();
+    calculatePosition(jupiterOrbit, epochOffset, positionVector);
+
     const jupiter = buildPrimaryBody({
         name: 'Jupiter',
         color: new Color(0xffa500),
         epochOffset: epochOffset,
         orbitData: jupiterOrbit,
         radiusKm: 71492 * bodyScaleFactor,
-        currentPosition: calculatePosition(jupiterOrbit, epochOffset),
+        currentPosition: positionVector,
     });
 
     const saturnOrbit = buildSaturnOrbit();
+    calculatePosition(saturnOrbit, epochOffset, positionVector);
+
     const saturn = buildPrimaryBody({
         name: 'Saturn',
         color: new Color(0x32cd32),
         epochOffset: epochOffset,
         orbitData: saturnOrbit,
         radiusKm: 58232 * bodyScaleFactor,
-        currentPosition: calculatePosition(saturnOrbit, epochOffset),
+        currentPosition: positionVector,
     });
 
     const uranusOrbit = buildUranusOrbit();
+    calculatePosition(uranusOrbit, epochOffset, positionVector);
+
     const uranus = buildPrimaryBody({
         name: 'Uranus',
         color: new Color(0xff69b4),
         epochOffset: epochOffset,
         orbitData: uranusOrbit,
         radiusKm: 25362 * bodyScaleFactor,
-        currentPosition: calculatePosition(uranusOrbit, epochOffset),
+        currentPosition: positionVector,
     });
 
     const neptuneOrbit = buildNeptuneOrbit();
+    calculatePosition(neptuneOrbit, epochOffset, positionVector);
+
     const neptune = buildPrimaryBody({
         name: 'Neptune',
         color: new Color(0xff00ff),
         epochOffset: epochOffset,
         orbitData: neptuneOrbit,
         radiusKm: 24622 * bodyScaleFactor,
-        currentPosition: calculatePosition(neptuneOrbit, epochOffset),
+        currentPosition: positionVector,
     });
 
     return [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
