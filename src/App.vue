@@ -12,8 +12,8 @@
 <template>
     <div id="scene-wrapper" class="fixed inset-0 overflow-hidden">
         <UI />
-        <TresCanvas :antialias="true" clear-color="#323233" logarithmicDepthBuffer window-size>
-            <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="100000000000" :fov="20" />
+        <TresCanvas :antialias="true" clear-color="#171717" logarithmicDepthBuffer window-size>
+            <TresPerspectiveCamera :position="CAMERA_START_POS" :look-at="[0, 0, 0]" :near="0.00001" :far="100000000000" />
             <Simulation v-if="state.isReady" />
         </TresCanvas>
     </div>

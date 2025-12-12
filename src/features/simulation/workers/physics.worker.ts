@@ -7,7 +7,7 @@ import {
     ZOOMED_OUT_SECONDARY_MAX_SCALE,
     ZOOMED_OUT_SECONDARY_SCALE,
 } from '../../../utility/constants';
-import { calculateOptimizedPosition } from '../services/position.service';
+import { calculatePosition } from '../services/position.service';
 import { calculateVelocity } from '../services/velocity.service';
 
 export enum PhysicsWorkerType {
@@ -93,7 +93,7 @@ function updatePrimaryObjects(t: number): void {
         const object = primaryBodies[i];
 
         if (object.orbitData) {
-            calculateOptimizedPosition(object.orbitData, object.epochOffset + t, tempPositionVector);
+            calculatePosition(object.orbitData, object.epochOffset + t, tempPositionVector);
 
             const offset = i * 3;
 
@@ -115,7 +115,7 @@ function updateSecondaryObjects(t: number): void {
     for (let i = 0; i < secondaryBodies.length; i++) {
         const body: EngineSecondaryBody = secondaryBodies[i];
 
-        calculateOptimizedPosition(body.orbit, body.epochOffset + t, tempPositionVector);
+        calculatePosition(body.orbit, body.epochOffset + t, tempPositionVector);
 
         earthDistanceBuffer[i] = tempPositionVector.distanceTo(earthPosition);
         velocityBuffer[i] = calculateVelocity(body, tempPositionVector);

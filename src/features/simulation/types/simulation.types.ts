@@ -15,7 +15,6 @@ export class EngineSecondaryBody {
     isSentry!: boolean;
 
     epochOffset!: number;
-    distanceToSun!: number;
     distanceToEarth!: number;
     currentPosition!: THREE.Vector3;
     velocity!: number;
@@ -34,7 +33,6 @@ export class EnginePrimaryBody {
     radiusKm!: number;
     color!: Color;
     currentPosition!: Vector3;
-    orbitEnabled: boolean = false;
 
     public constructor(partial: Partial<EnginePrimaryBody>) {
         Object.assign(this, partial);

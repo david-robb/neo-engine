@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { Color, Mesh, type ShaderMaterialParameters, Vector2, Vector3 } from 'three';
 import { EngineOrbit } from '../types/simulation.types';
 import { MeshLine, MeshLineGeometry, MeshLineMaterial } from '@lume/three-meshline';
-import { calculateOrbit } from '../../../utility/orbital-mechanics';
+import { calculateOrbit } from './position.service';
 
 export const buildSphereMesh = (radius: number, color: Color, name: string): Mesh => {
     const sphereGeometry = new THREE.SphereGeometry(radius, 30, 30);

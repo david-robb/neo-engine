@@ -1,18 +1,18 @@
 import { EngineOrbit } from '../types/simulation.types';
-import { calculateEccentricAnomaly, calculateRadius, calculateTrueAnomaly } from '../../../utility/orbital-mechanics';
 import { Matrix4, Vector3 } from 'three';
+import { ORBIT_SEGMENT_COUNT } from '../../../utility/constants';
 
 const DEFAULT_ROTATION = new Matrix4().makeRotationX((3 * Math.PI) / 2);
 
-export function calculateOptimizedPosition(orbitElements: EngineOrbit, t: number = 0, targetVector: Vector3): void {
+export function calculatePosition(orbitElements: EngineOrbit, t: number = 0, targetVector: Vector3): void {
     const eccentricAnomaly = calculateEccentricAnomaly(orbitElements, t);
     const trueAnomaly = calculateTrueAnomaly(orbitElements, eccentricAnomaly);
 
-    toOptimizedOrbitalCoordinates(orbitElements, trueAnomaly, targetVector);
-    toOptimizedEclipticCoordinates(orbitElements, targetVector);
+    toOrbitalCoordinates(orbitElements, trueAnomaly, targetVector);
+    toEclipticCoordinates(orbitElements, targetVector);
 }
 
-export function toOptimizedOrbitalCoordinates(orbitElements: EngineOrbit, trueAnomaly: number, targetVector: Vector3): void {
+export function toOrbitalCoordinates(orbitElements: EngineOrbit, trueAnomaly: number, targetVector: Vector3): void {
     const radius = calculateRadius(orbitElements, trueAnomaly);
 
     const xOrb = radius * Math.cos(trueAnomaly);
@@ -23,7 +23,7 @@ export function toOptimizedOrbitalCoordinates(orbitElements: EngineOrbit, trueAn
     targetVector.z = 0;
 }
 
-export function toOptimizedEclipticCoordinates(orbitElements: EngineOrbit, orbitalCoordinates: Vector3): void {
+export function toEclipticCoordinates(orbitElements: EngineOrbit, orbitalCoordinates: Vector3): void {
     const longAscendingNode = orbitElements.ascendingNodeLongitude;
     const argPerihelion = orbitElements.perihelionArgument;
     const inclination = orbitElements.inclination;
@@ -52,4 +52,62 @@ export function toOptimizedEclipticCoordinates(orbitElements: EngineOrbit, orbit
     orbitalCoordinates.z = zComp;
 
     orbitalCoordinates.applyMatrix4(DEFAULT_ROTATION);
+}
+
+export const calculateOrbit = (orbit: EngineOrbit): Vector3[] => {
+    let trueAnomaly: number = 0.0;
+
+    const segments: number = ORBIT_SEGMENT_COUNT;
+    const accumulator: number = 360.0 / segments;
+
+    const points: Vector3[] = [];
+    for (let i = 0; i < segments; i++) {
+        const position = new Vector3();
+
+        toOrbitalCoordinates(orbit, trueAnomaly, position);
+        toEclipticCoordinates(orbit, position);
+
+        points.push(position);
+
+        trueAnomaly += accumulator;
+    }
+
+    return points;
+};
+
+export function calculateRadius(orbitElements: EngineOrbit, trueAnomaly: number): number {
+    return (
+        (orbitElements.semiMajorAxis * (1.0 - Math.pow(orbitElements.eccentricity, 2))) /
+        (1.0 + orbitElements.eccentricity * Math.cos(trueAnomaly))
+    );
+}
+
+export function calculateMeanAnomaly(orbitElements: EngineOrbit, t: number): number {
+    const meanAnomalyAtEpoch = orbitElements.meanAnomaly;
+    if (t === 0) {
+        return meanAnomalyAtEpoch;
+    }
+
+    return meanAnomalyAtEpoch + orbitElements.meanMotion * t;
+}
+
+export function calculateEccentricAnomaly(orbitElements: EngineOrbit, t: number): number {
+    const m = calculateMeanAnomaly(orbitElements, t);
+    const eccentricity = orbitElements.eccentricity;
+
+    let en = m;
+    let enP1 = 0;
+
+    while (Math.abs(en - enP1) > 0.001) {
+        enP1 = en + (m - en + eccentricity * Math.sin(en)) / (1 - eccentricity * Math.cos(en));
+        en = enP1;
+    }
+
+    return enP1;
+}
+
+export function calculateTrueAnomaly(orbitElements: EngineOrbit, eccentricAnomaly: number): number {
+    const eccentricity = orbitElements.eccentricity;
+
+    return 2.0 * Math.atan(Math.sqrt((1 + eccentricity) / (1 - eccentricity)) * Math.tan(eccentricAnomaly / 2.0));
 }

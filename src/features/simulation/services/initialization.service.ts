@@ -60,7 +60,6 @@ const mapEngineSecondaryObject = (databaseObjects: NEO[]): EngineSecondaryBody[]
             isHazardous: neo.isHazardous,
             isSentry: neo.isSentry,
             currentPosition: new THREE.Vector3(0, 0, 0),
-            distanceToSun: 0,
             distanceToEarth: 0,
             velocity: 0,
             epochOffset: neo.epochOffset,
