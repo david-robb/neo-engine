@@ -17,13 +17,13 @@
 
     const formParameters = reactive<StartupFormParameters>({
         date: new Date(),
-        simulationSize: SimulationSize.SMALL,
+        simulationSize: SimulationSize.MEDIUM,
     });
 
     const simulationSize = (size: SimulationSize): number => {
         switch (size) {
             case SimulationSize.SMALL:
-                return 10; //Math.floor(objectCount.value * 0.1);
+                return Math.floor(objectCount.value * 0.1);
             case SimulationSize.MEDIUM:
                 return Math.floor(objectCount.value * 0.5);
             case SimulationSize.LARGE:

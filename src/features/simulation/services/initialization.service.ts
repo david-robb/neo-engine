@@ -42,6 +42,8 @@ export const initializeSimulation = async (epoch: Date, amount: number = 1): Pro
         primaryBodyMeshes: markRaw(bodyMeshes),
         primaryBodyOrbitMeshes: markRaw(orbitMeshes),
     };
+
+    state.focusObject(secondaryBodies[0].id);
 };
 
 const mapEngineSecondaryObject = (databaseObjects: NEO[]): EngineSecondaryBody[] => {

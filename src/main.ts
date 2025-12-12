@@ -4,7 +4,20 @@ import App from './App.vue';
 import { createPinia } from 'pinia';
 import PrimeVue from 'primevue/config';
 import Aura from '@primeuix/themes/aura';
-import { AutoComplete, Button, Card, Column, DataTable, DatePicker, Divider, Drawer, IftaLabel, Panel, RadioButton } from 'primevue';
+import {
+    AutoComplete,
+    Button,
+    ButtonGroup,
+    Card,
+    Column,
+    DataTable,
+    DatePicker,
+    Divider,
+    Drawer,
+    IftaLabel,
+    RadioButton,
+    ToggleSwitch,
+} from 'primevue';
 import { Form } from '@primevue/forms';
 import KilometerToAstronomicalUnitDirective from './directives/km-to-au';
 import KilometerToMeterDirective from './directives/km-to-m';
@@ -26,7 +39,6 @@ app.component('AutoComplete', AutoComplete);
 app.component('Button', Button);
 app.component('Form', Form);
 app.component('DatePicker', DatePicker);
-app.component('Panel', Panel);
 app.component('Card', Card);
 app.component('IftaLabel', IftaLabel);
 app.component('Divider', Divider);
@@ -34,6 +46,8 @@ app.component('RadioButton', RadioButton);
 app.component('DataTable', DataTable);
 app.component('Column', Column);
 app.component('Drawer', Drawer);
+app.component('ButtonGroup', ButtonGroup);
+app.component('ToggleSwitch', ToggleSwitch);
 
 app.directive('km-to-au', KilometerToAstronomicalUnitDirective);
 app.directive('km-to-m', KilometerToMeterDirective);

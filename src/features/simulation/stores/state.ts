@@ -13,6 +13,11 @@ export enum SimulationStateFlags {
     IS_SEARCHING = 1 << 2,
 }
 
+export interface IdNamePair {
+    id: number;
+    name: string;
+}
+
 export const useStateStore = defineStore('simulation-state', () => {
     const _secondaryBodyMeshPool = ref(new Map<number, MeshLine>());
     const _primaryBody = ref(new Map<string, EnginePrimaryBody>([]));
@@ -22,9 +27,9 @@ export const useStateStore = defineStore('simulation-state', () => {
     const _cameraPosition = ref(CAMERA_START_POS.clone());
 
     const _cameraTarget = ref(new Vector3(0, 0, 0));
-    const _objectsNearEarth = ref<string[]>([]);
     const _stateFlags = ref<SimulationStateFlags>(SimulationStateFlags.NONE);
     const _focusedIds = ref(new Set<number>());
+    const _objectsNearEarth = ref(new Set<number>());
     const _time = ref<SimulationTime>({
         epoch: new Date(),
         simulationClock: undefined,
@@ -39,6 +44,15 @@ export const useStateStore = defineStore('simulation-state', () => {
     const timeMultiplier = computed(() => _time.value.multiplier);
     const simulationEpoch = computed(() => _time.value.epoch);
     const simulationClock = computed(() => _time.value.simulationClock);
+    const idNamePairs = computed(() =>
+        Array.from(_secondaryBody.value.values()).map(
+            (body) =>
+                ({
+                    name: body.name,
+                    id: body.id,
+                }) as IdNamePair
+        )
+    );
 
     const focusedPool = computed(() => {
         const focusedPoolMap = new Map<number, EngineSecondaryBody>();
@@ -52,7 +66,20 @@ export const useStateStore = defineStore('simulation-state', () => {
         return focusedPoolMap;
     });
 
+    const objectsNearEarth = computed(() => {
+        const objectArray: EngineSecondaryBody[] = [];
+        _objectsNearEarth.value.forEach((id) => {
+            const obj = _secondaryBody.value.get(id);
+            if (obj) {
+                objectArray.push(obj);
+            }
+        });
+
+        return objectArray;
+    });
+
     const focusedPoolArray = computed(() => Array.from(focusedPool.value.values()));
+    const primaryBodyArray = computed(() => Array.from(_primaryBody.value.values()));
 
     function updateTimeMultiplier(multiplier: number): void {
         _time.value.multiplier = multiplier;
@@ -98,7 +125,7 @@ export const useStateStore = defineStore('simulation-state', () => {
         _cameraTarget.value = location.clone();
     }
 
-    function updateObjectState(id: number, location: Vector3, velocity: number, distanceToEarth: number): void {
+    function updateSecondaryObjectState(id: number, location: Vector3, velocity: number, distanceToEarth: number): void {
         const object = _secondaryBody.value.get(id);
         if (object) {
             object.currentPosition = location;
@@ -114,6 +141,24 @@ export const useStateStore = defineStore('simulation-state', () => {
         if (object) {
             object.currentPosition = position;
         }
+    }
+
+    function setPrimaryBodyOrbitVisible(bodyName: string, visible: boolean): void {
+        const primaryBodyMesh = _meshes.value.primaryBodyOrbitMeshes?.find((mesh) => mesh.name === bodyName);
+        if (primaryBodyMesh) {
+            primaryBodyMesh.visible = visible;
+        }
+    }
+
+    function setPrimaryBodyTarget(bodyName: string): void {
+        const body = _primaryBody.value.get(bodyName);
+        if (body) {
+            setTarget(body.currentPosition.clone());
+        }
+    }
+
+    function updateObjectsNearEarth(nearEarthObjects: Set<number>): void {
+        _objectsNearEarth.value = nearEarthObjects;
     }
 
     return {
@@ -141,6 +186,9 @@ export const useStateStore = defineStore('simulation-state', () => {
 
         gridEnabled,
         cameraTarget,
+        primaryBodyArray,
+        objectsNearEarth,
+        idNamePairs,
 
         updateTimeMultiplier,
         toggleFlag,
@@ -152,7 +200,10 @@ export const useStateStore = defineStore('simulation-state', () => {
         focusObject,
         unfocusObject,
         setTarget,
-        updateObjectState,
+        updateSecondaryObjectState,
         updatePrimaryObjectState,
+        setPrimaryBodyOrbitVisible,
+        setPrimaryBodyTarget,
+        updateObjectsNearEarth,
     };
 });

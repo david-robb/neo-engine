@@ -2,9 +2,9 @@ import { onUnmounted } from 'vue';
 import { useStateStore } from '../stores/state';
 import { PhysicsWorkerInitPayload, PhysicsWorkerType } from '../workers/physics.worker';
 import { DynamicDrawUsage, InstancedBufferAttribute, Vector3 } from 'three';
-import { ALERT_DISTANCE } from '../../../utility/constants';
 import { useTres } from '@tresjs/core';
 import { EngineSecondaryBody } from '../types/simulation.types';
+import { ALERT_DISTANCE } from '../../../utility/constants';
 
 export function usePhysicsWorker(): {
     initializePhysicsWorker: () => void;
@@ -110,17 +110,19 @@ export function usePhysicsWorker(): {
     }
 
     function updateNearEarthObjects(): void {
-        const nearEarthObjects: string[] = [];
+        const toAdd = new Set<number>();
 
         const length = earthDistanceArray.length;
         for (let i = 0; i < length; i++) {
             const distanceToEarth = earthDistanceArray[i];
             if (distanceToEarth < ALERT_DISTANCE) {
-                nearEarthObjects.push(`${secondaryBodyLookupArray[i].name} - ${distanceToEarth.toFixed(2)} KM`);
+                state.focusObject(secondaryBodyLookupArray[i].id);
+
+                toAdd.add(secondaryBodyLookupArray[i].id);
             }
         }
 
-        state._objectsNearEarth = nearEarthObjects.sort((a, b) => +a.split('-')[1].trim() - +b.split('-')[1].trim());
+        state.updateObjectsNearEarth(toAdd);
     }
 
     function updateSecondaryBodyPool(): void {
@@ -133,7 +135,7 @@ export function usePhysicsWorker(): {
             const distanceToEarth = earthDistanceArray[body.meshIndex];
             const velocity = velocityArray[body.meshIndex];
 
-            state.updateObjectState(
+            state.updateSecondaryObjectState(
                 body.id,
                 new Vector3(
                     secondaryBodyPositionArray[offset + 12],

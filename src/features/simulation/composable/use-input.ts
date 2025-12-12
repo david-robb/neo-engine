@@ -23,10 +23,6 @@ export function useInput(gridToggleEnabled: boolean = true): void {
                 }
             }
 
-            if (event.key === 's' || event.key == 'S') {
-                state.toggleSearch(true);
-            }
-
             if (event.key === 'Escape') {
                 state.toggleSearch(false);
             }

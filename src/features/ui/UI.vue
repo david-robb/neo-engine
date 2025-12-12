@@ -1,22 +1,20 @@
 <script setup lang="ts">
-    import SimulationClock from './controls/SimulationClock.vue';
-    import SearchSecondaryBodies from './search/SearchSecondaryBodies.vue';
-    import CloseApproachObjectList from './details/CloseApproachObjectList.vue';
+    import SearchSecondaryBodies from './general/SearchSecondaryBodies.vue';
     import { useStateStore } from '../simulation/stores/state';
-    import Help from './general/Help.vue';
-    import SecondaryPoolTable from './general/SecondaryPoolTable.vue';
+    import SecondaryObjectDetails from './general/SecondaryObjectDetails.vue';
     import StartupForm from './startup/StartupForm.vue';
+    import SimulationControls from './general/SimulationControls.vue';
+    import PrimaryBodyMenu from './general/PrimaryBodyMenu.vue';
 
     const state = useStateStore();
 </script>
 
 <template>
     <StartupForm />
-    <Help />
     <template v-if="state.isReady">
+        <PrimaryBodyMenu />
+        <SimulationControls />
         <SearchSecondaryBodies />
-        <CloseApproachObjectList />
-        <SimulationClock />
-        <SecondaryPoolTable />
+        <SecondaryObjectDetails />
     </template>
 </template>

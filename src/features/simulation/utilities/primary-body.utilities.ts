@@ -47,6 +47,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
         epochOffset: epochOffset,
         radiusKm: 6357 * bodyScaleFactor,
         currentPosition: calculatePosition(earthOrbit, epochOffset),
+        orbitEnabled: true,
     });
 
     const marsOrbit = buildMarsOrbit();
