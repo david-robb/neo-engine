@@ -1,4 +1,4 @@
-import { NEO } from '../types/neo.types';
+import { NEO } from '../types/database.types';
 import * as tempo from '@formkit/tempo';
 import { tzDate } from '@formkit/tempo';
 

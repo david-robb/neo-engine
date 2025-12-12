@@ -57,3 +57,4 @@ testdata/
 
 # Environment variables
 .env
+/src/todo.txt

@@ -1,79 +1,209 @@
 import { defineStore } from 'pinia';
 import { FlagUtilities } from '../utilities/flag.utilities';
-import { SimulationState, State } from './state.types';
 import { Vector3 } from 'three';
+import { EnginePrimaryBody, EngineSecondaryBody, SimulationMeshes, SimulationTime } from '../types/simulation.types';
+import { computed, ref } from 'vue';
+import { CAMERA_START_POS } from '../../../utility/constants';
+import { MeshLine } from '@lume/three-meshline';
 
-export const useStateStore = defineStore('state', {
-    state: () => initialState(),
-    getters: {
-        stateFlags: (state: State) => state.state,
-        timeMultiplier: (state: State) => state.time.multiplier,
-        focusedObject: (state: State) => state.focused,
-        focusedObjectIndex: (state: State) => state.neos.findIndex((neo) => neo.id === state.focused?.id),
-        simulationEpoch: (state: State) => state.time.epoch,
-        isReady: (state: State) => FlagUtilities.hasFlag(state.state, SimulationState.SIMULATION_READY),
-        isLoading: (state: State) => FlagUtilities.hasFlag(state.state, SimulationState.SIMULATION_LOADING),
-        nearEarthObjects: (state: State) => state.objectsNearEarth,
-        nearEarthObjectsSize: (state: State) => state.objectsNearEarth.length,
-    },
-    actions: {
-        updateTimeMultiplier(multiplier: number): void {
-            this.time.multiplier = multiplier;
-        },
-        toggleFlag(flag: SimulationState): void {
-            this.state = this.state ^ flag;
-        },
-        hasFlag(flag: SimulationState): boolean {
-            return (this.state & flag) > 0;
-        },
-        setFlags(flag: SimulationState): void {
-            this.state = this.state | flag;
-        },
-        clearFlag(flag: SimulationState): void {
-            this.state = this.state & ~flag;
-        },
-        setEpoch(epoch: Date): void {
-            this.time.epoch = epoch;
-        },
-        clearFocus(): void {
-            const mesh = this.meshes.orbitsMesh;
-            if (!mesh) {
-                return;
+export enum SimulationStateFlags {
+    NONE = 0,
+    SIMULATION_READY = 1 << 0,
+    GRID_ENABLED = 1 << 1,
+    IS_SEARCHING = 1 << 2,
+}
+
+export interface IdNamePair {
+    id: number;
+    name: string;
+}
+
+export const useStateStore = defineStore('simulation-state', () => {
+    const _secondaryBodyMeshPool = ref(new Map<number, MeshLine>());
+    const _primaryBody = ref(new Map<string, EnginePrimaryBody>([]));
+    const _secondaryBody = ref(new Map<number, EngineSecondaryBody>([]));
+    const _meshes = ref({} as SimulationMeshes);
+    const _mousePosition = ref(new Vector3(0, 0, 1));
+    const _cameraPosition = ref(CAMERA_START_POS.clone());
+
+    const _cameraTarget = ref(new Vector3(0, 0, 0));
+    const _stateFlags = ref<SimulationStateFlags>(SimulationStateFlags.NONE);
+    const _focusedIds = ref(new Set<number>());
+    const _objectsNearEarth = ref(new Set<number>());
+    const _time = ref<SimulationTime>({
+        epoch: new Date(),
+        simulationClock: undefined,
+        multiplier: 1,
+    });
+
+    const isReady = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.SIMULATION_READY));
+    const isSearching = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.IS_SEARCHING));
+    const gridEnabled = computed(() => FlagUtilities.hasFlag(_stateFlags.value, SimulationStateFlags.GRID_ENABLED));
+
+    const cameraTarget = computed(() => _cameraTarget.value);
+    const timeMultiplier = computed(() => _time.value.multiplier);
+    const simulationEpoch = computed(() => _time.value.epoch);
+    const simulationClock = computed(() => _time.value.simulationClock);
+    const idNamePairs = computed(() =>
+        Array.from(_secondaryBody.value.values()).map(
+            (body) =>
+                ({
+                    name: body.name,
+                    id: body.id,
+                }) as IdNamePair
+        )
+    );
+
+    const focusedPool = computed(() => {
+        const focusedPoolMap = new Map<number, EngineSecondaryBody>();
+        _focusedIds.value.forEach((id) => {
+            const obj = _secondaryBody.value.get(id);
+            if (obj) {
+                focusedPoolMap.set(id, obj);
             }
+        });
 
-            this.clearFlag(SimulationState.CLEAR_FOCUSED);
-            this.focused = undefined;
+        return focusedPoolMap;
+    });
 
-            mesh.geometry.dispose();
-        },
-        setNearEarthObjects(objectNames: string[]): void {
-            this.objectsNearEarth = objectNames;
-        },
-        updateSimulationClock(value: Date): void {
-            this.time.simulationClock = value;
-        },
-    },
-});
+    const objectsNearEarth = computed(() => {
+        const objectArray: EngineSecondaryBody[] = [];
+        _objectsNearEarth.value.forEach((id) => {
+            const obj = _secondaryBody.value.get(id);
+            if (obj) {
+                objectArray.push(obj);
+            }
+        });
 
-const initialState = (): any => {
+        return objectArray;
+    });
+
+    const focusedPoolArray = computed(() => Array.from(focusedPool.value.values()));
+    const primaryBodyArray = computed(() => Array.from(_primaryBody.value.values()));
+
+    function updateTimeMultiplier(multiplier: number): void {
+        _time.value.multiplier = multiplier;
+    }
+
+    function toggleFlag(flag: SimulationStateFlags): void {
+        _stateFlags.value = _stateFlags.value ^ flag;
+    }
+
+    function setFlags(flag: SimulationStateFlags): void {
+        _stateFlags.value = _stateFlags.value | flag;
+    }
+
+    function clearFlag(flag: SimulationStateFlags): void {
+        _stateFlags.value = _stateFlags.value & ~flag;
+    }
+
+    function setEpoch(epoch: Date): void {
+        _time.value.epoch = epoch;
+    }
+
+    function updateSimulationClock(value: Date): void {
+        _time.value.simulationClock = value;
+    }
+
+    function toggleSearch(toggle: boolean): void {
+        if (toggle) {
+            setFlags(SimulationStateFlags.IS_SEARCHING);
+        } else {
+            clearFlag(SimulationStateFlags.IS_SEARCHING);
+        }
+    }
+
+    function focusObject(id: number): void {
+        _focusedIds.value.add(id);
+    }
+
+    function unfocusObject(id: number): void {
+        _focusedIds.value.delete(id);
+    }
+
+    function setTarget(location: Vector3): void {
+        _cameraTarget.value = location.clone();
+    }
+
+    function updateSecondaryObjectState(id: number, location: Vector3, velocity: number, distanceToEarth: number): void {
+        const object = _secondaryBody.value.get(id);
+        if (object) {
+            object.currentPosition = location;
+
+            object.velocity = velocity;
+            object.distanceToEarth = distanceToEarth;
+            object.distanceToSun = location.length();
+        }
+    }
+
+    function updatePrimaryObjectState(name: string, position: Vector3): void {
+        const object = _primaryBody.value.get(name);
+        if (object) {
+            object.currentPosition = position;
+        }
+    }
+
+    function setPrimaryBodyOrbitVisible(bodyName: string, visible: boolean): void {
+        const primaryBodyMesh = _meshes.value.primaryBodyOrbitMeshes?.find((mesh) => mesh.name === bodyName);
+        if (primaryBodyMesh) {
+            primaryBodyMesh.visible = visible;
+        }
+    }
+
+    function setPrimaryBodyTarget(bodyName: string): void {
+        const body = _primaryBody.value.get(bodyName);
+        if (body) {
+            setTarget(body.currentPosition.clone());
+        }
+    }
+
+    function updateObjectsNearEarth(nearEarthObjects: Set<number>): void {
+        _objectsNearEarth.value = nearEarthObjects;
+    }
+
     return {
-        neos: [],
-        meshes: {
-            gridMesh: undefined,
-            neoInstancedMesh: undefined,
-            orbitsMesh: undefined,
-            planetMeshes: undefined,
-            planetOrbitMeshes: undefined,
-        },
-        planets: [],
-        state: SimulationState.NONE,
-        objectsNearEarth: [] as string[],
-        time: {
-            epoch: new Date(),
-            simulationClock: undefined,
-            multiplier: 1,
-        },
-        focused: undefined,
-        mousePosition: new Vector3(0, 0, 0),
+        _meshes,
+        _secondaryBody,
+        _stateFlags,
+        _mousePosition,
+        _cameraPosition,
+        _objectsNearEarth,
+        _time,
+        _secondaryBodyMeshPool,
+        _primaryBody,
+        _cameraTarget,
+        _focusedIds,
+
+        focusedPool,
+        focusedPoolArray,
+
+        timeMultiplier,
+        simulationEpoch,
+        simulationClock,
+
+        isReady,
+        isSearching,
+
+        gridEnabled,
+        cameraTarget,
+        primaryBodyArray,
+        objectsNearEarth,
+        idNamePairs,
+
+        updateTimeMultiplier,
+        toggleFlag,
+        setFlags,
+        clearFlag,
+        setEpoch,
+        updateSimulationClock,
+        toggleSearch,
+        focusObject,
+        unfocusObject,
+        setTarget,
+        updateSecondaryObjectState,
+        updatePrimaryObjectState,
+        setPrimaryBodyOrbitVisible,
+        setPrimaryBodyTarget,
+        updateObjectsNearEarth,
     };
-};
+});

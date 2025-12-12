@@ -1,11 +1,6 @@
-import { NEO, NEODiameter, NEOOrbitalData } from '../types/neo.types';
+import { NEO, NEODiameter, NEOOrbitalData } from '../types/database.types';
 import { supabase } from '../../../lib/supabase';
 import { PostgrestError } from '@supabase/supabase-js';
-
-export const fetchAllNeos = async (): Promise<NEO[]> => {
-    const { data, error } = await supabase.from('neo').select();
-    return parseResponse(data, error);
-};
 
 export const fetchTotalCount = async (): Promise<number> => {
     const { count, error } = await supabase.from('neo').select('*', { count: 'exact', head: true });
@@ -18,13 +13,8 @@ export const fetchTotalCount = async (): Promise<number> => {
     return count!;
 };
 
-export const fetchNeos = async (count: number): Promise<NEO[]> => {
+export const fetch = async (count: number): Promise<NEO[]> => {
     const { data, error } = await supabase.from('neo').select().limit(count);
-    return parseResponse(data, error);
-};
-
-export const fetchHazardousNeos = async (): Promise<NEO[]> => {
-    const { data, error } = await supabase.from('neo').select().eq('is_hazardous', true);
     return parseResponse(data, error);
 };
 
