@@ -1,12 +1,12 @@
 <script setup lang="ts">
-    import SearchSecondaryBodies from './general/SearchSecondaryBodies.vue';
-    import { useStateStore } from '../simulation/stores/state';
-    import SecondaryObjectDetails from './general/SecondaryObjectDetails.vue';
+    import SearchObjects from './general/SearchObjects.vue';
+    import ObjectDetails from './general/ObjectDetails.vue';
     import StartupForm from './startup/StartupForm.vue';
     import SimulationControls from './general/SimulationControls.vue';
     import PrimaryBodyMenu from './general/PrimaryBodyMenu.vue';
+    import { useSimulationStateStore } from '../simulation/stores/simulation-state';
 
-    const state = useStateStore();
+    const state = useSimulationStateStore();
 </script>
 
 <template>
@@ -14,7 +14,7 @@
     <template v-if="state.isReady">
         <PrimaryBodyMenu />
         <SimulationControls />
-        <SearchSecondaryBodies />
-        <SecondaryObjectDetails />
+        <SearchObjects />
+        <ObjectDetails />
     </template>
 </template>

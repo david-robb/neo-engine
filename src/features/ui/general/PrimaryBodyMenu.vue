@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import { useStateStore } from '../../simulation/stores/state';
     import { onMounted, ref } from 'vue';
     import { EnginePrimaryBody } from '../../simulation/types/simulation.types';
+    import { useSimulationStateStore } from '../../simulation/stores/simulation-state';
 
     interface ListItem {
         name: string;
@@ -9,7 +9,7 @@
         disabled: boolean;
     }
 
-    const state = useStateStore();
+    const state = useSimulationStateStore();
     const listItems = ref<ListItem[]>([]);
 
     const showMenu = ref(true);
@@ -22,16 +22,16 @@
                 disabled: !body.orbitData,
             });
 
-            state.setPrimaryBodyOrbitVisible(body.name, body.name === 'Earth');
+            state.setPrimaryObjectOrbitVisibility(body.name, body.name === 'Earth');
         });
     });
 
     const toggleOrbitForPrimaryBody = (bodyName: string, isEnabled: boolean) => {
-        state.setPrimaryBodyOrbitVisible(bodyName, isEnabled);
+        state.setPrimaryObjectOrbitVisibility(bodyName, isEnabled);
     };
 
     const setPrimaryBodyTarget = (bodyName: string) => {
-        state.setPrimaryBodyTarget(bodyName);
+        state.makePrimaryBodyTarget(bodyName);
     };
 
     const toggleMenu = () => {

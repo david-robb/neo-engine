@@ -1,50 +1,50 @@
-import { useStateStore } from '../stores/state';
 import { useTres } from '@tresjs/core';
 import { buildOrbitMeshLine } from '../services/mesh.service';
 import { Color } from 'three';
 import { markRaw } from 'vue';
+import { useSimulationStateStore } from '../stores/simulation-state';
 
 export function useRenderer(): { initializeScene: () => void; renderFrame: () => void } {
-    const state = useStateStore();
+    const state = useSimulationStateStore();
     const { scene, renderer } = useTres();
 
     function initializeScene(): void {
         renderer.setPixelRatio(window.devicePixelRatio);
 
-        if (state._meshes.gridMesh) {
-            scene.value.add(state._meshes.gridMesh);
+        if (state.globalMeshes.gridMesh) {
+            scene.value.add(state.globalMeshes.gridMesh);
         }
 
-        if (state._meshes.secondaryBodiesMesh) {
-            scene.value.add(state._meshes.secondaryBodiesMesh);
+        if (state.globalMeshes.secondaryBodiesMesh) {
+            scene.value.add(state.globalMeshes.secondaryBodiesMesh);
         }
 
-        if (state._meshes.primaryBodyMeshes) {
-            state._meshes.primaryBodyMeshes.forEach((planetMesh) => scene.value.add(planetMesh));
+        if (state.globalMeshes.primaryBodyMeshes) {
+            state.globalMeshes.primaryBodyMeshes.forEach((planetMesh) => scene.value.add(planetMesh));
         }
 
-        if (state._meshes.primaryBodyOrbitMeshes) {
-            state._meshes.primaryBodyOrbitMeshes.forEach((planetOrbitMesh) => scene.value.add(planetOrbitMesh));
+        if (state.globalMeshes.primaryBodyOrbitMeshes) {
+            state.globalMeshes.primaryBodyOrbitMeshes.forEach((planetOrbitMesh) => scene.value.add(planetOrbitMesh));
         }
     }
 
     function renderFrame(): void {
-        if (state._meshes.gridMesh) {
-            state._meshes.gridMesh.visible = state.gridEnabled;
+        if (state.globalMeshes.gridMesh) {
+            state.globalMeshes.gridMesh.visible = state.gridEnabled;
         }
 
-        const secondaryBodyPool = state.focusedPool;
+        const secondaryBodyPool = state.focusedSecondaryBodyMap;
         for (const [_, value] of secondaryBodyPool.entries()) {
-            if (!state._secondaryBodyMeshPool.has(value.id)) {
+            if (!state.secondaryOrbitMeshMap.has(value.id)) {
                 const mesh = buildOrbitMeshLine(value.orbit, new Color(0xa9a9a9), value.name, 50000);
 
-                state._secondaryBodyMeshPool.set(value.id, markRaw(mesh));
+                state.secondaryOrbitMeshMap.set(value.id, markRaw(mesh));
 
                 scene.value.add(mesh);
             }
         }
 
-        const secondaryBodyMeshPool = state._secondaryBodyMeshPool;
+        const secondaryBodyMeshPool = state.secondaryOrbitMeshMap;
         if (secondaryBodyMeshPool.size > secondaryBodyPool.size) {
             const toRemove: number[] = [];
 
@@ -62,7 +62,7 @@ export function useRenderer(): { initializeScene: () => void; renderFrame: () =>
 
                     scene.value.remove(meshLine);
 
-                    state.unfocusObject(value);
+                    state.setSecondaryBodyFocus(value, false);
                 }
             });
         }

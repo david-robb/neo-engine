@@ -1,9 +1,12 @@
 <script setup lang="ts">
     import { onMounted, ref } from 'vue';
-    import { IdNamePair, useStateStore } from '../../simulation/stores/state';
+    import { IdNamePair } from '../../simulation/stores/state';
     import { AutoCompleteCompleteEvent } from 'primevue/autocomplete';
+    import { useSimulationStateStore } from '../../simulation/stores/simulation-state';
 
-    const state = useStateStore();
+    const state = useSimulationStateStore();
+    const secondaryBodySearchArray = state.secondaryBodySearchArray;
+
     const filteredItems = ref<IdNamePair[]>([]);
 
     const selectedValue = ref<IdNamePair | undefined>(undefined);
@@ -13,9 +16,11 @@
     const search = (event: AutoCompleteCompleteEvent) => {
         setTimeout(() => {
             if (!event.query.trim().length) {
-                filteredItems.value = [...state.idNamePairs];
+                filteredItems.value = [...secondaryBodySearchArray];
             } else {
-                filteredItems.value = state.idNamePairs.filter((body) => body.name.toLowerCase().includes(event.query.toLowerCase()));
+                filteredItems.value = secondaryBodySearchArray.filter((body) =>
+                    body.name.toLowerCase().includes(event.query.toLowerCase())
+                );
             }
         }, 250);
     };
@@ -26,17 +31,17 @@
             return;
         }
 
-        state.focusObject(selected.id);
+        state.setSecondaryBodyFocus(selected.id, true);
 
         selectedValue.value = undefined;
 
-        state.toggleSearch(false);
+        state.setSearchFlag(false);
     };
 </script>
 
 <template>
     <div class="absolute z-10 bottom-0 flex flex-col">
-        <Button icon="pi pi-search" size="large" class="ml-2 mb-2" outlined rounded @click="state.toggleSearch(true)" />
+        <Button icon="pi pi-search" size="large" class="ml-2 mb-2" outlined rounded @click="state.setSearchFlag(true)" />
     </div>
     <div v-if="state.isSearching" class="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <Card>

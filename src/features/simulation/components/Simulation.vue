@@ -4,14 +4,14 @@
     import { CameraControls } from '@tresjs/cientos';
     import { onMounted } from 'vue';
     import { PhysicsWorkerTickPayload, PhysicsWorkerType } from '../workers/physics.worker';
-    import { useStateStore } from '../stores/state';
     import { addSecond } from '@formkit/tempo';
     import { usePhysicsWorker } from '../composable/use-physics-worker';
     import { useRenderer } from '../composable/use-renderer';
     import { useCamera } from '../composable/use-camera';
     import { useObjectSelector } from '../composable/use-object-selector';
+    import { useSimulationStateStore } from '../stores/simulation-state';
 
-    const state = useStateStore();
+    const state = useSimulationStateStore();
 
     const { initializePhysicsWorker, sendWorkerMessage } = usePhysicsWorker();
     const { initializeScene, renderFrame } = useRenderer();
@@ -35,8 +35,8 @@
     }
 
     function onSimulationStep(t: number): void {
-        const mousePosition = state._mousePosition;
-        const cameraPosition = state._cameraPosition;
+        const mousePosition = state.mousePosition;
+        const cameraPosition = state.cameraPosition;
 
         sendWorkerMessage({
             type: PhysicsWorkerType.TICK,
@@ -47,7 +47,7 @@
             } as PhysicsWorkerTickPayload,
         });
 
-        state.updateSimulationClock(addSecond(state.simulationEpoch, t));
+        state.setSimulationClock(addSecond(state.simulationEpoch, t));
     }
 </script>
 

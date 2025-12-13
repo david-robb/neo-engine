@@ -4,7 +4,7 @@ import { ORBIT_SEGMENT_COUNT } from '../../../utility/constants';
 
 const DEFAULT_ROTATION = new Matrix4().makeRotationX((3 * Math.PI) / 2);
 
-export function calculatePosition(orbitElements: EngineOrbit, t: number = 0, targetVector: Vector3): void {
+export function calculatePosition(orbitElements: EngineOrbit, t: number, targetVector: Vector3): void {
     const eccentricAnomaly = calculateEccentricAnomaly(orbitElements, t);
     const trueAnomaly = calculateTrueAnomaly(orbitElements, eccentricAnomaly);
 

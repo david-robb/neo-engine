@@ -2,16 +2,16 @@ import { NEO, NEOOrbitalData } from '../types/database.types';
 import { fetch } from '../services/database-api.service';
 import * as THREE from 'three';
 import { GridHelper, InstancedMesh, Mesh } from 'three';
-import { EngineOrbit, EnginePrimaryBody, EngineSecondaryBody } from '../types/simulation.types';
+import { EnginePrimaryBody, EngineSecondaryBody } from '../types/simulation.types';
 import { buildPrimaryBodies } from '../utilities/primary-body.utilities';
 import { buildGridMesh, buildInstancedSphereMesh, buildOrbitMeshLine, buildSphereMesh } from './mesh.service';
 import { MeshLine } from '@lume/three-meshline';
 import { synchronizeEpochs } from '../utilities/epoch-synchronization.utilities';
-import { useStateStore } from '../stores/state';
 import { markRaw } from 'vue';
+import { useSimulationStateStore } from '../stores/simulation-state';
 
 export const initializeSimulation = async (epoch: Date, amount: number = 1): Promise<void> => {
-    const state = useStateStore();
+    const state = useSimulationStateStore();
 
     const secondaryObjects = await fetch(amount);
 
@@ -32,25 +32,25 @@ export const initializeSimulation = async (epoch: Date, amount: number = 1): Pro
     secondaryBodies.forEach((body) => secondaryBodyMap.set(body.id, body));
 
     state.$patch({
-        _primaryBody: primaryBodyMap,
-        _secondaryBody: secondaryBodyMap,
+        primaryBodyMap: primaryBodyMap,
+        secondaryBodyMap: secondaryBodyMap,
     });
 
-    state._meshes = {
+    state.globalMeshes = {
         secondaryBodiesMesh: markRaw(instancedMesh),
         gridMesh: markRaw(gridMesh),
         primaryBodyMeshes: markRaw(bodyMeshes),
         primaryBodyOrbitMeshes: markRaw(orbitMeshes),
     };
 
-    state.focusObject(secondaryBodies[0].id);
+    state.setSecondaryBodyFocus(secondaryBodies[0].id, true);
 };
 
 const mapEngineSecondaryObject = (databaseObjects: NEO[]): EngineSecondaryBody[] => {
     return databaseObjects.map((neo, index) => {
         const o: NEOOrbitalData = neo.orbitalData;
 
-        return new EngineSecondaryBody({
+        return {
             id: neo.id,
             name: neo.name,
             neoReferenceId: neo.neoReferenceId,
@@ -63,7 +63,7 @@ const mapEngineSecondaryObject = (databaseObjects: NEO[]): EngineSecondaryBody[]
             distanceToEarth: 0,
             velocity: 0,
             epochOffset: neo.epochOffset,
-            orbit: new EngineOrbit({
+            orbit: {
                 epoch: neo.epoch,
                 orbitalPeriod: o.orbitalPeriod,
                 orbitUncertainty: o.orbitUncertainty,
@@ -77,9 +77,9 @@ const mapEngineSecondaryObject = (databaseObjects: NEO[]): EngineSecondaryBody[]
                 perihelionTime: o.perihelionTime,
                 meanAnomaly: o.meanAnomaly,
                 meanMotion: o.meanMotion,
-            }),
+            },
             meshIndex: index,
-        });
+        };
     });
 };
 

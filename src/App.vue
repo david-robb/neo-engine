@@ -3,10 +3,10 @@
 
     import { CAMERA_START_POS } from './utility/constants';
     import Simulation from './features/simulation/components/Simulation.vue';
-    import { useStateStore } from './features/simulation/stores/state';
     import UI from './features/ui/UI.vue';
+    import { useSimulationStateStore } from './features/simulation/stores/simulation-state';
 
-    const state = useStateStore();
+    const state = useSimulationStateStore();
 </script>
 
 <template>

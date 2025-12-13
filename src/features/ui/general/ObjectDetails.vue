@@ -1,20 +1,20 @@
 <script setup lang="ts">
-    import { useStateStore } from '../../simulation/stores/state';
     import { EngineSecondaryBody } from '../../simulation/types/simulation.types';
     import { ref } from 'vue';
     import { ALERT_DISTANCE } from '../../../utility/constants';
+    import { useSimulationStateStore } from '../../simulation/stores/simulation-state';
 
-    const state = useStateStore();
+    const state = useSimulationStateStore();
     const showDetails = ref(false);
 
     const selected = ref<EngineSecondaryBody | null>(null);
 
     const deleteFromPool = (row: EngineSecondaryBody) => {
-        state.unfocusObject(row.id);
+        state.setSecondaryBodyFocus(row.id, false);
     };
 
     const changeTarget = (row: EngineSecondaryBody) => {
-        state.setTarget(row.currentPosition);
+        state.setCameraTarget(row.currentPosition);
     };
 
     const displayOrbitDetails = (row: EngineSecondaryBody) => {
@@ -142,10 +142,10 @@
             </div>
         </div>
     </Drawer>
-    <div v-if="state.focusedPoolArray.length" class="absolute top-0 right-0 z-10">
+    <div v-if="state.focusedSecondaryBodyArray.length" class="absolute top-0 right-0 z-10">
         <Card class="opacity-80 m-6 w-xl">
             <template #content>
-                <DataTable :value="state.focusedPoolArray" class="p-datatable-sm" :rowStyle="rowStyle">
+                <DataTable :value="state.focusedSecondaryBodyArray" class="p-datatable-sm" :rowStyle="rowStyle">
                     <Column field="name" header="Name" class="text-xs"></Column>
                     <Column field="distanceToEarth" header="Distance from Earth" class="text-xs">
                         <template #body="slotProps">

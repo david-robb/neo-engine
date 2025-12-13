@@ -1,8 +1,8 @@
-import { EngineBody, EngineSecondaryBody } from '../types/simulation.types';
+import { EngineSecondaryBody } from '../types/simulation.types';
 import { onMounted } from 'vue';
 import * as THREE from 'three';
 import { TresRenderer, useTres } from '@tresjs/core';
-import { useStateStore } from '../stores/state';
+import { useSimulationStateStore } from '../stores/simulation-state';
 
 export const getCanvasRelativePosition = (event: MouseEvent, renderer: TresRenderer): THREE.Vector2 => {
     const canvas: HTMLCanvasElement = renderer.domElement;
@@ -18,7 +18,7 @@ export const getCanvasRelativePosition = (event: MouseEvent, renderer: TresRende
 };
 
 export function useObjectSelector(): void {
-    const state = useStateStore();
+    const state = useSimulationStateStore();
     const { camera, renderer } = useTres();
     const raycaster: THREE.Raycaster = new THREE.Raycaster();
 
@@ -38,15 +38,13 @@ export function useObjectSelector(): void {
 
         const intersectedObject = findIntersectedObject();
         if (intersectedObject) {
-            if (intersectedObject instanceof EngineSecondaryBody) {
-                state.focusObject(intersectedObject.id);
-            }
+            state.setSecondaryBodyFocus(intersectedObject.id, true);
         }
     }
 
-    function findIntersectedObject(): EngineBody | undefined {
-        const instancedMesh = state._meshes.secondaryBodiesMesh;
-        const primaryBodyMeshes = state._meshes.primaryBodyMeshes;
+    function findIntersectedObject(): EngineSecondaryBody | undefined {
+        const instancedMesh = state.globalMeshes.secondaryBodiesMesh;
+        const primaryBodyMeshes = state.globalMeshes.primaryBodyMeshes;
         if (!instancedMesh || !primaryBodyMeshes) {
             return undefined;
         }
@@ -54,12 +52,7 @@ export function useObjectSelector(): void {
         const intersectedArray = raycaster.intersectObjects([instancedMesh, ...primaryBodyMeshes]);
         const intersectedObject = intersectedArray[0];
 
-        const intersectedPrimaryObject = !!intersectedObject?.object?.name;
         const intersectedSecondaryObject = !!intersectedObject?.instanceId;
-
-        if (intersectedPrimaryObject) {
-            return state._primaryBody.get(intersectedObject.object.name);
-        }
 
         if (intersectedSecondaryObject) {
             return secondaryObjectMeshIndexMap.get(intersectedObject.instanceId!);
@@ -69,9 +62,11 @@ export function useObjectSelector(): void {
     }
 
     onMounted(() => {
-        state._secondaryBody.forEach((body) => {
+        state.secondaryBodyMap.forEach((body) => {
             secondaryObjectMeshIndexMap.set(body.meshIndex, body);
         });
+
+        state.simulationTime.simulationClock;
 
         window.addEventListener('mousedown', (event: MouseEvent) => {
             mouseDownTime = event.timeStamp;
