@@ -143,7 +143,7 @@ function calculateRadiusScale(currentPosition: Vector3): number {
     let scaleFactor = 0;
 
     if (distanceToCamera > 1) {
-        scaleFactor += 2000000 / Math.max(distanceToCamera, 8);
+        scaleFactor += 1000000 / Math.max(distanceToCamera, 8);
     } else {
         scaleFactor += 100000 + 100000 * distanceToCamera;
     }

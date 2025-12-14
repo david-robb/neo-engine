@@ -1,14 +1,12 @@
 <script setup lang="ts">
     import { onMounted, ref } from 'vue';
-    import { IdNamePair } from '../../simulation/stores/state';
     import { AutoCompleteCompleteEvent } from 'primevue/autocomplete';
-    import { useSimulationStateStore } from '../../simulation/stores/simulation-state';
+    import { IdNamePair, useSimulationStateStore } from '../../simulation/stores/simulation-state';
 
     const state = useSimulationStateStore();
     const secondaryBodySearchArray = state.secondaryBodySearchArray;
 
     const filteredItems = ref<IdNamePair[]>([]);
-
     const selectedValue = ref<IdNamePair | undefined>(undefined);
 
     onMounted(() => {});
