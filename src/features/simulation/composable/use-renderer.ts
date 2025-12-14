@@ -36,7 +36,7 @@ export function useRenderer(): { initializeScene: () => void; renderFrame: () =>
         const secondaryBodyPool = state.focusedSecondaryBodyMap;
         for (const [_, value] of secondaryBodyPool.entries()) {
             if (!state.secondaryOrbitMeshMap.has(value.id)) {
-                const mesh = buildOrbitMeshLine(value.orbit, new Color(0xa9a9a9), value.name, 50000);
+                const mesh = buildOrbitMeshLine(value.orbit, new Color(0xa9a9a9), value.name, 200000);
 
                 state.secondaryOrbitMeshMap.set(value.id, markRaw(mesh));
 

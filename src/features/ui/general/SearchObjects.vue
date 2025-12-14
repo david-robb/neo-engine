@@ -41,7 +41,7 @@
 
 <template>
     <div class="absolute z-10 bottom-0 flex flex-col">
-        <Button icon="pi pi-search" size="large" class="ml-2 mb-2" outlined rounded @click="state.setSearchFlag(true)" />
+        <Button icon="pi pi-search" size="large" class="ml-8 mb-8" outlined rounded @click="state.setSearchFlag(true)" />
     </div>
     <div v-if="state.isSearching" class="absolute z-10 top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
         <Card>

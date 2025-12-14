@@ -41,7 +41,7 @@
 
 <template>
     <div class="absolute z-10">
-        <Button v-if="!showMenu" icon="pi pi-sliders-h" size="large" class="ml-2 mt-2" outlined rounded @click="toggleMenu" />
+        <Button v-if="!showMenu" icon="pi pi-sliders-h" size="large" class="ml-8 mt-8" outlined rounded @click="toggleMenu" />
         <Card class="opacity-90 m-6" v-if="showMenu">
             <template #content>
                 <dl class="divide-y divide-white/10 p-0">

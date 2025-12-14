@@ -21,7 +21,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     });
 
     const mercuryOrbit = buildMercuryOrbit();
-    calculatePosition(mercuryOrbit, epochOffset, positionVector);
+    calculatePosition('Mercury', mercuryOrbit, epochOffset, positionVector);
 
     const mercury = buildPrimaryBody({
         name: 'Mercury',
@@ -33,7 +33,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     });
 
     const venusOrbit = buildVenusOrbit();
-    calculatePosition(venusOrbit, epochOffset, positionVector);
+    calculatePosition('Venus', venusOrbit, epochOffset, positionVector);
 
     const venus = buildPrimaryBody({
         name: 'Venus',
@@ -45,7 +45,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     });
 
     const earthOrbit = buildEarthOrbit();
-    calculatePosition(earthOrbit, epochOffset, positionVector);
+    calculatePosition('Earth', earthOrbit, epochOffset, positionVector);
 
     const earth = buildPrimaryBody({
         name: 'Earth',
@@ -57,7 +57,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     });
 
     const marsOrbit = buildMarsOrbit();
-    calculatePosition(marsOrbit, epochOffset, positionVector);
+    calculatePosition('Mars', marsOrbit, epochOffset, positionVector);
 
     const mars = buildPrimaryBody({
         name: 'Mars',
@@ -69,7 +69,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     });
 
     const jupiterOrbit = buildJupiterOrbit();
-    calculatePosition(jupiterOrbit, epochOffset, positionVector);
+    calculatePosition('Jupiter', jupiterOrbit, epochOffset, positionVector);
 
     const jupiter = buildPrimaryBody({
         name: 'Jupiter',
@@ -81,7 +81,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     });
 
     const saturnOrbit = buildSaturnOrbit();
-    calculatePosition(saturnOrbit, epochOffset, positionVector);
+    calculatePosition('Saturn', saturnOrbit, epochOffset, positionVector);
 
     const saturn = buildPrimaryBody({
         name: 'Saturn',
@@ -93,7 +93,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     });
 
     const uranusOrbit = buildUranusOrbit();
-    calculatePosition(uranusOrbit, epochOffset, positionVector);
+    calculatePosition('Uranus', uranusOrbit, epochOffset, positionVector);
 
     const uranus = buildPrimaryBody({
         name: 'Uranus',
@@ -105,7 +105,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     });
 
     const neptuneOrbit = buildNeptuneOrbit();
-    calculatePosition(neptuneOrbit, epochOffset, positionVector);
+    calculatePosition('Neptune', neptuneOrbit, epochOffset, positionVector);
 
     const neptune = buildPrimaryBody({
         name: 'Neptune',

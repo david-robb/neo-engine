@@ -66,8 +66,6 @@ export function useObjectSelector(): void {
             secondaryObjectMeshIndexMap.set(body.meshIndex, body);
         });
 
-        state.simulationTime.simulationClock;
-
         window.addEventListener('mousedown', (event: MouseEvent) => {
             mouseDownTime = event.timeStamp;
         });
