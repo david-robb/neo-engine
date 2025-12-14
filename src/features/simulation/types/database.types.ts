@@ -1,21 +1,8 @@
-export interface NEO {
-    id: number;
-    neoReferenceId: number;
-    name: string;
-    epoch: string;
-    orbitalClass: string;
-    isHazardous: boolean;
-    isSentry: boolean;
-    diameter: NEODiameter;
-    orbitalData: NEOOrbitalData;
-    epochOffset: number;
-}
-
-export interface NEODiameter {
+export interface DiameterJson {
     km: { min: number; max: number };
 }
 
-export interface NEOOrbitalData {
+export interface OrbitalDataJson {
     determinationDate: string;
     firstObservation: string;
     lastObservation: string;

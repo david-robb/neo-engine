@@ -119,7 +119,7 @@ export const buildPrimaryBodies = (simulationEpoch: Date): EnginePrimaryBody[] =
     return [sun, mercury, venus, earth, mars, jupiter, saturn, uranus, neptune];
 };
 
-export const buildEarthOrbit = (): EngineOrbit => {
+const buildEarthOrbit = (): EngineOrbit => {
     return {
         orbitalPeriod: 31558150,
         ascendingNodeLongitude: 0,
@@ -133,7 +133,7 @@ export const buildEarthOrbit = (): EngineOrbit => {
     } as EngineOrbit;
 };
 
-export const buildMarsOrbit = (): EngineOrbit => {
+const buildMarsOrbit = (): EngineOrbit => {
     return {
         orbitalPeriod: 59354355,
         ascendingNodeLongitude: degreesToRadians(49.71),
@@ -147,7 +147,7 @@ export const buildMarsOrbit = (): EngineOrbit => {
     } as EngineOrbit;
 };
 
-export const buildMercuryOrbit = (): EngineOrbit => {
+const buildMercuryOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(48.34);
 
     return {
@@ -163,7 +163,7 @@ export const buildMercuryOrbit = (): EngineOrbit => {
     } as EngineOrbit;
 };
 
-export const buildVenusOrbit = (): EngineOrbit => {
+const buildVenusOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(76.67);
 
     return {
@@ -179,7 +179,7 @@ export const buildVenusOrbit = (): EngineOrbit => {
     } as EngineOrbit;
 };
 
-export const buildJupiterOrbit = (): EngineOrbit => {
+const buildJupiterOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(100.29);
 
     return {
@@ -195,7 +195,7 @@ export const buildJupiterOrbit = (): EngineOrbit => {
     } as EngineOrbit;
 };
 
-export const buildSaturnOrbit = (): EngineOrbit => {
+const buildSaturnOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(113.64);
     const orbitalPeriodSec = 29.47 * 31540000;
 
@@ -212,7 +212,7 @@ export const buildSaturnOrbit = (): EngineOrbit => {
     } as EngineOrbit;
 };
 
-export const buildUranusOrbit = (): EngineOrbit => {
+const buildUranusOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(73.96);
     const orbitalPeriodSec = 84.05 * 31540000;
 
@@ -229,7 +229,7 @@ export const buildUranusOrbit = (): EngineOrbit => {
     } as EngineOrbit;
 };
 
-export const buildNeptuneOrbit = (): EngineOrbit => {
+const buildNeptuneOrbit = (): EngineOrbit => {
     const ascendingNodeLongitude = degreesToRadians(131.79);
     const orbitalPeriodSec = 164.9 * 31540000;
 
