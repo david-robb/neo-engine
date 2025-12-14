@@ -1,7 +1,6 @@
 <script setup lang="ts">
     import { onMounted, reactive, ref } from 'vue';
-    import { fetchTotalCount } from '../../simulation/services/database-api.service';
-    import { initializeSimulation } from '../../simulation/services/initialization.service';
+    import { fetchTotalCount } from '../../simulation/services/database.service';
     import { SimulationStateFlags, useSimulationStateStore } from '../../simulation/stores/simulation-state';
 
     enum SimulationSize {
@@ -38,9 +37,7 @@
     const onSubmit = async () => {
         loading.value = true;
 
-        state.setEpoch(formParameters.date);
-
-        await initializeSimulation(formParameters.date, simulationSize(formParameters.simulationSize));
+        await state.initializeSimulation(formParameters.date, simulationSize(formParameters.simulationSize));
 
         loading.value = false;
         state.setFlag(SimulationStateFlags.SIMULATION_READY);

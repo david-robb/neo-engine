@@ -1,8 +1,12 @@
 import { defineStore } from 'pinia';
 import { MeshLine } from '@lume/three-meshline';
 import { EnginePrimaryBody, EngineSecondaryBody, SimulationMeshes, SimulationTime } from '../types/simulation.types';
-import { Vector3 } from 'three';
+import { GridHelper, InstancedMesh, Vector3 } from 'three';
 import { CAMERA_START_POS } from '../../../utility/constants';
+import { fetch } from '../services/database.service';
+import { buildGridMesh, buildInstancedSphereMesh, buildOrbitMeshLine, buildSphereMesh } from '../services/mesh.service';
+import { buildPrimaryBodies } from '../utilities/primary-body.utilities';
+import { markRaw } from 'vue';
 
 export enum SimulationStateFlags {
     NONE = 0,
@@ -93,9 +97,6 @@ export const useSimulationStateStore = defineStore('simulation-state', {
         clearFlag(flag: SimulationStateFlags) {
             this.simulationFlags = this.simulationFlags & ~flag;
         },
-        setEpoch(epoch: Date) {
-            this.simulationTime.epoch = epoch;
-        },
         setSimulationClock(value: Date) {
             this.simulationTime.simulationClock = value;
         },
@@ -151,6 +152,32 @@ export const useSimulationStateStore = defineStore('simulation-state', {
         setMousePosition(x: number, y: number) {
             this.mousePosition.x = x;
             this.mousePosition.y = y;
+        },
+        async initializeSimulation(epoch: Date, amount: number) {
+            this.simulationTime.epoch = epoch;
+
+            const gridMesh: GridHelper = buildGridMesh();
+
+            const secondaryBodies = await fetch(amount, epoch);
+            const instancedMesh: InstancedMesh = buildInstancedSphereMesh(secondaryBodies.length);
+
+            const primaryBodies: EnginePrimaryBody[] = buildPrimaryBodies(epoch);
+            const bodyMeshes = primaryBodies.map((body) => buildSphereMesh(body.radiusKm, body.color, body.name));
+            const orbitMeshes = primaryBodies
+                .filter((body: EnginePrimaryBody) => !!body.orbitData)
+                .map((body: EnginePrimaryBody) =>
+                    buildOrbitMeshLine(body.orbitData!, body.color, body.name, Math.min(body.radiusKm / 2, 10000000))
+                );
+
+            primaryBodies.forEach((body) => this.primaryBodyMap.set(body.name, body));
+            secondaryBodies.forEach((body) => this.secondaryBodyMap.set(body.id, body));
+
+            this.globalMeshes.primaryBodyOrbitMeshes = markRaw(orbitMeshes);
+            this.globalMeshes.gridMesh = markRaw(gridMesh);
+            this.globalMeshes.primaryBodyMeshes = markRaw(bodyMeshes);
+            this.globalMeshes.secondaryBodiesMesh = markRaw(instancedMesh);
+
+            this.setSecondaryBodyFocus(secondaryBodies[0].id, true);
         },
     },
 });
