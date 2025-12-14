@@ -1,7 +1,7 @@
 <script setup lang="ts">
-    import { useStateStore } from '../../simulation/stores/state';
+    import { useSimulationStateStore } from '../../simulation/stores/simulation-state';
 
-    enum SPEED_SELECTION {
+    const enum SPEED_SELECTION {
         R_WEEK_PER_SEC = -86400 * 7,
         R_DAY_PER_SEC = -86400,
         PAUSED = 0,
@@ -10,10 +10,10 @@
         DAY_PER_SEC = 86400,
     }
 
-    const state = useStateStore();
+    const state = useSimulationStateStore();
 
     const setTimeMultiplier = (multiplier: number): void => {
-        state.updateTimeMultiplier(multiplier);
+        state.setTimeMultiplier(multiplier);
     };
 </script>
 

@@ -2,17 +2,16 @@ import { onMounted } from 'vue';
 import { Vector2 } from 'three';
 import { getCanvasRelativePosition } from './use-object-selector';
 import { useTres } from '@tresjs/core';
-import { SimulationStateFlags, useStateStore } from '../stores/state';
+import { SimulationStateFlags, useSimulationStateStore } from '../stores/simulation-state';
 
 export function useInput(gridToggleEnabled: boolean = true): void {
-    const state = useStateStore();
+    const state = useSimulationStateStore();
     const { renderer } = useTres();
 
     const onMouseMove = (event: MouseEvent): void => {
         const pickPosition: Vector2 = getCanvasRelativePosition(event, renderer);
 
-        state._mousePosition.x = pickPosition.x;
-        state._mousePosition.y = pickPosition.y;
+        state.setMousePosition(pickPosition.x, pickPosition.y);
     };
 
     onMounted(() => {
@@ -24,7 +23,7 @@ export function useInput(gridToggleEnabled: boolean = true): void {
             }
 
             if (event.key === 'Escape') {
-                state.toggleSearch(false);
+                state.setSearchFlag(false);
             }
         });
 

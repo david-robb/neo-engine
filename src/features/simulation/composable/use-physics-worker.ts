@@ -1,10 +1,10 @@
 import { onUnmounted } from 'vue';
-import { useStateStore } from '../stores/state';
 import { PhysicsWorkerInitPayload, PhysicsWorkerType } from '../workers/physics.worker';
 import { DynamicDrawUsage, InstancedBufferAttribute, Vector3 } from 'three';
 import { useTres } from '@tresjs/core';
 import { EngineSecondaryBody } from '../types/simulation.types';
 import { ALERT_DISTANCE } from '../../../utility/constants';
+import { useSimulationStateStore } from '../stores/simulation-state';
 
 export function usePhysicsWorker(): {
     initializePhysicsWorker: () => void;
@@ -26,7 +26,7 @@ export function usePhysicsWorker(): {
 
     let first: boolean = true;
 
-    const state = useStateStore();
+    const state = useSimulationStateStore();
     const { camera } = useTres();
 
     const worker = new Worker(new URL('../workers/physics.worker.ts', import.meta.url), {
@@ -38,14 +38,14 @@ export function usePhysicsWorker(): {
     });
 
     function initializePhysicsWorker(): void {
-        if (!state._meshes.secondaryBodiesMesh) {
+        if (!state.globalMeshes.secondaryBodiesMesh) {
             return;
         }
 
-        primaryBodyPositionBuffer = new SharedArrayBuffer(state._primaryBody.size * 16 * 4);
-        secondaryBodyPositionBuffer = new SharedArrayBuffer(state._secondaryBody.size * 16 * 4);
-        earthDistanceBuffer = new SharedArrayBuffer(state._secondaryBody.size * 4);
-        velocityBuffer = new SharedArrayBuffer(state._secondaryBody.size * 4);
+        primaryBodyPositionBuffer = new SharedArrayBuffer(state.primaryBodyMap.size * 16 * 4);
+        secondaryBodyPositionBuffer = new SharedArrayBuffer(state.secondaryBodyMap.size * 16 * 4);
+        earthDistanceBuffer = new SharedArrayBuffer(state.secondaryBodyMap.size * 4);
+        velocityBuffer = new SharedArrayBuffer(state.secondaryBodyMap.size * 4);
         cameraMatrixBuffer = new SharedArrayBuffer(2 * 16 * 4);
 
         primaryBodyPositionArray = new Float32Array(primaryBodyPositionBuffer);
@@ -54,16 +54,16 @@ export function usePhysicsWorker(): {
         velocityArray = new Float32Array(velocityBuffer);
         cameraMatrixArray = new Float32Array(cameraMatrixBuffer);
 
-        secondaryBodyLookupArray = Array.from(state._secondaryBody.values());
+        secondaryBodyLookupArray = Array.from(state.secondaryBodyMap.values());
 
-        state._meshes.secondaryBodiesMesh.instanceMatrix = new InstancedBufferAttribute(secondaryBodyPositionArray, 16);
-        state._meshes.secondaryBodiesMesh.instanceMatrix.setUsage(DynamicDrawUsage);
+        state.globalMeshes.secondaryBodiesMesh.instanceMatrix = new InstancedBufferAttribute(secondaryBodyPositionArray, 16);
+        state.globalMeshes.secondaryBodiesMesh.instanceMatrix.setUsage(DynamicDrawUsage);
 
         worker.postMessage({
             type: PhysicsWorkerType.INIT,
             payload: {
-                primaryBodies: JSON.stringify(Array.from(state._primaryBody.values())),
-                secondaryBodies: JSON.stringify(Array.from(state._secondaryBody.values())),
+                primaryBodies: JSON.stringify(state.primaryBodyArray),
+                secondaryBodies: JSON.stringify(Array.from(state.secondaryBodyMap.values())),
 
                 primaryBodyPositionBuffer: primaryBodyPositionBuffer,
                 secondaryBodyPositionBuffer: secondaryBodyPositionBuffer,
@@ -86,7 +86,7 @@ export function usePhysicsWorker(): {
         updatePrimaryBodies();
         updateSecondaryBodyPool();
 
-        const secondaryBodiesMesh = state._meshes.secondaryBodiesMesh!;
+        const secondaryBodiesMesh = state.globalMeshes.secondaryBodiesMesh!;
         if (first) {
             secondaryBodiesMesh.computeBoundingSphere();
             secondaryBodiesMesh.computeBoundingBox();
@@ -116,17 +116,17 @@ export function usePhysicsWorker(): {
         for (let i = 0; i < length; i++) {
             const distanceToEarth = earthDistanceArray[i];
             if (distanceToEarth < ALERT_DISTANCE) {
-                state.focusObject(secondaryBodyLookupArray[i].id);
+                state.setSecondaryBodyFocus(secondaryBodyLookupArray[i].id, true);
 
                 toAdd.add(secondaryBodyLookupArray[i].id);
             }
         }
 
-        state.updateObjectsNearEarth(toAdd);
+        state.setObjectsNearEarth(toAdd);
     }
 
     function updateSecondaryBodyPool(): void {
-        const secondaryBodyPool = state.focusedPoolArray;
+        const secondaryBodyPool = state.focusedSecondaryBodyArray;
 
         for (let i = 0; i < secondaryBodyPool.length; i++) {
             const body = secondaryBodyPool[i];
@@ -147,7 +147,7 @@ export function usePhysicsWorker(): {
     }
 
     function updatePrimaryBodies(): void {
-        const primaryBodies = state._meshes.primaryBodyMeshes!;
+        const primaryBodies = state.globalMeshes.primaryBodyMeshes!;
 
         for (let i = 0; i < primaryBodies.length; i++) {
             const mesh = primaryBodies[i];

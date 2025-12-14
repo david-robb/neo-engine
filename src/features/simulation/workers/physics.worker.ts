@@ -1,12 +1,6 @@
 import { EnginePrimaryBody, EngineSecondaryBody } from '../types/simulation.types';
 import { Matrix4, Vector3 } from 'three';
-import {
-    AU_TO_KM_1,
-    ZOOMED_IN_SECONDARY_MAX_SCALE,
-    ZOOMED_IN_SECONDARY_SCALE,
-    ZOOMED_OUT_SECONDARY_MAX_SCALE,
-    ZOOMED_OUT_SECONDARY_SCALE,
-} from '../../../utility/constants';
+import { AU_TO_KM_1 } from '../../../utility/constants';
 import { calculatePosition } from '../services/position.service';
 import { calculateVelocity } from '../services/velocity.service';
 
@@ -93,7 +87,7 @@ function updatePrimaryObjects(t: number): void {
         const object = primaryBodies[i];
 
         if (object.orbitData) {
-            calculatePosition(object.orbitData, object.epochOffset + t, tempPositionVector);
+            calculatePosition(object.name, object.orbitData, object.epochOffset + t, tempPositionVector);
 
             const offset = i * 3;
 
@@ -115,7 +109,7 @@ function updateSecondaryObjects(t: number): void {
     for (let i = 0; i < secondaryBodies.length; i++) {
         const body: EngineSecondaryBody = secondaryBodies[i];
 
-        calculatePosition(body.orbit, body.epochOffset + t, tempPositionVector);
+        calculatePosition(body.name, body.orbit, body.epochOffset + t, tempPositionVector);
 
         earthDistanceBuffer[i] = tempPositionVector.distanceTo(earthPosition);
         velocityBuffer[i] = calculateVelocity(body, tempPositionVector);
@@ -145,9 +139,18 @@ function calculateRadiusScale(currentPosition: Vector3): number {
     const screenCoordinates: Vector3 = currentPosition.clone().applyMatrix4(cameraInverseWorld).applyMatrix4(cameraProjection);
     const distanceToMouse: number = screenCoordinates.distanceTo(mousePosition);
     const distanceToCamera: number = currentPosition.distanceTo(cameraPosition) / AU_TO_KM_1;
+
+    let scaleFactor = 0;
+
     if (distanceToCamera > 1) {
-        return Math.min(ZOOMED_OUT_SECONDARY_SCALE * distanceToCamera, ZOOMED_OUT_SECONDARY_MAX_SCALE);
+        scaleFactor += 1000000 / Math.max(distanceToCamera, 8);
+    } else {
+        scaleFactor += 100000 + 100000 * distanceToCamera;
     }
 
-    return Math.min(ZOOMED_IN_SECONDARY_SCALE * (1 / (distanceToMouse + 0.0001)), ZOOMED_IN_SECONDARY_MAX_SCALE);
+    if (distanceToCamera < 0.5 && distanceToMouse < 0.3) {
+        scaleFactor += 5000 / Math.max(distanceToMouse, 0.05);
+    }
+
+    return scaleFactor;
 }

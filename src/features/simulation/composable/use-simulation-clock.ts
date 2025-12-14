@@ -1,13 +1,13 @@
 import { onMounted } from 'vue';
 import { useLoop } from '@tresjs/core';
 import { SIMULATION_TICKS_PER_SECOND } from '../../../utility/constants';
-import { useStateStore } from '../stores/state';
+import { useSimulationStateStore } from '../stores/simulation-state';
 
 export type PhysicsCallback = (t: number) => void;
 export type RenderCallback = (delta: number) => void;
 
 export function useSimulationClock(physicsCallback?: PhysicsCallback, renderCallback?: RenderCallback): void {
-    const state = useStateStore();
+    const state = useSimulationStateStore();
     const { onBeforeRender } = useLoop();
 
     onMounted(() => {

@@ -1,15 +1,14 @@
 import { onMounted, watch } from 'vue';
 import { useTres } from '@tresjs/core';
 import { Vector3 } from 'three';
-import { useStateStore } from '../stores/state';
 import CameraControls from 'camera-controls';
 import { CAMERA_START_POS } from '../../../utility/constants';
+import { useSimulationStateStore } from '../stores/simulation-state';
 
 export function useCamera(): {
     updateCamera: () => void;
-    setTarget: (location: Vector3, animate?: boolean) => void;
 } {
-    const state = useStateStore();
+    const state = useSimulationStateStore();
     const { camera, controls } = useTres();
 
     onMounted(() => {
@@ -30,7 +29,7 @@ export function useCamera(): {
             return;
         }
 
-        camera.value.getWorldPosition(state._cameraPosition);
+        camera.value.getWorldPosition(state.cameraPosition);
     }
 
     function setTarget(location: Vector3, animate: boolean = true): void {
@@ -44,6 +43,5 @@ export function useCamera(): {
 
     return {
         updateCamera,
-        setTarget,
     };
 }

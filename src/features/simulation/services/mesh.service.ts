@@ -16,22 +16,17 @@ export const buildSphereMesh = (radius: number, color: Color, name: string): Mes
     return mesh;
 };
 
-export function buildOrbitMeshLine(
-    orbit: EngineOrbit,
-    color: Color = new Color('white'),
-    name: string = '',
-    thickness: number = 200
-): MeshLine {
-    const points: Vector3[] = calculateOrbit(orbit);
+export const buildOrbitMeshLine = (orbit: EngineOrbit, color: Color, name: string, thickness: number): MeshLine => {
+    const points: Vector3[] = calculateOrbit(name, orbit);
 
     const geometry: MeshLineGeometry = new MeshLineGeometry();
     geometry.setPoints(points);
 
     const material = new MeshLineMaterial({
-        lineWidth: thickness,
         color: color,
         resolution: new Vector2(window.innerWidth, window.innerHeight),
         name: name,
+        lineWidth: thickness,
         sizeAttenuation: true,
     } as ShaderMaterialParameters & MeshLineMaterial);
 
@@ -43,7 +38,7 @@ export function buildOrbitMeshLine(
     meshLine.name = name;
 
     return meshLine;
-}
+};
 
 export const buildGridMesh = (): THREE.GridHelper => {
     const GRID_TOTAL_SIZE_KM = 10000000000; // 10 billion KM

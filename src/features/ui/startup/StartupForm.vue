@@ -1,8 +1,8 @@
 <script setup lang="ts">
     import { onMounted, reactive, ref } from 'vue';
-    import { SimulationStateFlags, useStateStore } from '../../simulation/stores/state';
     import { fetchTotalCount } from '../../simulation/services/database-api.service';
     import { initializeSimulation } from '../../simulation/services/initialization.service';
+    import { SimulationStateFlags, useSimulationStateStore } from '../../simulation/stores/simulation-state';
 
     enum SimulationSize {
         SMALL = 'SMALL',
@@ -31,7 +31,7 @@
         }
     };
 
-    const state = useStateStore();
+    const state = useSimulationStateStore();
     const loading = ref(false);
     const objectCount = ref(0);
 
@@ -43,7 +43,7 @@
         await initializeSimulation(formParameters.date, simulationSize(formParameters.simulationSize));
 
         loading.value = false;
-        state.setFlags(SimulationStateFlags.SIMULATION_READY);
+        state.setFlag(SimulationStateFlags.SIMULATION_READY);
     };
 
     onMounted(async () => {
